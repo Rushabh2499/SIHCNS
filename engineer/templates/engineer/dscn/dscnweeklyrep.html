@@ -1,0 +1,51 @@
+<html>
+{% if f != 1 %}  
+<button onclick="window.location.href='/logout/{{ id }}'"> Logout</button></td>    
+{% endif %}   
+<h1>Weekly Reports conducted</h1>
+    <body>
+        <div class="container">
+							           
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                    
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Air conditioning check</th>
+                  <th>Cleaning DSCN associated eqpt</th>
+               <th>UPS1 UPS2 battery backup</th>
+                     <th>UPS battery voltage on load</th>
+                  <th>Antenna and Cable check</th>
+                  <th>Remarks</th>
+                  <th>Unit incharge approval</th>
+                  <th>Test</th>
+                  <th>Update</th>
+                </tr>
+              </thead>
+              <tbody>
+                    {% for dscnw in dscn_w %}
+                <tr>
+                  <td>{{ dscnw.date }}</td>
+                  <td>{{ dscnw.time }}</td>
+                 <td>{{ dscnw.air_conditioning_check }}</td>
+                  <td>{{ dscnw.cleaning_dscn_associated_eqpt }}</td>
+                  <td>{{ dscnw.ups1_ups2_battery_backup }}</td>
+                  <td>{{ dscnw.ups_battery_voltage_on_load }}</td>
+                  <td>{{ dscnw.antenna_n_cable_check }}</td>
+                  <td>{{ dscnw.remarks }}</td>
+                  <td>{{ dscnw.unit_incharge_approval }}</td>
+                  <td>Pass</td>
+                  <td><button onclick="window.location.href='/editdscnw/{{ dscnw.dscnweekly_id }}'">Edit</button></td>
+               
+              </tr>
+               {% endfor %}
+             </tbody>
+             </table>
+             </div>
+             {% if f != 1 %}  
+            <button onclick="window.location.href='/routebackdd/{{ id }}'">Back</button>
+              {% endif %}
+</body>
+</html>
+

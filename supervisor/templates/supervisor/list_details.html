@@ -1,0 +1,32 @@
+<html>
+    <body>
+        <h3>{{name}}</h3>
+<table>
+{% for i in context %}
+<tr>
+<td> 
+{% if i.s_verify == None %}
+<a href="/schoice/{{i.p_id}}/{{name}} ">{{i.p_id}}</a> </td>
+<td >{{i.date}}</td>    
+<td >{{i.emp_id}}</td>
+<td>{{i.status}}</td>
+{% endif %}
+{% endfor %}
+</tr>
+</table>
+<table>
+   <br><br><h1> verified </h1>
+    {% for i in context %}
+<tr>
+
+{% if i.s_verify != None %}
+<td> <a href="/schoice/{{i.p_id}}/{{name}} ">{{i.p_id}}</a> </td>
+<td >{{i.date}}</td>    
+<td >{{i.emp_id}}</td>
+<td>{{i.status}}</td>
+{% endif %}
+{% endfor %}
+</tr>
+    
+    
+</table>

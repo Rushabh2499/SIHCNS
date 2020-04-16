@@ -1,0 +1,18 @@
+<html>
+    <h1>Submit weekly DSCN report </h1>
+    <form method='POST' action='/dscnwrepsub/{{ id }}'>
+        {% csrf_token %}
+        <input type=text  placeholder="Air_conditioning_check" name="acc"></input><br>
+        <input type=text  placeholder="Cleaning_DSCN_associated_eqpt" name="cdae"></input><br>
+        <input type=text  placeholder="UPS1_UPS2_battery_backup" name="uubb"></input><br>
+        <input type=text  placeholder="UPS_battery_voltage_on_load" name="ubvl"></input><br>
+        <input type=text  placeholder="Antenna_n_Cable_check" name="ancc"></input><br>
+        <input type=text  placeholder="Remarks" name="remarks"></input><br>
+        <button> Submit </button>
+    </form>
+    <td><button class="btn btn-success" onclick="window.open('/dscnweeklylogs/{{ id }}','_blank')" >Past Equipment Logs</button></td>
+    <td><button class="btn btn-success" onclick="window.open('/standards','_blank')">Check Standards</button></td>
+    <td><button onclick="window.location.href= '/datisdaily/{{ id }}'"> Contact Supervisor</button></td>
+    <button onclick="window.location.href='/routebackvd/{{ id }}'">Back</button>
+   
+    </html> 

@@ -1,0 +1,25 @@
+<html>
+    <h1>Submit monthly VHF report </h1>
+    <form method='POST' action='/vhfmrepsub/{{ id }}'>
+        {% csrf_token %}
+        <input type=text  placeholder="Modulation Mode" name="modulation mode"></input><br>
+        <input type=number  placeholder="Line Op" name="line op"></input><br>
+        <input type=text  placeholder="Squelch Defeat" name="squelch defeat"></input><br>
+        <input type=number  placeholder="Squelch Threshold" name="squelch threshold"></input><br>
+        <input type=text  placeholder="Squelch Carrier Override" name="squelch carrier override"></input><br>
+        <input type=text  placeholder="RF pre ATTN" name="RF pre ATTN"></input><br>
+        <input type=text  placeholder="AGC" name="AGC"></input><br>
+        <input type=text  placeholder="Ready signal" name="Ready signal"></input><br>
+        <input type=text  placeholder="Squelch op marc" name="Squelch op marc"></input><br>
+        <input type=text  placeholder="Squelch op facilities" name="Squelch op facilities"></input><br>
+        <input type=text  placeholder="Squelch op phantom" name="Squelch op phantom"></input><br>
+        <input type=text  placeholder="Squelch defeat ip" name="Squelch defeat ip"></input><br>
+        <input type=text  placeholder="Bit Test" name="bit test"></input><br>
+        <button> Submit </button>
+    </form>
+    <td><button class="btn btn-success" onclick="window.open('/vhfmlogs/{{ id }}','_blank')" >Past Equipment Logs</button></td>
+    <td><button class="btn btn-success" onclick="window.open('/standards','_blank')">Check Standards</button></td>
+    <td><button onclick="window.location.href= '/datisdaily/{{ id }}'"> Contact Supervisor</button></td>
+    <button onclick="window.location.href='/routebackvd/{{ id }}'">Back</button>
+           
+</html>

@@ -1,0 +1,68 @@
+<html>
+  {% if f != 1 %}
+  <button onclick="window.location.href='/logout/{{ id }}'"> Logout</button></td>    
+  {% endif %}
+  <h1>Daily Reports conducted</h1>
+    <body>
+        <div class="container">
+			<table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>SAT LED</th>
+                  <th>ODU LED</th>
+                  <th>IO LED</th>
+                  <th>Alarm LED</th>
+                  <th>Power LED</th>
+                  <th>V35 LED</th>
+                  <th>IP Voltage</th>
+                  <th>OP voltage</th>
+                  <th>Battery Voltage</th>
+                  <th>CorO function</th>
+                  <th>Remarks</th>
+                  <th>Unit Incharge Approval</th>
+                  <th>Test</th>
+                  <th>Update</th>
+                   </tr>
+              </thead>
+              <tbody>
+                    {% for dscnd in dscn_d %}
+                <tr>
+                 
+                  <td>{{ dscnd.date }}</td>
+                  <td>{{ dscnd.time }}</td>
+                  <td>{{ dscnd.sat_led }}</td>
+                  <td>{{ dscnd.odu_led }}</td>
+                  <td>{{ dscnd.io_led }}</td>
+                  <td>{{ dscnd.alarm_led }}</td>
+                  <td>{{ dscnd.power_led }}</td>
+                  <td>{{ dscnd.v35_led }}</td>
+                  <td>{{ dscnd.ip_voltage }}</td>
+                  <td>{{ dscnd.op_voltage }}</td>
+                  <td>{{ dscnd.battery_voltage }}</td>
+                  <td>{{ dscnd.coro_function }}</td>
+                  <td>{{ dscnd.remarks }}</td>
+                  <td>{{ dscnd.unit_incharge_approval }}</td>
+                  
+                  {% if dscnd.coro_function == "OK" and dscnd.ip_voltage > 219 and dscnd.ip_voltage < 241 and dscnd.op_voltage > 219 and dscnd.op_voltage < 241 and dscnd.battery_voltage > 180 and dscnd.battery_voltage < 250 and dscnd.power_led == "STEADY ON" and dscnd.sat_led == "STEADY ON" and dscnd.odu_led == "STEADY ON" and dscnd.io_led == "STEADY ON" and dscnd.alarm_led == "OFF" and dscnd.v35_led == "RX/TX BLINKING" %}
+                  <td>Pass</td>
+                  {% else %}
+                 <td>Fail</td>
+                  {% endif %}
+                  {% if dscnd.coro_function == "OK" and dscnd.ip_voltage > 219 and dscnd.ip_voltage < 241 and dscnd.op_voltage > 219 and dscnd.op_voltage < 241 and dscnd.battery_voltage > 180 and dscnd.battery_voltage < 250 and dscnd.power_led == "STEADY ON" and dscnd.sat_led == "STEADY ON" and dscnd.odu_led == "STEADY ON" and dscnd.io_led == "STEADY ON" and dscnd.alarm_led == "OFF" and dscnd.v35_led == "RX/TX BLINKING" %}
+                  <p></p>
+                  {% else %}
+                  <td><button onclick="window.location.href='/editdscnd/{{ dscnd.dscndaily_id }}'">Edit</button></td>
+                   {% endif %}
+                  </tr>
+                {% endfor %}
+             </tbody>
+             </table>
+             </div>
+             {% if f != 1 %}
+             <button onclick="window.location.href='/routebackdsd/{{ id }}'">Back</button>
+             {% endif %}          
+</body>
+</html>
+

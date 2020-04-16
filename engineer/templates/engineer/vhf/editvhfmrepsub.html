@@ -1,0 +1,27 @@
+<html>
+    <h1>Submit monthly VHF report </h1>
+    <form method='POST' action='/upvhfmrepsub/{{ id }}'>
+        {% csrf_token %}
+        {% for vhfmm in vhfm %}
+        <input type=text  placeholder="Modulation Mode" value="{{ vhfmm.modulation_mode }}" name="modulation mode"></input><br>
+        <input type=number  placeholder="Line Op" value="{{ vhfmm.line_op }}" name="line op"></input><br>
+        <input type=text   placeholder="Squelch Defeat" value="{{ vhfmm.squelch_defeat }}" name="squelch defeat"></input><br>
+        <input type=number  placeholder="Squelch Threshold" value="{{ vhfmm.squelch_threshold }}" name="squelch threshold"></input><br>
+        <input type=text  placeholder="Squelch Carrier Override" value="{{ vhfmm.squelch_carrier_override }}" name="squelch carrier override"></input><br>
+        <input type=text  placeholder="RF pre ATTN" value="{{ vhfmm.rf_pre_attn }}" name="RF pre ATTN"></input><br>
+        <input type=text  placeholder="AGC"  value="{{ vhfmm.agc }}" name="AGC"></input><br>
+        <input type=text  placeholder="Ready signal" value="{{ vhfmm.ready_signal }}" name="Ready signal"></input><br>
+        <input type=text  placeholder="Squelch op marc" value="{{ vhfmm.squelch_op_marc }}" name="Squelch op marc"></input><br>
+        <input type=text   placeholder="Squelch op facilities" value="{{ vhfmm.squelch_op_facilities }}" name="Squelch op facilities"></input><br>
+        <input type=text   placeholder="Squelch op phantom" value="{{ vhfmm.squelch_op_phantom }}" name="Squelch op phantom"></input><br>
+        <input type=text   placeholder="Squelch defeat ip" value="{{ vhfmm.squelch_defeat_ip  }}" name="Squelch defeat ip"></input><br>
+        <input type=text  placeholder="Bit Test"  value="{{ vhfmm.bit_test }}" name="bit test"></input><br>
+        <button> Submit </button>
+    </form>
+    <td><button class="btn btn-success" onclick="window.open('/vhfmlogs/{{ vhfmm.emp_id }}','_blank')" >Past Equipment Logs</button></td>
+    {% endfor %}
+   
+    <td><button class="btn btn-success" onclick="window.open('/standards','_blank')">Check Standards</button></td>
+    <td><button onclick="window.location.href= '/datisdaily/{{ id }}'"> Contact Supervisor</button></td>
+   
+</html>

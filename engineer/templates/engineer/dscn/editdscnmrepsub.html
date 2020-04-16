@@ -1,0 +1,20 @@
+<html>
+    <h1>Submit monthly DSCN report </h1>
+    <form method='POST' action='/updscnmrepsub/{{ id }}'>
+        {% csrf_token %}
+        {% for dscnmm in dscnm %}
+        <input type=text value="{{ dscnmm.cleaning_dscn_associated_eqpt }}" placeholder="Cleaning_DSCN_associated_eqpt" name="cdae"></input><br>
+        <input type=text value="{{ dscnmm.battery_backup_time_of_ups1nups2 }}" placeholder="Battery_backup_time_of_UPS1nUPS2" name="bbt"></input><br>
+        <input type=text value="{{ dscnmm.ups_battery_voltage_on_load }}" placeholder="UPS_battery_voltage_on_load" name="ubvl"></input><br>
+        <input type=text value="{{ dscnmm.antenna_n_cable_check }}" placeholder="Antenna_n_Cable_check" name="ancc"></input><br>
+        <input type=text value="{{ dscnmm.earth_resistance }}" placeholder="Earth_resistance" name="er"></input><br>
+        <input type=number value="{{ dscnmm.eorn_voltage }}" placeholder="EorN_voltage" name="ev"></input><br>
+        <input type=text value="{{ dscnmm.eqpt_status_after_check }}" placeholder="Eqpt_status_after_check" name="esac"></input><br>
+        <input type=text value="{{ dscnmm.remarks }}" placeholder="Remarks" name="remarks"></input><br>
+        <button> Submit </button>
+    </form>
+    <td><button class="btn btn-success" onclick="window.open('/dscnmonthlylogs/{{ dscnmm.emp_id }}','_blank')" >Past Equipment Logs</button></td>
+    {% endfor %}
+    <td><button class="btn btn-success" onclick="window.open('/standards','_blank')">Check Standards</button></td>
+    <td><button onclick="window.location.href= '/datisdaily/{{ id }}'"> Contact Supervisor</button></td>
+    </html> 

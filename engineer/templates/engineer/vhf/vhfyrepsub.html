@@ -1,0 +1,18 @@
+<html>
+    <h1>Submit yearly VHF report </h1>
+    <form method='POST' action='/vhfyrepsub/{{ id }}'>
+        {% csrf_token %}
+        <input type=number step="any" placeholder="Frequency MHz" name="fm"></input><br>
+        <input type=number step="any" placeholder="Reference Frequency" name="rf"></input><br>
+        <input type=number  placeholder="Power" name="pw"></input><br>
+        <input type=text  placeholder="Bit Test" name="bt"></input><br>
+        <input type=text  placeholder="AC/DC Changeover" name="acdc"></input><br>
+        <input tpye=text  value="" placeholder="Remarks" name="remarks"></input><br>
+        <button> Submit </button>
+    </form>
+    <td><button class="btn btn-success" onclick="window.open('/vhfylogs/{{ id }}','_blank')" >Past Equipment Logs</button></td>
+    <td><button class="btn btn-success" onclick="window.open('/standards','_blank')">Check Standards</button></td>
+    <td><button onclick="window.location.href= '/datisdaily/{{ id }}'"> Contact Supervisor</button></td>
+    <button onclick="window.location.href='/routebackvd/{{ id }}'">Back</button>
+           
+</html>

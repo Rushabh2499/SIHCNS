@@ -1,0 +1,19 @@
+<html>
+    <h1>Submit monthly DSCN report </h1>
+    <form method='POST' action='/dscnmrepsub/{{ id }}'>
+        {% csrf_token %}
+        <input type=text  placeholder="Cleaning_DSCN_associated_eqpt" name="cdae"></input><br>
+        <input type=text  placeholder="Battery_backup_time_of_UPS1nUPS2" name="bbt"></input><br>
+        <input type=text  placeholder="UPS_battery_voltage_on_load" name="ubvl"></input><br>
+        <input type=text  placeholder="Antenna_n_Cable_check" name="ancc"></input><br>
+        <input type=text  placeholder="Earth_resistance" name="er"></input><br>
+        <input type=number  placeholder="EorN_voltage" name="ev"></input><br>
+        <input type=text  placeholder="Eqpt_status_after_check" name="esac"></input><br>
+        <input type=text  placeholder="Remarks" name="remarks"></input><br>
+        <button> Submit </button>
+    </form>
+    <td><button class="btn btn-success" onclick="window.open('/dscnmonthlylogs/{{ id }}','_blank')" >Past Equipment Logs</button></td>
+    <td><button class="btn btn-success" onclick="window.open('/standards','_blank')">Check Standards</button></td>
+    <td><button onclick="window.location.href= '/datisdaily/{{ id }}'"> Contact Supervisor</button></td>
+    <button onclick="window.location.href='/routebackvd/{{ id }}'">Back</button>
+    </html> 

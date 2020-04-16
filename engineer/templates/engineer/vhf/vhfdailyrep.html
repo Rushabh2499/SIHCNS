@@ -1,0 +1,62 @@
+<html>
+{% if f != 1 %} 
+<button onclick="window.location.href='/logout/{{ id }}'"> Logout</button></td>   
+{% endif %}
+<h1>Daily Reports conducted</h1>
+    <body>
+        <div class="container">
+							           
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                    
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>RX No</th>
+                  <th>Frequency MHZ</th>
+               <th>Bit Test</th>
+                     <th>Status</th>
+                  <th>RXN Check</th>
+                  <th>SQ_Threshold</th>
+                  <th>Unit Incharge Approval</th>
+                  <th>Test</th>
+                  <th>Update</th>
+           </tr>
+              </thead>
+              <tbody>
+                    {% for vhfd in vhf_d %}
+                <tr>
+                 
+                  <td>{{ vhfd.date }}</td>
+                  <td>{{ vhfd.time }}</td>
+                  <td>{{ vhfd.rx_no }}</td>
+                  <td>{{ vhfd.frequency_mhz }}</td>
+                  <td>{{ vhfd.bit_test }}</td>
+                  <td>{{ vhfd.status }}</td>
+                  <td>{{ vhfd.rxn_check }}</td>
+                  <td>{{ vhfd.sq_threshold }}</td>
+                  <td>{{ vhfd.unit_incharge_approval }}</td>
+                 
+                 
+                  {% if vhfd.bit_test == "PASS" and vhfd.status == "READY" and vhfd.rxn_check == "RXN NORMAL" and vhfd.sq_threshold < -80 %}
+                  <td>Pass</td>
+                  {% else %}
+                   <td>Fail</td>
+                  {% endif %}
+                  {% if vhfd.bit_test == "PASS" and vhfd.status == "READY" and vhfd.rxn_check == "RXN NORMAL" and vhfd.sq_threshold < -80 %}
+                  <p></p>
+                  {% else %}
+                  <td><button onclick="window.location.href='/editvhfd/{{ vhfd.vhfdaily_id }}'">Edit</button></td>
+                   {% endif %}
+                  </tr>
+                {% endfor %}
+             </tbody>
+             </table>
+             </div>
+             {% if f != 1 %}
+             <button onclick="window.location.href='/routebackvd/{{ id }}'">Back</button>
+             {% endif %}
+                     
+</body>
+</html>
+

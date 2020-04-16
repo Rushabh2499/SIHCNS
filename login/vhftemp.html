@@ -1,0 +1,18 @@
+<html>
+    <h1>Submit todays VHF report </h1>
+    <form method='POST' action='/vhfrepsub/{{ id }}'>
+        {% csrf_token %}
+        <input type=number  placeholder="RX_No" name="RX_No"></input><br>
+        <input type=number  placeholder="Frequency_MHZ" name="Frequency_MHZ"></input><br>
+        <input type=text  placeholder="Bit_Status" name="Bit_Status"></input><br>
+        <input type=text  placeholder="Status" name="Status"></input><br>
+        <input type=text  placeholder="RXN_Check" name="RXN_Check"></input><br>
+        <input type=number  placeholder="SQ_Threshold" name="SQ_Threshold"></input><br>
+        <button> Submit </button>
+    </form>
+    <td><button class="btn btn-success" onclick="window.open('/vhfdailylogs/{{ id }}','_blank')" >Past Equipment Logs</button></td>
+    <td><button class="btn btn-success" onclick="window.open('/standards','_blank')">Check Standards</button></td>
+    <td><button onclick="window.location.href= '/datisdaily/{{ id }}'"> Contact Supervisor</button></td>
+    <button onclick="window.location.href='/routebackvd/{{ id }}'">Back</button>
+           
+</html>

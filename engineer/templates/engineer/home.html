@@ -1,0 +1,705 @@
+<!--{% load static %}-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Home</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	 <link rel="stylesheet" type="text/css" href="{% static '/home.css' %}">
+	 
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	<!-- <script type="text/javascript" src="https://me.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=rSsOun_tWZ6BU_i_eIBZTpxWchstms3OKuEZYQsU3YaQ4wjhYzhfYZ7MBL8aFWsSrcatFSrVC5ORl3KZ8wGh1Ke_WRvOEZGZu1Q7NpMlidQ0htj0bpdotO-_Dg4OJ0JiCihTIxH1fRk5eQ9UR58dC8EI5HGkNOKr9t8uJTCYkN86to-WRn-Mk7DzLs-AhO0EtgGYOnzW_XMxftxnB-ZzI0fxharehlD-DIMiKQppRUQtuGON_AcgKcew6YxTRJ3EizH2Uy6XfidG22tlM7nZqpLVCqpXkuH-k0pG2H4WfI5NSmxARosKCfyRfXKUmkeHPLN0SEDC_tPM17H-Z-ArzegzKsbogJdblww2KwyH6o_P7ScfRsMToZcv4XYnE4lCzcbqXOZUgm-5Y7WSIb5ChzImsWIc3pTcT1xHnhLEv2BogbhqitM4DlLQwZKhcwh14URdp1dpXhOLDjTY132FtdYqaFW3rtXEXcm-IgrFTa103Lv2HrTv658DG0ByYwDKBvGhjqx22U7OKfkVkiw6r7xaS8FM4c3BMWz0EJu0TFdFYc_Ss8bdwNyu_OJSk25KiZBstkpIzk16nkTmrsXvW3bxFDJwG198NB5589K4YfjAmKa6LHXyEIFKDKqyYi5DPV8eMKoeWM1YLxx4kTnRo47Jdp-YTL17ugxUTxhgun_-fQKcS5ylGya1JPYSMeqdfDdbLdz3Uwcvtw25sze_hN6T4Ktxbv2yp9PLQcjbsc0oCX7QRU3V4eGc28C6_BLtIjQ1vweQSiAPbUqVIyXS35KjWlKeQt0OP5fAM9IB6jRK5G_JOgtMMZYxCP4tP8gKHzkEE_wvLQXC47eXfwieDwZmAlV-tTUOuEE3M1px_tzhxB7t5kzkX1e1DeJWgbLcsWeXWMiBvMO8T-0KGmFtbwPyNTSP3ooyW5r8tH3xh5_RqFt568n2Pma0v1Wp716Y6t7zTqeefwQ6X9YggofibLnnOkQIrZLY1kp4S6AkMNgHu12TGyneNk-L3xo9MYewiVDBVueSfIA9PBzls5vIYN0UC_IeIMRfs5Hi3Q50mqo6sCNewxGVh_f-u8xD48eWweS289xJm1Q7n1bzTLD863DejQg5Dki3x17ka6Jvq1XWmQckir_o_AVMM2BR6tCftZVDXvCuFKC-nXmYEkaXGLudKhHYIBRTF13Hra906V1wzIw4dn-O37T5FseLRi1NtEuEuZrUBvhLAkoDON_aDA" charset="UTF-8"></script> -->
+ 
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+	<link href="https://fonts.googleapis.com/css2?family=Gotu&family=Righteous&display=swap" rel="stylesheet">
+		<style>
+		.jumbotron {
+		  background-image: url("{% static '/images/sky1.jpg' %}"); 
+		  background-repeat: no-repeat;
+		  background-attachment: fixed;
+		  background-size: cover;
+		}
+		</style>
+</head>
+<body> 
+	<div class="container" >
+	<div class="title-header"><img src="{% static '/images/aai.jpg' %}">PREVENTIVE MAINTENANCE LOG</div>
+	<div class="jumbotron">
+		
+			<div class="row">
+				<div class="col-md-3">
+					<div class="card cardlogo" >
+					  <img class="card-img-top" src="{% static '/images/man1.jpg' %}" alt="FACE">
+					  <div class="card-body">
+					  	<br>
+					  	{% for empdets in empdet %}
+					    <h5 class="card-title">{{empdets.name }}</h5>
+						<div class="data-emp">
+							{{ empdets.designation }}
+							 {% endfor %}  
+    						 {% csrf_token %}
+							<br>
+							{% for name1 in name %}
+							{{ name1.name }} Airport
+							{% endfor %}
+							<br>
+							<br>
+						</div>
+					  </div>
+					</div>
+					<div class="card cardcontact">
+						<!-- NEED TO FETCH SUPERVISOR NAME -->
+					  <div class="card-body headcard">
+							<br>
+							Head
+							<br>
+							{% for supdetails1 in supdetails %}
+						    Name: {{ supdetails1.name }} 
+							Email: {{ supdetails1.email }}
+							<br>
+							Contact: {{ supdetails1.contact }}
+							{% endfor %}
+							<br>
+						   <!-- <a href="#" class="btn btn-primary contactbut">Contact</a>-->
+							<br>
+						</div>
+					</div>
+				</div>
+	
+		<div class="col-md-2">
+		</div>
+		<div class="data-table">
+			<div class="col-md-3" >
+				<div class="card tabcard">
+				<ul class="nav nav-pills nav-stacked">
+				    <li class="active"><a class="todays" data-toggle="pill" href="#today" >Today's Tasks</a></li>
+				    <li><a class="faculty" data-toggle="pill" href="#facilities" >Facilities</a></li>
+				 </ul>
+				 <button class="btn btn-primary logout" onclick="window.location.href='/logout/{{ id }}'"> Logout</button></td>
+   
+		<!--		 <a href="#" class="btn btn-primary logout">LOGOUT</a>-->
+			</div>
+		</div>
+		<div class="col-md-4 card tabcol">
+			<div class="tab-content">
+	    		<div id="today" class="tab-pane fade in active tod">
+						<table class="table table-bordered table-condensed table-striped table-hover todaytasks">
+							<tr>
+					      		<th>Deadline</th>
+					      		<th>Task Name</th>
+					      		<th>Status</th>
+				      		</tr>
+				      		<!-- DATIS DAILY -->
+				      		{% if datisd_deadline <= currdate %} 
+                			{% if datisdsub_on == currdate and ddr == 0 %}
+							{% if statusd == "PENDING" %}	
+							<tr data-href='/datisdaily/{{ id }}'>
+				                	<td>{{ datisd_deadline }}</td>                
+				                 	<td>DATIS DAILY</td>
+				                 	<td>Pending</td>
+								</tr>
+								{% endif %}
+							 {% elif ddr == 0 %}
+			                	<tr data-href='/datisdailyrep/{{ id }}'>
+				                 <td>{{ datisd_deadline }}</td>
+				                 <td>DATIS Daily</td>
+				                 <td>Pending</td>
+			                	</tr>
+			                {% endif %}
+                 			{% endif %}  
+							 {% if statusd == "COMPLETED WITH ERRORS" and ddr == 1 %}	
+							 <tr data-href='/datisdailyrec/{{ id }}'>
+								 <td>{{ datisdsub_on }}</td>                
+								  <td>DATIS DAILY</td>
+								  <td>Completed with errors</td>
+							 </tr>
+							 {% endif %}
+						
+                 			{% if ddr == 1 and statusd == "COMPLETED" %}
+                 				<tr data-href='/datisdailyrec/{{ id }}'>
+				                 <td>{{ datisdsub_on }}</td>
+				                 <td>DATIS Daily</td>
+				                 <td>Completed</td>
+				                </tr>
+                  			{% endif %}
+                  
+							<!-- Vhf daily-->
+							{% if vhfd_deadline <= currdate %} 
+                			{% if vhfdsub_on == currdate and vdr == 0 %}
+							{% if statusvd == "PENDING" %}	
+							<tr data-href='/vhfdaily/{{ id }}'>
+				                	<td>{{ vhfd_deadline }}</td>                
+				                 	<td>VHF DAILY</td>
+				                 	<td>Pending</td>
+								</tr>
+								{% endif %}
+							 {% elif vdr == 0 %}
+			                	<tr data-href='/vhfdailyrep/{{ id }}'>
+				                 <td>{{ vhfd_deadline }}</td>
+				                 <td>VHF Daily</td>
+				                 <td>Pending</td>
+			                	</tr>
+			                {% endif %}
+                 			{% endif %}  
+							 {% if statusvd == "COMPLETED WITH ERRORS" and vdr == 1 %}	
+							 <tr data-href='/vhfdailyrec/{{ id }}'>
+								 <td>{{ vhfdsub_on }}</td>                
+								  <td>VHF DAILY</td>
+								  <td>Completed with errors</td>
+							 </tr>
+							 {% endif %}
+						
+                 			{% if vdr == 1 and statusvd == "COMPLETED" %}
+                 				<tr data-href='/vhfdailyrec/{{ id }}'>
+				                 <td>{{ vhfdsub_on }}</td>
+				                 <td>VHF Daily</td>
+				                 <td>Completed</td>
+				                </tr>
+                  			{% endif %}
+                  
+				  
+					
+					
+							  <!-- Datis weekly-->
+					        {% if dwr == 0 %} 
+		                    {% if currdate > wdate %}
+		                    	<tr data-href='/datisweeklyrep/{{ id }}' >
+			                       	<td>{{ datiswsub_deadline }}</td>    
+			                   		<td>DATIS Weekly</td>
+			                      	<td>Pending</td>
+			                    </tr>
+							  {% elif datiswsub_deadline == currdate %}
+							    {% if status == "PENDING" %}
+		                      	<tr data-href='/datisweekly/{{ id }}' >
+			                      <td>{{ datiswsub_deadline }}</td>    
+			                      <td>DATIS Weekly</td>
+			                      <td>Pending</td>
+								</tr>
+								{% else %}
+								<tr data-href='/datisweeklyrep/{{ id }}' >
+									<td>{{ datiswsub_deadline }}</td>    
+									<td>DATIS Weekly</td>
+									<td>Pending</td>
+								  </tr>
+								  {% endif %}
+								  {% else %}
+								  {% if status == "PENDING" %}
+		                      	<tr data-href='/datisweekly/{{ id }}' >
+			                      <td>{{ datiswsub_deadline }}</td>    
+			                      <td>DATIS Weekly</td>
+			                      <td>Pending</td>
+								</tr>
+							   {% endif %}
+				 			{% endif %} 
+		                      {% endif %}
+		                      
+		                      {% if dwr == 1 and datiswsub_on == currdate %}
+							     {% if status == "COMPLETED"  %}  
+							    <tr data-href='/datisweeklyrec/{{ id }}' > 
+			                      <td>{{ datiswsub_on }}</td>    
+			                      <td>DATIS Weekly</td>
+			                      <td>Completed</td>
+								</tr>
+								{% else %}
+								<tr data-href='/datisweeklyrec/{{ id }}' > 
+									<td>{{ datiswsub_on }}</td>    
+									<td>DATIS Weekly</td>
+									<td>Completed with errors</td>
+								  </tr>
+					  			  {% endif %}
+		                         {% endif %} 
+						</table>
+			    </div>
+
+
+			    <div id="facilities" class="tab-pane fade fac">
+			    	<div id="facfix"> 	
+			  			<button class="tablink" onclick="openCity('Daily', this, 'blue')" id="defaultOpen">Daily</button>
+						<button class="tablink" onclick="openCity('Weekly', this, 'blue')">Weekly</button>
+						<button class="tablink" onclick="openCity('Monthly', this, 'blue')">Monthly</button>
+					</div>
+						<div id="Daily" class="tabcontent">	
+	  						<h3 class="dateset">Daily</h3>
+	  						<table class="table table-bordered table-condensed table-striped table-hover todaytasks">
+	  							<tr>	
+					    			<th>Deadline</th>
+					    			<th>Task Name</th>
+					    			<th>Last submitted on</th>
+					    			<th>Standards</th>
+					    			<th>Previous Records</th>
+								</tr>
+								<td>{{ datisd_deadline }}</td>
+                                {% if datisd_deadline == currdate %} 
+								{% if datisdsub_on == currdate and ddr == 0 %}
+								<td><button class="btn standards" onclick="window.location.href='/datisdaily/{{ id }}'">DATIS</button></td>
+					           {% elif ddr == 0 %}
+							   <td><button class="btn standards" onclick="window.location.href='/datisdailyrep/{{ id }}'">DATIS</button></td>
+					        	{% endif %}
+	                            {% endif %}
+								{% if ddr == 1  %}
+								<td><button disabled class="btn standards" onclick="window.location.href='/datisdailyrec/{{ id }}'">Datis</button></td>
+					             {% endif %}
+					    			<td>{{ datisdsub_on }}</td>
+					    			<td><button class="btn standards" data-toggle="modal" data-target="#datisdaily">STANDARDS</button></td>
+					    			<td><button class="btn standards" onclick="window.location.href='/standards/{{ id }}'">MORE DETAILS</button></td>
+					    		</tr>
+					    		
+					    		 		<tr data-href='#'>
+							    			<td>{{ vhfd_deadline }}</td>    
+				                            <td>VHF</td>
+				                            <td>{{ vhfdsub_on }}</td>
+							    			<td><button class="btn standards" data-toggle="modal" data-target="#vhfdaily">STANDARDS</button></td>
+							    			<td><button class="btn standards" href="/vhfdaily/{{ id }}">DETAILS</button></td>
+							    		</tr>
+							    		 <tr data-href='#'>
+							    			<td>01.04.2020</td>
+							    			<td>DSCN</td>
+							    			<td>01.04.2020</td>
+							    			<td><button class="btn standards"data-toggle="modal" data-target="#dscndaily">STANDARDS</button></td>
+							    			<td><button class="btn standards" href="#">DETAILS</button></td> 
+							    		</tr>
+					    		
+					    	</table>
+							</div>
+
+							<div id="Weekly" class="tabcontent">
+	  						<h3 class="dateset">Weekly</h3>
+	  						<table class="table table-bordered table-condensed table-striped table-hover todaytasks">
+	  							<tr>	
+					    			<th>Deadline</th>
+					    			<th>Task Name</th>
+					    			<th>Last submitted on</th>
+					    			<th>Standards</th>
+					    			<th>Previous Records</th>
+					    		</tr>
+
+									{% if status == "PENDING" %}
+									<td>{{ wdate }}</td>
+									{% else %}
+									<td>{{ datiswsub_deadline }}</td>    
+									{% endif %}
+									{% if dwr == 1 and datiswsub_on == currdate %}
+									{% if status == "COMPLETED" or status == "COMPLETED WITH ERRORS" %}
+									<td><button disabled class="btn standards" onclick="window.location.href='/datisweeklyrec/{{ id }}'">DATIS</button></td>
+									{% else %}
+									<td><button class="btn standards" onclick="window.location.href='/datisweekly/{{ id }}'">DATIS</button></td>
+									{% endif %}	 
+									{% elif dwr == 0 %}
+									 {% if currdate > wdate %}
+									 <td><button class="btn standards" onclick="window.location.href='/datisweeklyrep/{{ id }}'">DATIS</button></td>
+								   {% elif datiswsub_deadline == currdate %}
+									 {% if status == "PENDING" %}
+									 <td><button class="btn standards" onclick="window.location.href='/datisweekly/{{ id }}'">DATIS</button></td>
+								    {% else %}
+									<td><button class="btn standards" onclick="window.location.href='/datisweeklyrep/{{ id }}'">DATIS</button></td>
+								{% endif %}
+								  {% else %}
+								  {% if status == "PENDING" %}
+					     		  <td><button class="btn standards" onclick="window.location.href='/datisweekly/{{ id }}'">DATIS</button></td>
+								   {% else %} 
+								   <td><button class="btn standards" onclick="window.location.href='/datisweeklyrep/{{ id }}'">DATIS</button></td>
+						 		 {% endif %}
+								   {% endif %} 
+								  {% endif %}
+								<td>{{ datiswsub_on }}</td>
+				         			<td><button class="btn standards" data-toggle="modal" data-target="#datisweekly">STANDARDS</button></td>
+									 <td><button class="btn standards" onclick="window.location.href='/datisweeklyrec/{{ id }}'">MORE DETAILS</button></td>
+						     	</tr>
+					    		 <tr data-href='#'>
+					    			<td>01.04.2020</td>
+					    			<td>VHF RX</td>
+					    			<td>01.04.2020</td>
+					    			<td></td>
+					    			<td><button class="btn standards" href="#">DETAILS</button></td>
+					    		</tr>
+					    		 <tr data-href='#'>
+					    			<td>01.04.2020</td>
+					    			<td>DSCN</td>
+					    			<td>01.04.2020</td>
+					    			<td></td>
+					    			<td><button class="btn standards" href="#">DETAILS</button></td>
+					    		</tr>
+					    	</table>
+							</div>
+
+							<div id="Monthly" class="tabcontent">
+	  						<h3 class="dateset">Monthly</h3>
+	  						<table class="table table-bordered table-condensed table-striped table-hover todaytasks">
+	  							<tr>	
+					    			<th>Deadline</th>
+					    			<th>Task Name</th>
+					    			<th>Last submitted on</th>
+					    			<th>Standards</th>
+					    			<th>Previous Records</th>
+					    		</tr>
+					    		 <tr data-href='#'>
+					    			<td>01.04.2020</td>
+					    			<td>DATIS</td>
+					    			<td>01.04.2020</td>
+					    			<td></a></td>
+					    			<td><button class="btn standards" href="#">DETAILS</button></td>
+					    		</tr>
+					    		 <tr data-href='#'>
+					    			<td>{{ vhfmsub_deadline }}</td>    
+			                        <td>VHF</td>
+			                        <td>{{ vhfmsub_on }}</td>  
+					    			<td><button class="btn standards" data-toggle="modal" data-target="#vhfmonthly">STANDARDS</button></td>
+					    			<td><button class="btn standards" href="/vhfmonthly/{{ id }}">DETAILS</button></td>
+					    		</tr>
+					    		 <tr data-href='#'>
+					    			<td>01.04.2020</td>
+					    			<td>DSCN</td>
+					    			<td>01.04.2020</td>
+					    			<td></td>
+					    			<td><button class="btn standards" href="#">DETAILS</button></td>
+					    		</tr>
+					    	</table>
+							</div>
+					  </div>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="datisdaily">
+				    <div class="modal-dialog">
+				      <div class="modal-content">
+				        <div class="modal-header">
+				          <h4 class="modal-title">Standards - Datis Daily</h4>
+				          <button type="button" class="close" data-dismiss="modal">&times;</button>
+				        </div>
+				        <div class="modal-body">
+				          <table class="standtab">
+				          	<tr>
+				          		<th>VALUE LABEL</th>
+				          		<th>NORMAL VALUE</th>
+				          	</tr>
+				          	<tr>
+				          		<td>Room Temperature</td>
+				          		<td>24 C</td>
+				          	</tr>
+				          	
+								<tr>
+				          		<td>Status of AC</td>
+				          		<td>Svcbl</td>
+				          	</tr>
+				          		<tr>
+				          		<td>Status OF UPS</td>
+				          		<td>Nml</td>
+				          	</tr>
+				          		<tr>
+				          		<td>Status of Server A</td>
+				          		<td>Main/Stby</td>
+				          	</tr>
+				          		<tr>
+				          		<td>Status of Server B</td>
+				          		<td>Main/Stdby</td>
+				          	</tr>
+				          		<tr>
+				          		<td>Date and time of servers wrt GPS CLK</td>
+				          		<td>Correct</td>
+				          	</tr>
+				          		<tr>
+				          		<td>Status of Disk Array</td>
+				          		<td>OK</td>
+				          	</tr>
+				          		<tr>
+				          		<td>Status of VHF TX used for ATIS</td>
+				          		<td>On-Line</td>
+				          	</tr>
+				          		<tr>
+				          		<td>Status of VHF RX used for ATIS</td>
+				          		<td>On-Line</td>
+				          	</tr>
+				          		<tr>
+				          		<td>DATIS update</td>
+				          		<td>OK</td>
+				          	</tr>
+				          		<tr>
+				          		<td>Audio Quality of Datis Announcement</td>
+				          		<td>Good</td>
+				          	</tr>
+				          </table>
+				        </div>
+				        <div class="modal-footer">
+				          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				        </div>  
+				      </div>
+				    </div>
+				</div>
+				<div class="modal fade" id="datisweekly">
+				    <div class="modal-dialog">
+				      <div class="modal-content">
+				        <div class="modal-header">
+				          <h4 class="modal-title">Standards - Datis Weekly</h4>
+				          <button type="button" class="close" data-dismiss="modal">&times;</button>
+				        </div>
+				        <div class="modal-body">
+				          <table class="standtab">
+				          	<tr>
+				          		<th>VALUE LABEL</th>
+				          		<th>NORMAL VALUE</th>
+				          	</tr>
+				          	<tr>
+				          		<td>UPS Input</td>
+				          		<td>200-230V</td>
+				          	</tr>
+				          	
+								<tr>
+				          		<td>UPS Output</td>
+				          		<td>230V</td>
+				          	</tr>
+				          		<tr>
+				          		<td>Dust Free</td>
+				          		<td>OK</td>
+				          	</tr>
+				          		<tr>
+				          		<td>LAN Status</td>
+				          		<td>OK</td>
+				          	</tr>
+				          		<tr>
+				          		<td>Time Sync</td>
+				          		<td>OK</td>
+				          	</tr>
+				          		<tr>
+				          		<td>Quality of Audio</td>
+				          		<td>OK</td>
+				          	</tr>
+				          		<tr>
+				          		<td>PTT off Interval</td>
+				          		<td>15 seconds</td>
+				          	</tr>
+				          </table>
+				        </div>
+				        <div class="modal-footer">
+				          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				        </div>  
+				      </div>
+				    </div>
+				</div>
+				<div class="modal fade" id="vhfdaily">
+				    <div class="modal-dialog">
+				      <div class="modal-content">
+				        <div class="modal-header">
+				          <h4 class="modal-title">Standards - VHF RX Daily</h4>
+				          <button type="button" class="close" data-dismiss="modal">&times;</button>
+				        </div>
+				        <div class="modal-body">
+				          <table class="standtab">
+				          	<tr>
+				          		<th>VALUE LABEL</th>
+				          		<th>NORMAL VALUE</th>
+				          	</tr>
+				          	<tr>
+				          		<td>Bit Test</td>
+				          		<td>Pass</td>
+				          	</tr>
+				          	
+								<tr>
+				          		<td>Status</td>
+				          		<td>Ready</td>
+				          	</tr>
+				          		<tr>
+				          		<td>Rxn Check</td>
+				          		<td>Rxn Normal</td>
+				          	</tr>
+				          		<tr>
+				          		<td>AC/DC C/O</td>
+				          		<td>C/O Normal</td>
+				          	</tr>
+				          		<tr>
+				          		<td>SQ Threshold</td>
+				          		<td>Less than -80 DBm</td>
+				          	</tr>
+				          </table>
+				        </div>
+				        <div class="modal-footer">
+				          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				        </div>  
+				      </div>
+				    </div>
+				</div>
+				<div class="modal fade" id="vhfmonthly">
+				    <div class="modal-dialog">
+				      <div class="modal-content">
+				        <div class="modal-header">
+				          <h4 class="modal-title">Standards - VHF RX Monthly</h4>
+				          <button type="button" class="close" data-dismiss="modal">&times;</button>
+				        </div>
+				        <div class="modal-body">
+				          <table class="standtab">
+				          	<tr>
+				          		<th>VALUE LABEL</th>
+				          		<th>NORMAL VALUE</th>
+				          	</tr>
+				          	<tr>
+				          		<td>Modulation Mode</td>
+				          		<td>AM-Voice</td>
+				          	</tr>
+				          	
+								<tr>
+				          		<td>Line O/P</td>
+				          		<td>Less than 13dbm</td>
+				          	</tr>
+				          		<tr>
+				          		<td>Squelch Defeat</td>
+				          		<td>OFF</td>
+				          	</tr>
+				          		<tr>
+				          		<td>Squelch Threshold</td>
+				          		<td>-107 dbm</td>
+				          	</tr>
+				          		<tr>
+				          		<td>Squelch Carrier Override</td>
+				          		<td>OFF</td>
+				          	</tr>
+				          		<tr>
+				          		<td>RF PRE ATTN</td>
+				          		<td>OFF</td>
+				          	</tr>
+				          		<tr>
+				          		<td>AGC</td>
+				          		<td>ON</td>
+				          	</tr>
+				          		<tr>
+				          		<td>Ready Signal</td>
+				          		<td>STD</td>
+				          	</tr>
+				          		<tr>
+				          		<td>Squelch O/P Marc</td>
+				          		<td>STD</td>
+				          	</tr>
+				          		<tr>
+				          		<td>Squelch O/P Facilities</td>
+				          		<td>STD</td>
+				          	</tr>
+				          		<tr>
+				          		<td>Squelch O/P Phantom</td>
+				          		<td>STD</td>
+				          	</tr>
+				          		<tr>
+				          		<td>Squelch Defeat I/P</td>
+				          		<td>STD</td>
+				          	</tr>
+				          		<tr>
+				          		<td>Bit Test</td>
+				          		<td>OK</td>
+				          	</tr>
+				          </table>
+				        </div>
+				        <div class="modal-footer">
+				          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				        </div>  
+				      </div>
+				    </div>
+				</div>
+				<div class="modal fade" id="dscndaily">
+				    <div class="modal-dialog">
+				      <div class="modal-content">
+				        <div class="modal-header">
+				          <h4 class="modal-title">Standards - DSCN Daily</h4>
+				          <button type="button" class="close" data-dismiss="modal">&times;</button>
+				        </div>
+				        <div class="modal-body">
+				          <table class="standtab">
+				          	<tr>
+				          		<th>VALUE LABEL</th>
+				          		<th>NORMAL VALUE</th>
+				          	</tr>
+				          	<tr>
+				          		<td>SAT LED</td>
+				          		<td>Steady ON</td>
+				          	</tr>
+				          	
+								<tr>
+				          		<td>ODU LED</td>
+				          		<td>Steady ON</td>
+				          	</tr>
+				          		<tr>
+				          		<td>I/O LED</td>
+				          		<td>Steady ON</td>
+				          	</tr>
+				          		<tr>
+				          		<td>Alarm LED</td>
+				          		<td>OFF</td>
+				          	</tr>
+				          		<tr>
+				          		<td>Power LED</td>
+				          		<td>Steady ON</td>
+				          	</tr>
+				          		<tr>
+				          		<td>V.35 LED</td>
+				          		<td>Rx/Tx- Blinking, When data is being Xmitted/R'cvd</td>
+				          	</tr>
+				          		<tr>
+				          		<td>Input Voltage</td>
+				          		<td>230-10%, 230+10%</td>
+				          	</tr>
+				          		<tr>
+				          		<td>Output Voltage</td>
+				          		<td>Refer Airtel/UPS service manual</td>
+				          	</tr>
+				          		<tr>
+				          		<td>Battery Voltage</td>
+				          		<td>Refer Airtel/UPS service manual</td>
+							</tr>
+				          		<tr>
+				          		<td>C/O Function</td>
+				          		<td>OK</td>
+				          	</tr>
+				          </table>
+				        </div>
+				        <div class="modal-footer">
+				          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				        </div>  
+				      </div>
+				    </div>
+				</div>
+	</div>
+	</div>
+</div>
+{% if messages %}
+        {% for message in messages %}
+         {% if message.tags %}  <script>alert("{{ message }}")</script> {% endif %}
+
+        {% endfor %}
+
+    {% endif %}
+
+</div>
+<script>
+ function openCity(cityName,elmnt,color) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablink");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].style.backgroundColor = "";
+  }
+  document.getElementById(cityName).style.display = "block";
+  elmnt.style.backgroundColor = color;
+
+}
+// Get the element with id="defaultOpen" and click on it
+document.getElementById("defaultOpen").click();
+
+$(function(){
+    $('.table tr[data-href]').each(function(){
+        $(this).css('cursor','pointer').hover(
+            function(){ 
+                $(this).addClass('active'); 
+            },  
+            function(){ 
+                $(this).removeClass('active'); 
+            }).click( function(){ 
+                document.location = $(this).attr('data-href'); 
+            }
+        );
+    });
+});
+</script>
+</body>
+</html>

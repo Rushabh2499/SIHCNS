@@ -1,0 +1,36 @@
+<html>
+  <button onclick="window.location.href='/logout/{{ id }}'"> Logout</button></td>    
+   
+<h1>Communication Department</h1>
+    {% for empdets in empdet %}
+     <h2>Welcome {{empdets.name }}</h2>
+     <h2>{{ empdets.designation }}</h2>
+     {% endfor %}  
+     {% csrf_token %}
+        {% for name1 in name %}
+        <h3>{{ name1.name }} Airport</h3>
+        {% endfor %}  
+        <h4>VHF Facility</h4>
+<body>
+    <div class="container">
+							           
+        <table class="table table-hover">
+          <tbody>
+            
+            <tr>
+            <td><button onclick="window.location.href= '/vhfdaily/{{ id }}'"> VHF Daily</button></td>
+            <td><button onclick="window.location.href='/vhfmonthly/{{ id }}'"> VHF Monthly</button></td>
+            <td><button onclick="window.location.href='/vhfyearly/{{ id }}'"> VHF Yearly</button></td>
+               
+        </tr>
+             
+         </tbody>
+         </table>
+         </div>
+        
+          
+          
+
+</body>   
+
+</html>

@@ -1,0 +1,57 @@
+<html>
+    <head>
+        <style>
+        table, th, td {
+          border: 1px solid black;
+        }
+        </style>
+        </head>
+    <table>
+<tr>
+
+    
+    {% for name, value in temp.items %}
+        
+            <th>{{ name }}</th>
+        
+    {% endfor %}
+    <th></th> 
+</tr>
+<tr>
+
+{% for name, value in temp.items %}
+    
+        <td>{{ value }}</td>
+    
+
+{% endfor %}
+
+</tr>
+</table>
+<a href="{% url 'supervisor:sendmail' temp.emp_id%}">report</a>
+<a href="{% url 'supervisor:verify' names temp.p_id%}">verify</a>
+<h1>logs</h1>
+<table>
+    <tr>
+    
+        
+        {% for log in logs|slice:":1" %}
+            {% for name,value in log.items %}
+                <th>{{ name }}</th>
+                {% endfor %}
+        {% endfor %}
+    </tr>
+    
+    
+    
+        {% for log in logs %}
+        <tr>
+        {% for name,value in log.items %}
+            <td>{{ value }}</td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+    
+    
+    </table>
+</html>

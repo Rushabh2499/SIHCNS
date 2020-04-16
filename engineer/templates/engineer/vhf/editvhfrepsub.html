@@ -1,0 +1,20 @@
+<html>
+    <h1>Edit todays VHF report </h1>
+    <form method='POST' action='/upvhfrepsub/{{ id }}'>
+        {% csrf_token %}
+        {% for vhfdd in vhfd %}
+        <input type=number  value="{{ vhfdd.rx_no }}" name="RX_No"></input><br>
+        <input type="number"  value="{{ vhfdd.frequency_mhz }}" name="Frequency_MHZ"></input><br>
+        <input type=text  value="{{ vhfdd.bit_test }}" name="Bit_Status"></input><br>
+        <input type=text  value="{{ vhfdd.status }}" name="Status"></input><br>
+        <input type=text  value="{{ vhfdd.rxn_check }}" name="RXN_Check"></input><br>
+        <input type=number  value="{{ vhfdd.sq_threshold }}" name="SQ_Threshold"></input><br>
+        <button> Submit </button>
+      
+    </form>
+    <td><button class="btn btn-success" onclick="window.open('/vhfdailylogs/{{ vhfdd.emp_id }}','_blank')" >Past Equipment Logs</button></td>
+    {% endfor %}
+    <td><button class="btn btn-success" onclick="window.open('/standards','_blank')">Check Standards</button></td>
+    <td><button onclick="window.location.href= '/datisdaily/{{ id }}'"> Contact Supervisor</button></td>
+   
+</html>

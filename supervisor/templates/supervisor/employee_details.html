@@ -1,0 +1,18 @@
+<html>
+    <table>
+        <tr>
+            <th>date</th>
+            <th>p_id</th>
+            <th>Status</th>
+            <th>type</th>
+        </tr>
+        {% for i in datis %}
+        <tr>
+            <td>{{i.date}}</td>
+            <td>{{i.p_id}}</td>
+            <td>{{i.status}}</td>
+            <td><a href="/schoice/{{i.p_id}}/{{i.type}} ">{{i.p_id}}</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</html>

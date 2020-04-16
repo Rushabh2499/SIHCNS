@@ -1,0 +1,77 @@
+<html>
+ {% if f != 1 %}  
+<button onclick="window.location.href='/logout/{{ id }}'"> Logout</button></td>   
+{% endif %}
+<h1>Monthly Reports conducted</h1>
+    <body>
+        <div class="container">
+							           
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                    
+                  <th>Date</th>
+                  <th>Time</th>
+                 
+                  <th>Modulation Mode</th>
+               <th>Line Op</th>
+                     <th>Squelch Defeat</th>
+                  <th>Squelch Threshold</th>
+                  <th>Squelch Carrier Override</th>
+                  <th>RF pre ATTN</th>
+                  <th>AGC</th>
+                  <th>Ready Signal</th>
+                  <th>Squelch op marc</th>
+                  <th>Squelch op facilities </th>
+                  <th>Squelch op phantom</th>
+                  <th>Squelch defeat ip</th>
+                  <th>Bit Test</th>
+                  <th>Unit Incharge Approval</th>
+                  <th>Test</th>
+                  <th>Update</th>
+           </tr>
+              </thead>
+              <tbody>
+                    {% for vhfm in vhf_m %}
+                <tr>
+                 
+                  <td>{{ vhfm.date }}</td>
+                  <td>{{ vhfm.time }}</td>
+                  <td>{{ vhfm.modulation_mode }}</td>
+                  <td>{{ vhfm.line_op }}</td>
+                  <td>{{ vhfm.squelch_defeat }}</td>
+                  <td>{{ vhfm.squelch_threshold }}</td>
+                  <td>{{ vhfm.squelch_carrier_override }}</td>
+                  <td>{{ vhfm.rf_pre_attn }}</td>
+                  <td>{{ vhfm.agc }}</td>
+                  <td>{{ vhfm.ready_signal }}</td>
+                  <td>{{ vhfm.squelch_op_marc }}</td>
+                  <td>{{ vhfm.squelch_op_facilities }}</td>
+                  <td>{{ vhfm.squelch_op_phantom }}</td>
+                  <td>{{ vhfm.squelch_defeat_ip }}</td>
+                  <td>{{ vhfm.bit_test }}</td>
+                  <td>{{ vhfm.unit_incharge_approval }}</td>
+                 
+                 
+                  {% if vhfm.modulation_mode == "AM-Voice" and vhfm.line_op < 13 and vhfm.squelch_defeat == "OFF" and vhfm.squelch_threshold > -115 and vhfm.squelch_carrier_override == "OFF" and vhfm.rf_pre_attn == "OFF" and vhfm.agc == "ON" and vhfm.ready_signal == "STD" and vhfm.squelch_op_marc == "STD" and vhfm.squelch_op_facilities == "STD" and vhfm.squelch_op_phantom == "STD" and vhfm.squelch_defeat_ip == "STD" and vhfm.bit_test == "OK" %}
+                  <td>Pass</td>
+                  {% else %}
+                   <td>Fail</td>
+                  {% endif %}
+                  {% if vhfm.modulation_mode == "AM-Voice" and vhfm.line_op < 13 and vhfm.squelch_defeat == "OFF" and vhfm.squelch_threshold > -115 and vhfm.squelch_carrier_override == "OFF" and vhfm.rf_pre_attn == "OFF" and vhfm.agc == "ON" and vhfm.ready_signal == "STD" and vhfm.squelch_op_marc == "STD" and vhfm.squelch_op_facilities == "STD" and vhfm.squelch_op_phantom == "STD" and vhfm.squelch_defeat_ip == "STD" and vhfm.bit_test == "OK" %}
+                  <p></p>
+                  {% else %}
+                  <td><button onclick="window.location.href='/editvhfm/{{ vhfm.vhfmonthly_id }}'">Edit</button></td>
+                   {% endif %}
+                  </tr>
+                {% endfor %}
+             </tbody>
+             </table>
+             </div>
+             {% if f != 1 %}  
+             <button onclick="window.location.href='/routebackvd/{{ id }}'">Back</button>
+             {% endif %}
+                       
+</body>
+</html>
+

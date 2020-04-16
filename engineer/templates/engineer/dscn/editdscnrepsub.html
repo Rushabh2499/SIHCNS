@@ -1,0 +1,25 @@
+<html>
+    <h1>Submit todays DSCN report </h1>
+    <form method='POST' action='/updscnrepsub/{{ id }}'>
+        {% csrf_token %}
+        {% for dscndd in dscnd %}
+        <input type=text value="{{ dscndd.sat_led }}" placeholder="SAT LED" name="sled"></input><br>
+        <input type=text value="{{ dscndd.odu_led }}" placeholder="ODU LED" name="oled"></input><br>
+        <input type=text  value="{{ dscndd.io_led }}" placeholder="I/O LED" name="ioled"></input><br>
+        <input type=text value="{{ dscndd.alarm_led }}" placeholder="Alarm LED" name="aled"></input><br>
+        <input type=text value="{{ dscndd.power_led }}" placeholder="Power LED" name="pwled"></input><br>
+        <input type=text value="{{ dscndd.v35_led }}" placeholder="V.35 LED" name="v35led"></input><br>
+        <input type=number value="{{ dscndd.ip_voltage }}" placeholder="Input Voltage" name="iv"></input><br>
+        <input type=number value="{{ dscndd.op_voltage }}" placeholder="Output Voltage" name="ov"></input><br>
+        <input type=number value="{{ dscndd.battery_voltage }}" placeholder="Battery Voltage" name="bv"></input><br>
+        <input type=text value="{{ dscndd.coro_function }}" placeholder="C/O Function" name="cof"></input><br>
+        <input type=text value="{{ dscndd.remarks }}" placeholder="Remarks" name="remarks"></input><br>
+        <button> Submit </button>
+        
+    </form>
+    <td><button class="btn btn-success" onclick="window.open('/dscndailylogs/{{ dscndd.emp_id }}','_blank')" >Past Equipment Logs</button></td>
+    {% endfor %}   
+    <td><button class="btn btn-success" onclick="window.open('/standards','_blank')">Check Standards</button></td>
+    <td><button onclick="window.location.href= '/datisdaily/{{ id }}'"> Contact Supervisor</button></td>
+  
+</html>

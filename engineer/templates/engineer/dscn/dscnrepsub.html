@@ -1,0 +1,24 @@
+<html>
+    <h1>Submit todays DSCN report </h1>
+    <form method='POST' action='/dscnrepsub/{{ id }}'>
+        {% csrf_token %}
+        <input type=text  placeholder="SAT LED" name="sled"></input><br>
+        <input type=text  placeholder="ODU LED" name="oled"></input><br>
+        <input type=text  placeholder="I/O LED" name="ioled"></input><br>
+        <input type=text  placeholder="Alarm LED" name="aled"></input><br>
+        <input type=text  placeholder="Power LED" name="pwled"></input><br>
+        <input type=text placeholder="V.35 LED" name="v35led"></input><br>
+        <input type=number  placeholder="Input Voltage" name="iv"></input><br>
+        <input type=number  placeholder="Output Voltage" name="ov"></input><br>
+        <input type=number  placeholder="Battery Voltage" name="bv"></input><br>
+        <input type=text placeholder="C/O Function" name="cof"></input><br>
+        <input type=text placeholder="Remarks" name="remarks"></input><br>
+        
+        <button> Submit </button>
+    </form>
+    <td><button class="btn btn-success" onclick="window.open('/dscndailylogs/{{ id }}','_blank')" >Past Equipment Logs</button></td>
+    <td><button class="btn btn-success" onclick="window.open('/standards','_blank')">Check Standards</button></td>
+    <td><button onclick="window.location.href= '/datisdaily/{{ id }}'"> Contact Supervisor</button></td>
+    <button onclick="window.location.href='/routebackvd/{{ id }}'">Back</button>
+            
+</html>
