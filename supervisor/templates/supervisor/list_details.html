@@ -1,32 +1,175 @@
-<html>
-    <body>
-        <h3>{{name}}</h3>
-<table>
-{% for i in context %}
-<tr>
-<td> 
-{% if i.s_verify == None %}
-<a href="/schoice/{{i.p_id}}/{{name}} ">{{i.p_id}}</a> </td>
-<td >{{i.date}}</td>    
-<td >{{i.emp_id}}</td>
-<td>{{i.status}}</td>
-{% endif %}
-{% endfor %}
-</tr>
-</table>
-<table>
-   <br><br><h1> verified </h1>
-    {% for i in context %}
-<tr>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Reports</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	 <link rel="stylesheet" type="text/css" href="{% static 'supervisor/home.css' %}">
+	  <link rel="stylesheet" type="text/css" href="home.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"> 
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
-{% if i.s_verify != None %}
-<td> <a href="/schoice/{{i.p_id}}/{{name}} ">{{i.p_id}}</a> </td>
-<td >{{i.date}}</td>    
-<td >{{i.emp_id}}</td>
-<td>{{i.status}}</td>
-{% endif %}
-{% endfor %}
-</tr>
-    
-    
-</table>
+	<link href="https://fonts.googleapis.com/css2?family=Gotu&family=Righteous&display=swap" rel="stylesheet">
+		<style>
+		.active a 
+		{
+		  background-color: #1E72FA !important; 
+		  color: white !important; 
+		}
+		.todays
+{
+	color:#1E72FA; 
+}
+.faculty
+{
+	color:#1E72FA;
+}
+.fac 
+{
+	max-height: 34rem!important;
+}
+.tod
+{
+	max-height: 34rem!important;
+}
+.container {
+  text-align: center;
+  display: absolute;
+  position: relative;
+  height: auto;
+  margin: auto;
+  box-shadow: 1px 5px 10px 1px #333;
+ /* overflow: hidden;*/
+}
+.taskbut img{
+	height:40px;
+}
+.title-header
+{
+	font-size: 30px; background-color: #1E27FA ; color: white; font-family: 'Righteous', cursive;
+}
+.title-header img
+{
+	height:80px; padding:10px; padding-top: 0;
+}
+
+	</style>
+</head>
+<body>
+    <div class="container" >	
+	    		
+		<!--<div class="title-header"><a href='#' onclick="window.location.href='/routebackdd/{{ id }}'" class="taskbut"><img src="{% static '/images/task.png' %}"></a>PREVENTIVE MAINTENANCE LOG<img src="{% static '/images/aai.jpg' %}" ></div>-->
+		<nav class="navbar sticky-top">
+			<ul class="navbar-nav">
+	    		<li class="nav-item">
+	      			<a href='#' onclick="window.location.href='/routebackdd/{{ id }}'" class="taskbut"><img src="{% static '/images/task.png' %}"></a>		
+	    		</li>
+	    	</ul>
+			<div class="title-header">PREVENTIVE MAINTENANCE LOG<img src="{% static '/images/aai.jpg' %}"></div>
+			
+		</nav>
+		<div class="row">
+			<div class="card" style="width: 14rem; height: 7rem; text-align: center; margin-left:45%">
+				<div class="card-body" style="font-family: 'Times New Roman', Times, serif; font-weight: bold; font-size: 20px; box-shadow: 2px 2px 5px 1px #009; ">
+					        <h2 class="card-title">{{ name }}</h2>
+					<!-- Enter the maintainence type details here -->
+			 	</div>
+			</div>
+
+			<div class="data-tab" style="margin-top: 2rem;">
+				<div class="col-md-2"> 
+				</div>
+				<div class="col-md-3" >
+					<div class="row"> 
+					</div>
+					<div class="card tabcard" style="height:35rem !important; background-color: #ffffff">
+						<ul class="nav nav-pills nav-stacked">
+						    <li class="active"><a class="todays" data-toggle="pill" href="#today" style="margin-top:50%; ">Pending Approvals</a></li>
+						    <li><a class="faculty" data-toggle="pill" href="#employ" >Approved</a></li>
+						    
+						 </ul>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 card tabcol" style="height:35rem!important;">
+				<div class="tab-content">
+		    		<div id="today" class="tab-pane fade fac in active">		  
+				        <table class="table table-bordered table-condensed table-striped table-hover todaytasks">
+				            <thead>
+				                <tr>  
+				                	<th>Report ID</th>
+				                	<th>Date</th>
+				                  	<th>Time</th>
+				                  	<th>Status</th>
+				                </tr>
+				            </thead>
+				            <tbody>
+				            	<h1> Unverified </h1>
+				                {% for i in context %}
+				                {% if i.s_verify == None %}
+				                <tr data-href="/schoice/{{i.p_id}}/{{name}} ">
+				                 	<td>{{i.p_id}}</td>
+				                	<td>{{i.date}}</td>
+				                	<td>{{i.time}}</td>
+						            <td>{{i.status}}</td>
+				                </tr>
+				                {% endif %}
+				                {% endfor %}
+				             </tbody>
+				        </table>
+				    </div>
+
+				    <div id="employ" class="tab-pane fade fac">
+						<table class="table table-bordered table-condensed table-striped table-hover todaytasks">
+						   <h1> Verified </h1>
+						   <thead>
+				                <tr>  
+				                	<th>Report ID</th>
+				                	<th>Date</th>
+				                  	<th>Time</th>
+				                  	<th>Status</th>
+				                </tr>
+				            </thead>
+							{% for i in context %}
+							{% if i.s_verify != None and i.status != "PENDING" %}
+							<tr data-href="/schoice/{{i.p_id}}/{{name}} ">
+			                 	<td>{{i.p_id}}</td>
+			                	<td>{{i.date}}</td>
+			                	<td>{{i.time}}</td>
+					            <td>{{i.status}}</td>
+				            </tr>
+							{% endif %}
+							{% endfor %}   
+						</table>
+					</div>
+				</div>
+
+			</div>
+
+
+
+			    
+		</div>		
+	</div>
+	<script type="text/javascript">
+
+		$(function(){
+	    $('.table tr[data-href]').each(function(){
+	        $(this).css('cursor','pointer').hover(
+	            function(){ 
+	                $(this).addClass('active'); 
+	            },  
+	            function(){ 
+	                $(this).removeClass('active'); 
+	            }).click( function(){ 
+	                document.location = $(this).attr('data-href'); 
+	            }
+	        );
+	    });
+	});
+	</script>             
+</body>
+</html>

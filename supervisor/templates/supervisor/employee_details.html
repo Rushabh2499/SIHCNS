@@ -1,18 +1,77 @@
-<html>
-    <table>
-        <tr>
-            <th>date</th>
-            <th>p_id</th>
-            <th>Status</th>
-            <th>type</th>
-        </tr>
-        {% for i in datis %}
-        <tr>
-            <td>{{i.date}}</td>
-            <td>{{i.p_id}}</td>
-            <td>{{i.status}}</td>
-            <td><a href="/schoice/{{i.p_id}}/{{i.type}} ">{{i.p_id}}</a></td>
-        </tr>
-        {% endfor %}
-    </table>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Daily DATIS Maintenance Report</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="{% static '/datisstyle.css' %}">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<link href="https://fonts.googleapis.com/css2?family=Gotu&family=Righteous&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+		<nav class="navbar sticky-top">
+			<ul class="navbar-nav">
+	    		<li class="nav-item">
+	      			<a href='#' onclick="window.location.href='/routebackdd/{{ id }}'" class="taskbut"><img src="{% static '/images/task.png' %}"></a>
+	    		</li>
+	    	</ul>
+			<div class="title-header">PREVENTIVE MAINTENANCE LOG<img src="{% static '/images/aai.jpg' %}"></div>
+		</nav>
+		<br>
+		
+		<div class="card mb-3 sidecard" style="width: 14rem; height: 7rem">
+			<div class="card-body">
+				Name: <br>
+				Designation:<br>
+				<button class="btn btn-white">Contact</button>
+				<!-- Enter the respective employee details -->
+		 	</div>
+		</div>
+
+		<br>        
+        <table class="table table-bordered table-condensed table-striped table-hover todaytasks">
+            <thead>
+                <tr>  
+                	<th>Report ID</th>
+                	<th>Report Type</th>
+                	<th>Date</th>
+                  	<th>Time</th>
+                  	<th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in datis %}
+                <tr data-href="/schoice/{{i.p_id}}/{{i.type}} ">
+                 	<td>{{i.p_id}}</td>
+                 	<td>{{i.type}}</td>
+                	<td>{{i.date}}</td>
+                	<td>{{i.time}}</td>
+		            <td>{{i.status}}</td>
+                </tr>
+                {% endfor %}
+             </tbody>
+        </table>
+    </div>
+<script type="text/javascript">
+	$(function(){
+    $('.table tr[data-href]').each(function(){
+        $(this).css('cursor','pointer').hover(
+            function(){ 
+                $(this).addClass('active'); 
+            },  
+            function(){ 
+                $(this).removeClass('active'); 
+            }).click( function(){ 
+                document.location = $(this).attr('data-href'); 
+            }
+        );
+    });
+});
+</script>             
+</body>
 </html>
