@@ -65,7 +65,7 @@ a{ text-decoration: none !important; }
 }
 .card.cardcontact
 {
-	margin-top: 5px; font-family: 'Gotu', sans-serif;width: 18rem; border-radius: 15px; background-color:#1E72FA; 
+	margin-top: 5px; font-family: 'Gotu', sans-serif;width: 16rem; border-radius: 15px; background-color:#1E72FA; margin-left: 10px;
 }
 .headcard
 {

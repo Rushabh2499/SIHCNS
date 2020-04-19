@@ -42,7 +42,7 @@
     						 {% csrf_token %}
 							<br>
 							{% for name1 in name %}
-							<h6 class="card-subsubtitle">{{ name1.name }} Airport</h6><!-- Retrieve Airport name -->
+							<h6 class="card-subsubtitle">{{ name1.name }} Airport</h6><
 							{% endfor %}							
 							<br>
 						</div>
@@ -50,7 +50,7 @@
 					   </div>
 					</div>
 					<div class="card cardcontact">
-						<!-- NEED TO FETCH SUPERVISOR NAME -->
+						
 					  <div class="card-body headcard">
 							{% for supdetails1 in supdetails %}
 							<b>Sup: {{ supdetails1.name }}</b>
@@ -58,8 +58,7 @@
 						    {% endfor %}
 							<br>
 							<button class="btn btn-primary contactbut" data-toggle="modal" data-target="#contactsuper" href='#'>Contact</a>
-								
-						   <!-- <a href="#" class="btn btn-primary contactbut">Contact</a>-->
+						
 							<br>
 						</div>
 					
@@ -100,7 +99,6 @@
 				 </ul>
 				 <button class="btn btn-primary logout" onclick="window.location.href='/logout/{{ id }}'"> Logout</button></td>
    
-		<!--		 <a href="#" class="btn btn-primary logout">LOGOUT</a>-->
 			</div>
 		</div>
 		<div class="col-md-4 card tabcol">

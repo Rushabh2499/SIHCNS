@@ -32,6 +32,7 @@ def logEng(request,id):
         supdetails = models.Supervisor.objects.all()
         supdetails = supdetails.values('name','contact','email').filter(dept='C')
         statusd = "" 
+        datisd_deadline= ""
         #!!!!!!!!!!!!!!!!!datis daily!!!!!!!!!!!!!!!!!!!!!!!!
         ddr = 0
         currdate = date.today()
@@ -55,8 +56,29 @@ def logEng(request,id):
                 datisd_deadline = currdate + timedelta(days=1)
                 datisdsub_on = currdate
                 ddr = 1
-       
-                datisd_deadline = date.today()
+        else :
+            datisd_deadline = models.Datisdaily.objects.all()
+            datisd_deadline = datisd_deadline.values('date')
+            datisd_deadline = datisd_deadline.order_by('-date')
+            datisd_deadline = datisd_deadline.values('date').filter(a_id=1)[0]['date']
+            datisdsub_on = datisd_deadline
+            datisd_deadline = datisd_deadline + timedelta(days=2)
+            tempdate = datisdsub_on + timedelta(days=1)
+            i = 1 
+            while i == 1 and tempdate != date.today() : 
+              if (datisd_deadline <= date.today()) :    
+                #remarks = "---Report not submitted---"
+                #statusd = "COMPLETED"
+                #val = (tempdate,currtime,'1',id,statusd,'2',remarks)
+                #sql = "INSERT INTO datisdaily (date,time,a_id,emp_id,status,f_id,remarks) values (%s ,%s,%s,%s,%s, %s,%s)"
+                #cursor.execute(sql,val)  
+                #datisdsub_on = date.today()-timedelta(days=1)    
+                tempdate = tempdate + timedelta(days=1)
+              else : 
+                break
+            datisd_deadline = date.today()
+    
+                
         print(ddr)
     #!!!!!!!!!!!!!!!!!!!!!!!datis weekly!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         p_id = models.Datisweekly.objects.all()

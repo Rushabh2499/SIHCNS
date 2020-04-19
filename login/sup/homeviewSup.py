@@ -11,7 +11,7 @@ from operator import itemgetter
 from django.http import HttpResponse
 from .. import models
 from django.db import connection
-
+from django.db.models import Q
 def run_sup(request,uid):
     today = datetime.now().strftime('%d/%m/%Y')
     request.session['type']='s'
@@ -78,15 +78,15 @@ def run_sup(request,uid):
     
     
     elif request.session.get('dept')=='C':
-        datisdaily=[entry for entry in models.Datisdaily.objects.filter(unit_incharge_approval=None).values().order_by('-date')]
+        datisdaily=[entry for entry in models.Datisdaily.objects.filter(Q(unit_incharge_approval=None) | Q(status='PENDING')).values().order_by('-date')]
         for item in datisdaily:
                 item.update( {"type":"Datisdaily"})
                 item.update({"repdead":item['date']})
-        datisweekly=[entry for entry in models.Datisweekly.objects.filter(unit_incharge_approval=None).values().order_by('-date')]
+        datisweekly=[entry for entry in models.Datisweekly.objects.filter(Q(unit_incharge_approval=None) | Q(status='PENDING')).values().order_by('-date')]
         for item in datisweekly:
                 item.update( {"type":"Datisweekly"})
                 item.update({"repdead":week(item['date'])})
-        vhfdaily=[entry for entry in models.Vhfdaily.objects.filter(unit_incharge_approval=None).values().order_by('-date')]
+        vhfdaily=[entry for entry in models.Vhfdaily.objects.filter(Q(unit_incharge_approval=None) | Q(status='PENDING')).values().order_by('-date')]
         for item in vhfdaily:
                 item.update( {"type":"Vhfdaily"})
                 
@@ -94,20 +94,20 @@ def run_sup(request,uid):
         # vhfweekly=[entry for entry in models.Vhfweekly.objects.filter(unit_incharge_approval=None).values().order_by('-date')]
         # for item in vhfweekly:
         #         item.update( {"type":"Vhfweekly"})
-        vhfmonthly=[entry for entry in models.Vhfmonthly.objects.filter(unit_incharge_approval=None).values().order_by('-date')]
+        vhfmonthly=[entry for entry in models.Vhfmonthly.objects.filter(Q(unit_incharge_approval=None) | Q(status='PENDING')).values().order_by('-date')]
         for item in vhfmonthly:
                 item.update( {"type":"Vhfmonthly"})
                 item.update({"repdead":month(item['date'])})
-        dscndaily=[entry for entry in models.Dscndaily.objects.filter(unit_incharge_approval=None).values().order_by('-date')]
+        dscndaily=[entry for entry in models.Dscndaily.objects.filter(Q(unit_incharge_approval=None) | Q(status='PENDING')).values().order_by('-date')]
         for item in dscndaily:
                 item.update( {"type":"Dscndaily"})
                 item.update({"repdead":dailydeadline})
                 item.update({"repdead":item['date']})
-        dscnweekly=[entry for entry in models.Dscnweekly.objects.filter(unit_incharge_approval=None).values().order_by('-date')]
+        dscnweekly=[entry for entry in models.Dscnweekly.objects.filter(Q(unit_incharge_approval=None) | Q(status='PENDING')).values().order_by('-date')]
         for item in dscnweekly:
                 item.update( {"type":"Dscnweekly"})
                 item.update({"repdead":week(item['date'])})
-        dscnmonthly=[entry for entry in models.Dscnmonthly.objects.filter(unit_incharge_approval=None).values().order_by('-date')]
+        dscnmonthly=[entry for entry in models.Dscnmonthly.objects.filter(Q(unit_incharge_approval=None) | Q(status='PENDING')).values().order_by('-date')]
         for item in dscnmonthly:
                 item.update( {"type":"Dscnmonthly"})
                 item.update({"repdead":month(item['date'])})

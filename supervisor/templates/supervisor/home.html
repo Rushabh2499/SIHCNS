@@ -36,7 +36,7 @@
 						<div class="data-emp">
 							<h6 class="card-subsubtitle">{{sup.designation}}</h6>
 							
-							<h6 class="card-subsubtitle">{{air.name}} Airport</h6><!-- Retrieve Airport name -->
+							<h6 class="card-subsubtitle">{{air.name}} Airport</h6>
 							
 							<br>
 							<br>
@@ -45,8 +45,7 @@
 					</div>
 				<div class="card cardcontact">	
 					<div class="card-body headcard">
-							DGM: {{dgm.name}} 
-							<!--Email:{{dgm.email}}  Retrieve EmailID --> 
+							<b>DGM: {{dgm.name}} </b>
 							<br>
 						   <button class="btn btn-primary contactbut" data-toggle="modal" data-target="#contactsuper" href='#'>Contact</a>
 							<br>
@@ -86,7 +85,7 @@
 						    <li><a class="faculty" data-toggle="pill" href="#facilities" >Facilities</a></li>
 						    
 						 </ul>
-						 <button class="btn btn-primary logout" onclick="window.location.href='/logout/{{ sup.supervisor_id }}'"> Logout</button></td><!-- Link logout button -->
+						 <button class="btn btn-primary logout" onclick="window.location.href='/logout/{{ sup.supervisor_id }}'"> Logout</button></td>
 					</div>
 				</div>
 
@@ -126,7 +125,11 @@
 								    <tr data-href="{% url 'supervisor:details' id=i.token name=i.type%}">
 								    	
 								    	<td>{{i.repdead}}</td>
+								    	{% if i.remarks == "---Report not submitted---" %}
+								    	<td>--</td>
+								    	{% else %}
 								        <td>{{i.date}}</td>
+								        {% endif %}
 								        <td>{{i.type}}</td>
 								        <td>{{i.emp_id}}</td>
 								            

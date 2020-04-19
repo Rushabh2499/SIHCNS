@@ -107,7 +107,7 @@ def dhomeview(request,id) :
     f = 1   
     flag = cursor.execute("select date from datisweekly where date = %s",[date.today()])    
         
-    if currdate > wdate :  #if it goes beyond 7 days
+    if currdate > wdate and flag == 0 :  #if it goes beyond 7 days
         remarks = "Report not submitted"
         value = "No Entry" 
         val = (id,p_id,remarks,value,currdate,currtime)
@@ -123,7 +123,7 @@ def dhomeview(request,id) :
             elif status == "PENDING" :
                 dwr=0
             
-        elif temp == temp1 and temp == currdate : # report submitted on same day as deadline
+        elif temp == temp1 and temp == currdate : # report submitted on a day same as deadline
             datiswsub_deadline = temp    
             if status == "COMPLETED" or status == "COMPLETED WITH ERRORS" :
                 dwr=1  

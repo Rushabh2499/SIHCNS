@@ -83,7 +83,11 @@ def details(request,id,name):
         str1='temp=models.'
         str2='.objects.filter(p_id='
         str3=').values()'
+        str4='.objects.all('
         que=str1+name+str2+str(id)+str3
+        exec(que,globals())
+        str1='mrec=models.'
+        que=str1+name+str4+str3+".order_by('-date')"
         exec(que,globals())
         #  UNCOMMENT WHEN DONE WITH ALL LOG TABLES
         logname=name+'logs'
@@ -106,8 +110,10 @@ def details(request,id,name):
         i=temp[0]
         i['e_token']=encode(request,str(i['emp_id']))
         i['p_token']=encode(request,str(i['p_id']))
+        eng=models.Engineer.objects.filter(emp_id=temp[0]['emp_id']).values()
         # print(i)
-        return render(request,'supervisor/imp_details.html',{'temp':i,'names':name,'logs':logs})
+        redir='supervisor:'+name
+        return render(request,'supervisor/imp_details.html',{'eng':eng[0],'temp':i,'names':name,'redir':redir,'logs':logs,'mrec':mrec})
         # return render(request,'supervisor/imp_details.html',{'temp':i,'names':name})
 
 def mail(request,id):
@@ -122,7 +128,7 @@ def mail(request,id):
 
 def sent(request):
     send=request.POST['feedback']
-    
+    print(send)
     mail_from=models.Supervisor.objects.filter(supervisor_id=request.session.get('uid')).values('email')
     print(mail_from)
     mail="From:"+mail_from[0]['email']+"\n"+send 
@@ -195,17 +201,18 @@ def verify(request,names,id):
 def empdetails(request,id):
      id=decode(request,id)
      datisdaily=[entry for entry in models.Datisdaily.objects.filter(emp_id=id).values().order_by('-date')]
-                
+     eng=models.Engineer.objects.filter(emp_id=id).values()          
      datisweekly=[entry for entry in models.Datisweekly.objects.filter(emp_id=id).values().order_by('-date')]
      datis=datisdaily+[i for i in datisweekly]
      print(datis)
      for i in datis:
-        eng=models.Engineer.objects.filter(emp_id=i['emp_id']).values()
+        # eng=models.Engineer.objects.filter(emp_id=i['emp_id']).values()
          
-        print(eng[0]['name'])
-        i.update({'type':'Datisdaily','e_name':eng[0]['name'],'e_desig':eng[0]['designation'],'token':encode(request,str(i['p_id']))})
-     print(datis)
-     return render(request,'supervisor/employee_details.html',{'datis':datis})
+        
+        i.update({'type':'Datisdaily','token':encode(request,str(i['p_id']))})
+        # print(i['e_name'])
+    #  print(datis)
+     return render(request,'supervisor/employee_details.html',{'datis':datis,'e_name':eng[0]['name'],'e_desig':eng[0]['designation'],'e_contact':eng[0]['contact'],'e_email':eng[0]['email']})
 
 def encode(request,s):
 
