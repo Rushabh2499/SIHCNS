@@ -6,9 +6,8 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	 <link rel="stylesheet" type="text/css" href="{% static 'engineer/home.css' %}">
-	 
+	  <link rel="stylesheet" type="text/css" href="home.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-	<!-- <script type="text/javascript" src="https://me.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=rSsOun_tWZ6BU_i_eIBZTpxWchstms3OKuEZYQsU3YaQ4wjhYzhfYZ7MBL8aFWsSrcatFSrVC5ORl3KZ8wGh1Ke_WRvOEZGZu1Q7NpMlidQ0htj0bpdotO-_Dg4OJ0JiCihTIxH1fRk5eQ9UR58dC8EI5HGkNOKr9t8uJTCYkN86to-WRn-Mk7DzLs-AhO0EtgGYOnzW_XMxftxnB-ZzI0fxharehlD-DIMiKQppRUQtuGON_AcgKcew6YxTRJ3EizH2Uy6XfidG22tlM7nZqpLVCqpXkuH-k0pG2H4WfI5NSmxARosKCfyRfXKUmkeHPLN0SEDC_tPM17H-Z-ArzegzKsbogJdblww2KwyH6o_P7ScfRsMToZcv4XYnE4lCzcbqXOZUgm-5Y7WSIb5ChzImsWIc3pTcT1xHnhLEv2BogbhqitM4DlLQwZKhcwh14URdp1dpXhOLDjTY132FtdYqaFW3rtXEXcm-IgrFTa103Lv2HrTv658DG0ByYwDKBvGhjqx22U7OKfkVkiw6r7xaS8FM4c3BMWz0EJu0TFdFYc_Ss8bdwNyu_OJSk25KiZBstkpIzk16nkTmrsXvW3bxFDJwG198NB5589K4YfjAmKa6LHXyEIFKDKqyYi5DPV8eMKoeWM1YLxx4kTnRo47Jdp-YTL17ugxUTxhgun_-fQKcS5ylGya1JPYSMeqdfDdbLdz3Uwcvtw25sze_hN6T4Ktxbv2yp9PLQcjbsc0oCX7QRU3V4eGc28C6_BLtIjQ1vweQSiAPbUqVIyXS35KjWlKeQt0OP5fAM9IB6jRK5G_JOgtMMZYxCP4tP8gKHzkEE_wvLQXC47eXfwieDwZmAlV-tTUOuEE3M1px_tzhxB7t5kzkX1e1DeJWgbLcsWeXWMiBvMO8T-0KGmFtbwPyNTSP3ooyW5r8tH3xh5_RqFt568n2Pma0v1Wp716Y6t7zTqeefwQ6X9YggofibLnnOkQIrZLY1kp4S6AkMNgHu12TGyneNk-L3xo9MYewiVDBVueSfIA9PBzls5vIYN0UC_IeIMRfs5Hi3Q50mqo6sCNewxGVh_f-u8xD48eWweS289xJm1Q7n1bzTLD863DejQg5Dki3x17ka6Jvq1XWmQckir_o_AVMM2BR6tCftZVDXvCuFKC-nXmYEkaXGLudKhHYIBRTF13Hra906V1wzIw4dn-O37T5FseLRi1NtEuEuZrUBvhLAkoDON_aDA" charset="UTF-8"></script> -->
  
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -31,43 +30,64 @@
 		
 			<div class="row">
 				<div class="col-md-3">
-					<div class="card cardlogo" >
+					<div class="card cardlogo" style="word-wrap: break-word;" >
 					  <img class="card-img-top" src="{% static '/images/man1.jpg' %}" alt="FACE">
 					  <div class="card-body">
 					  	<br>
 					  	{% for empdets in empdet %}
 					    <h5 class="card-title">{{empdets.name }}</h5>
 						<div class="data-emp">
-							{{ empdets.designation }}
-							 {% endfor %}  
+							<h6 class="card-subtitle">{{ empdets.designation }}</h6>
+							{% endfor %}  
     						 {% csrf_token %}
 							<br>
 							{% for name1 in name %}
-							{{ name1.name }} Airport
-							{% endfor %}
-							<br>
+							<h6 class="card-subsubtitle">{{ name1.name }} Airport</h6><!-- Retrieve Airport name -->
+							{% endfor %}							
 							<br>
 						</div>
-					  </div>
+					   
+					   </div>
 					</div>
 					<div class="card cardcontact">
 						<!-- NEED TO FETCH SUPERVISOR NAME -->
 					  <div class="card-body headcard">
-							<br>
-							Supervisor
-							<br>
 							{% for supdetails1 in supdetails %}
-						    Name: {{ supdetails1.name }} 
-							Email: {{ supdetails1.email }}
+							<b>Sup: {{ supdetails1.name }}</b>
+						  
+						    {% endfor %}
 							<br>
-							Contact: {{ supdetails1.contact }}
-							{% endfor %}
-							<br>
+							<button class="btn btn-primary contactbut" data-toggle="modal" data-target="#contactsuper" href='#'>Contact</a>
+								
 						   <!-- <a href="#" class="btn btn-primary contactbut">Contact</a>-->
 							<br>
 						</div>
-					</div>
+					
+							
+							</div>
+				<div class="modal fade" id="contactsuper">
+				    <div class="modal-dialog">
+				      <div class="modal-content">
+				        <div class="modal-header">
+				          <h3 class="modal-title">SUPERVISOR</h3>
+				          <button type="button" class="close" data-dismiss="modal">&times;</button>
+				        </div>
+				        <div class="modal-body">
+				        	{% for supdetails1 in supdetails %}
+				          <h4>Name:{{supdetails1.name}}</h4>
+				          <h4>Email: <a href="mailto:{{ supdetails1.email }}">{{ supdetails1.email }}</a></h4>
+				          <!--put the contact in the a href as mailto:{{ contact }} and outside in phone too-->
+				          <h4>Phone: {{ supdetails1.contact }}</h4>
+							{% endfor %}
+				        </div>
+				        
+				        <div class="modal-footer">
+				          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				        </div>  
+				      </div>
+				    </div>
 				</div>
+			</div>	
 	
 		<div class="col-md-2">
 		</div>
@@ -200,13 +220,13 @@
 		                      {% if dwr == 1 and datiswsub_on == currdate %}
 							     {% if status == "COMPLETED"  %}  
 							    <tr data-href='/datisweeklyrec/{{ id }}' > 
-			                      <td>{{ datiswsub_deadline }}</td>    
+			                      <td>{{ datiswsub_on }}</td>    
 			                      <td>DATIS Weekly</td>
 			                      <td>Completed</td>
 								</tr>
 								{% else %}
 								<tr data-href='/datisweeklyrec/{{ id }}' > 
-									<td>{{ datiswsub_deadline  }}</td>    
+									<td>{{ wdate }}</td>    
 									<td>DATIS Weekly</td>
 									<td>Completed with errors</td>
 								  </tr>
@@ -278,7 +298,11 @@
 					    			<th>Previous Records</th>
 					    		</tr>
 
-								   <td>{{ wdate }}</td>
+									{% if status == "PENDING" %}
+									<td>{{ wdate }}</td>
+									{% else %}
+									<td>{{ datiswsub_deadline }}</td>    
+									{% endif %}
 									{% if dwr == 1 and datiswsub_on == currdate %}
 									{% if status == "COMPLETED" or status == "COMPLETED WITH ERRORS" %}
 									<td><button disabled class="btn standards" onclick="window.location.href='/datisweeklyrec/{{ id }}'">DATIS</button></td>
@@ -291,9 +315,9 @@
 								   {% elif datiswsub_deadline == currdate %}
 									 {% if status == "PENDING" %}
 									 <td><button class="btn standards" onclick="window.location.href='/datisweekly/{{ id }}'">DATIS</button></td>
-								     {% else %}
+								    {% else %}
 									<td><button class="btn standards" onclick="window.location.href='/datisweeklyrep/{{ id }}'">DATIS</button></td>
-								    {% endif %}
+								{% endif %}
 								  {% else %}
 								  {% if status == "PENDING" %}
 					     		  <td><button class="btn standards" onclick="window.location.href='/datisweekly/{{ id }}'">DATIS</button></td>
