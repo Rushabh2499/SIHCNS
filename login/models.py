@@ -13,7 +13,7 @@ class Airport(models.Model):
     name = models.CharField(max_length=20, blank=True, null=True)
     altitude = models.IntegerField(blank=True, null=True)
     area = models.FloatField(blank=True, null=True)
-    dgm = models.OneToOneField('Dgm', models.DO_NOTHING, blank=True, null=True,related_name='xyz')
+    dgm = models.OneToOneField('Dgm', models.DO_NOTHING, blank=True, null=True)
     longitude = models.CharField(max_length=10, blank=True, null=True)
     latitude = models.CharField(max_length=10, blank=True, null=True)
     code = models.CharField(max_length=3, blank=True, null=True)
@@ -177,7 +177,7 @@ class Communication(models.Model):
     doi = models.DateField(db_column='DOI', blank=True, null=True)  # Field name made lowercase.
     doc = models.DateField(db_column='DOC', blank=True, null=True)  # Field name made lowercase.
     location = models.CharField(max_length=20, blank=True, null=True)
-    emp = models.ForeignKey('Engineer', models.DO_NOTHING, blank=True, null=True)
+    supervisor = models.ForeignKey('Supervisor', models.DO_NOTHING, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -191,7 +191,7 @@ class Datisdaily(models.Model):
     time = models.TimeField(blank=True, null=True)
     a = models.ForeignKey(Airport, models.DO_NOTHING, blank=True, null=True)
     emp = models.ForeignKey('Engineer', models.DO_NOTHING, blank=True, null=True)
-    status = models.CharField(db_column='Status', max_length=20)  # Field name made lowercase.
+    status = models.CharField(db_column='Status', max_length=40)  # Field name made lowercase.
     f = models.ForeignKey(Communication, models.DO_NOTHING, blank=True, null=True)
     room_temp = models.IntegerField(blank=True, null=True)
     status_of_ac = models.CharField(db_column='status_of_AC', max_length=10, blank=True, null=True)  # Field name made lowercase.
@@ -207,7 +207,8 @@ class Datisdaily(models.Model):
     remarks = models.TextField(db_column='REMARKS', blank=True, null=True)  # Field name made lowercase.
     unit_incharge_approval = models.CharField(db_column='Unit_incharge_approval', max_length=3, blank=True, null=True)  # Field name made lowercase.
     test = models.CharField(max_length=30, blank=True, null=True)
-    s_verify = models.IntegerField(blank=True, null=True)
+    approval_date = models.DateField(blank=True, null=True)
+    approval_time = models.TimeField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -236,7 +237,7 @@ class Datisweekly(models.Model):
     a = models.ForeignKey(Airport, models.DO_NOTHING, blank=True, null=True)
     f = models.ForeignKey(Communication, models.DO_NOTHING)
     emp = models.ForeignKey('Engineer', models.DO_NOTHING, blank=True, null=True)
-    status = models.CharField(db_column='Status', max_length=20)  # Field name made lowercase.
+    status = models.CharField(db_column='Status', max_length=40)  # Field name made lowercase.
     serveraorb = models.CharField(db_column='serverAorB', max_length=1, blank=True, null=True)  # Field name made lowercase.
     ups_ip = models.IntegerField(db_column='UPS_ip', blank=True, null=True)  # Field name made lowercase.
     ups_op = models.IntegerField(db_column='UPS_op', blank=True, null=True)  # Field name made lowercase.
@@ -250,6 +251,8 @@ class Datisweekly(models.Model):
     remarks = models.TextField(db_column='REMARKS', blank=True, null=True)  # Field name made lowercase.
     unit_incharge_approval = models.CharField(db_column='Unit_incharge_approval', max_length=3, blank=True, null=True)  # Field name made lowercase.
     s_verify = models.IntegerField(blank=True, null=True)
+    approval_date = models.DateField(blank=True, null=True)
+    approval_time = models.TimeField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -275,11 +278,12 @@ class Dgm(models.Model):
     dgm_id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=20, blank=True, null=True)
     designation = models.CharField(max_length=10, blank=True, null=True)
-    a = models.ForeignKey(Airport, models.DO_NOTHING, blank=True, null=True,related_name='yus')
+    a = models.ForeignKey(Airport, models.DO_NOTHING, blank=True,related_name='ui', null=True)
     contact = models.IntegerField(blank=True, null=True)
     password = models.CharField(max_length=128, blank=True, null=True)
     head = models.ForeignKey('Head', models.DO_NOTHING, blank=True, null=True)
     email = models.CharField(max_length=30)
+
     class Meta:
         managed = False
         db_table = 'dgm'
@@ -347,6 +351,8 @@ class Dmedaily(models.Model):
     unit_incharge_approval = models.CharField(db_column='Unit_incharge_approval', max_length=3, blank=True, null=True)  # Field name made lowercase.
     p_id = models.IntegerField(primary_key=True)
     s_verify = models.CharField(max_length=11, blank=True, null=True)
+    approval_date = models.DateField(blank=True, null=True)
+    approval_time = models.TimeField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -368,6 +374,8 @@ class Dmemonthly(models.Model):
     p_id = models.IntegerField(primary_key=True)
     s_verify = models.IntegerField(blank=True, null=True)
     status = models.CharField(max_length=30)
+    approval_date = models.DateField(blank=True, null=True)
+    approval_time = models.TimeField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -394,6 +402,8 @@ class Dmeweekly(models.Model):
     p_id = models.AutoField(primary_key=True)
     s_verify = models.IntegerField(blank=True, null=True)
     status = models.CharField(max_length=30)
+    approval_date = models.DateField(blank=True, null=True)
+    approval_time = models.TimeField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -422,6 +432,8 @@ class Dscndaily(models.Model):
     coro_function = models.CharField(db_column='CorO_function', max_length=5, blank=True, null=True)  # Field name made lowercase.
     remarks = models.TextField(db_column='REMARKS', blank=True, null=True)  # Field name made lowercase.
     unit_incharge_approval = models.CharField(db_column='Unit_incharge_approval', max_length=3, blank=True, null=True)  # Field name made lowercase.
+    approval_date = models.DateField(blank=True, null=True)
+    approval_time = models.TimeField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -436,6 +448,7 @@ class Dscndlogs(models.Model):
     value = models.CharField(max_length=30)
     date = models.DateField()
     time = models.TimeField()
+    p = models.ForeignKey(Datisdaily, models.DO_NOTHING, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -460,6 +473,8 @@ class Dscnmonthly(models.Model):
     unit_incharge_approval = models.CharField(db_column='Unit_incharge_approval', max_length=3, blank=True, null=True)  # Field name made lowercase.
     s_verify = models.IntegerField(blank=True, null=True)
     status = models.CharField(max_length=30)
+    approval_date = models.DateField(blank=True, null=True)
+    approval_time = models.TimeField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -481,6 +496,8 @@ class Dscnweekly(models.Model):
     antenna_n_cable_check = models.TextField(db_column='Antenna_n_Cable_check', blank=True, null=True)  # Field name made lowercase.
     remarks = models.TextField(db_column='REMARKS', blank=True, null=True)  # Field name made lowercase.
     unit_incharge_approval = models.CharField(db_column='Unit_incharge_approval', max_length=3, blank=True, null=True)  # Field name made lowercase.
+    approval_date = models.DateField(blank=True, null=True)
+    approval_time = models.TimeField(blank=True, null=True)
     s_verify = models.IntegerField(blank=True, null=True)
     status = models.CharField(max_length=30)
 
@@ -555,7 +572,7 @@ class Mcdo(models.Model):
     dop = models.DateTimeField(db_column='DOP')  # Field name made lowercase.
     content = models.TextField()
     doa = models.DateTimeField(db_column='DOA', blank=True, null=True)  # Field name made lowercase.
-    approved_by = models.ForeignKey(Employee, models.DO_NOTHING, db_column='approved_by',related_name='abc', blank=True, null=True)
+    approved_by = models.ForeignKey(Employee, models.DO_NOTHING, db_column='approved_by', blank=True,related_name='abc', null=True)
 
     class Meta:
         managed = False
@@ -575,7 +592,7 @@ class Navigation(models.Model):
     eqpt = models.CharField(max_length=20, blank=True, null=True)
     doi = models.DateField(db_column='DOI', blank=True, null=True)  # Field name made lowercase.
     doc = models.DateField(db_column='DOC', blank=True, null=True)  # Field name made lowercase.
-    emp = models.ForeignKey(Engineer, models.DO_NOTHING, blank=True, null=True)
+    supervisor = models.ForeignKey('Supervisor', models.DO_NOTHING, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -600,6 +617,8 @@ class Ndbdaily(models.Model):
     remote_ctrl_link_led = models.CharField(db_column='remote_ctrl_link_LED', max_length=20, blank=True, null=True)  # Field name made lowercase.
     remarks = models.TextField(db_column='REMARKS', blank=True, null=True)  # Field name made lowercase.
     unit_incharge_approval = models.CharField(db_column='Unit_incharge_approval', max_length=3, blank=True, null=True)  # Field name made lowercase.
+    approval_date = models.DateField(blank=True, null=True)
+    approval_time = models.TimeField(blank=True, null=True)
     p_id = models.AutoField(primary_key=True)
     s_verify = models.IntegerField(blank=True, null=True)
     status = models.CharField(max_length=30)
@@ -623,6 +642,8 @@ class Ndbmonthly(models.Model):
     ndb_eqpt_n_acu_cleaning = models.CharField(db_column='NDB_eqpt_n_ACU_cleaning', max_length=10, blank=True, null=True)  # Field name made lowercase.
     remarks = models.TextField(db_column='REMARKS', blank=True, null=True)  # Field name made lowercase.
     unit_incharge_approval = models.CharField(db_column='Unit_incharge_approval', max_length=3, blank=True, null=True)  # Field name made lowercase.
+    approval_date = models.DateField(blank=True, null=True)
+    approval_time = models.TimeField(blank=True, null=True)
     p_id = models.AutoField(primary_key=True)
     s_verify = models.IntegerField(blank=True, null=True)
     status = models.CharField(max_length=30)
@@ -645,6 +666,8 @@ class Ndbweekly(models.Model):
     antenna_site_condition = models.TextField(blank=True, null=True)
     remarks = models.TextField(db_column='REMARKS', blank=True, null=True)  # Field name made lowercase.
     unit_incharge_approval = models.CharField(db_column='Unit_incharge_approval', max_length=3, blank=True, null=True)  # Field name made lowercase.
+    approval_date = models.DateField(blank=True, null=True)
+    approval_time = models.TimeField(blank=True, null=True)
     p_id = models.AutoField(primary_key=True)
     s_verify = models.IntegerField(blank=True, null=True)
     status = models.CharField(max_length=30)
@@ -670,6 +693,8 @@ class Scctvdaily(models.Model):
     eqpt_cleaning = models.CharField(max_length=20, blank=True, null=True)
     remarks = models.TextField(db_column='REMARKS', blank=True, null=True)  # Field name made lowercase.
     unit_incharge_approval = models.CharField(db_column='Unit_incharge_approval', max_length=3, blank=True, null=True)  # Field name made lowercase.
+    approval_date = models.DateField(blank=True, null=True)
+    approval_time = models.TimeField(blank=True, null=True)
     p_id = models.AutoField(primary_key=True)
     s_verify = models.IntegerField(blank=True, null=True)
     status = models.CharField(max_length=30)
@@ -698,6 +723,8 @@ class Scctvmonthly(models.Model):
     user_rights_check = models.CharField(max_length=10, blank=True, null=True)
     remarks = models.TextField(db_column='REMARKS', blank=True, null=True)  # Field name made lowercase.
     unit_incharge_approval = models.CharField(db_column='Unit_incharge_approval', max_length=3, blank=True, null=True)  # Field name made lowercase.
+    approval_date = models.DateField(blank=True, null=True)
+    approval_time = models.TimeField(blank=True, null=True)
     p_id = models.AutoField(primary_key=True)
     s_verify = models.IntegerField(blank=True, null=True)
     status = models.CharField(max_length=30)
@@ -723,6 +750,8 @@ class Scctvweekly(models.Model):
     nas_free_capacity = models.FloatField(db_column='NAS_free_capacity', blank=True, null=True)  # Field name made lowercase.
     remarks = models.TextField(db_column='REMARKS', blank=True, null=True)  # Field name made lowercase.
     unit_incharge_approval = models.CharField(db_column='Unit_incharge_approval', max_length=3, blank=True, null=True)  # Field name made lowercase.
+    approval_date = models.DateField(blank=True, null=True)
+    approval_time = models.TimeField(blank=True, null=True)
     p_id = models.AutoField(primary_key=True)
     s_verify = models.IntegerField(blank=True, null=True)
     status = models.CharField(max_length=30)
@@ -755,7 +784,7 @@ class Surveillance(models.Model):
     eqpt = models.CharField(max_length=20, blank=True, null=True)
     doi = models.DateField(db_column='DOI', blank=True, null=True)  # Field name made lowercase.
     doc = models.DateField(db_column='DOC', blank=True, null=True)  # Field name made lowercase.
-    emp = models.ForeignKey(Engineer, models.DO_NOTHING, blank=True, null=True)
+    supervisor = models.ForeignKey(Supervisor, models.DO_NOTHING, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -769,17 +798,20 @@ class Vhfdaily(models.Model):
     date = models.DateField()
     time = models.TimeField()
     emp = models.ForeignKey(Engineer, models.DO_NOTHING, blank=True, null=True)
+    status = models.CharField(max_length=40)
     f = models.ForeignKey(Communication, models.DO_NOTHING)
     a = models.ForeignKey(Airport, models.DO_NOTHING)
     rx_no = models.IntegerField(db_column='RX_no', blank=True, null=True)  # Field name made lowercase.
     frequency_mhz = models.IntegerField(db_column='frequency_MHz', blank=True, null=True)  # Field name made lowercase.
     bit_test = models.CharField(max_length=10, blank=True, null=True)
-    status = models.CharField(max_length=10, blank=True, null=True)
+    vstatus = models.CharField(max_length=10, blank=True, null=True)
     rxn_check = models.CharField(db_column='RXN_check', max_length=10, blank=True, null=True)  # Field name made lowercase.
     acordc_coro = models.CharField(db_column='ACorDC_CorO', max_length=10, blank=True, null=True)  # Field name made lowercase.
     sq_threshold = models.IntegerField(db_column='SQ_threshold', blank=True, null=True)  # Field name made lowercase.
     remarks = models.TextField(db_column='Remarks', blank=True, null=True)  # Field name made lowercase.
     unit_incharge_approval = models.CharField(db_column='Unit_Incharge_Approval', max_length=3, blank=True, null=True)  # Field name made lowercase.
+    approval_date = models.DateField(blank=True, null=True)
+    approval_time = models.TimeField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -835,6 +867,8 @@ class Vhfmonthly(models.Model):
     bit_test = models.CharField(max_length=10, blank=True, null=True)
     remarks = models.TextField(db_column='REMARKS', blank=True, null=True)  # Field name made lowercase.
     unit_incharge_approval = models.CharField(db_column='Unit_incharge_approval', max_length=3, blank=True, null=True)  # Field name made lowercase.
+    approval_date = models.DateField(blank=True, null=True)
+    approval_time = models.TimeField(blank=True, null=True)
     s_verify = models.IntegerField(blank=True, null=True)
     status = models.CharField(max_length=30)
 
@@ -859,6 +893,8 @@ class Vhfyearly(models.Model):
     ac_dc_changeover = models.CharField(db_column='AC_DC_changeover', max_length=20, blank=True, null=True)  # Field name made lowercase.
     remarks = models.TextField(db_column='Remarks', blank=True, null=True)  # Field name made lowercase.
     unit_incharge_approval = models.CharField(db_column='Unit_incharge_approval', max_length=3, blank=True, null=True)  # Field name made lowercase.
+    approval_date = models.DateField(blank=True, null=True)
+    approval_time = models.TimeField(blank=True, null=True)
     s_verify = models.IntegerField(blank=True, null=True)
     status = models.CharField(max_length=30)
 

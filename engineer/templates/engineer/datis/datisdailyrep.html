@@ -7,7 +7,6 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" type="text/css" href="{% static 'engineer/datisstyle.css' %}">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
@@ -35,18 +34,18 @@
 					<div class="alert alert-success">
 						<strong>Maintenance succesful!</strong> 
 							All entries matched with standard values.
-					</div>					
+										
 					{% else %}					
 					<div class="alert alert-danger">
 						<strong>Maintenance failed!!!</strong> 
 							Please try again.
-					</div>
+					
 					{% endif %}
 					{% endif %}
 					{% if f == 1 %}
 					<div class="alert alert-danger">
 						<strong>Report Submitted to the supervisor!</strong> 
-					</div>
+					
 				   {% endif %}
 					<div class="card" style="text-align: center;">				    
 						<form id="form-v">					   
@@ -54,7 +53,7 @@
 					        <h2 class="card-title">DATIS-TERMA DAILY MAINTENANCE ENTRY</h2>
 					      
 					      	
-							 	<div class="alert alert-light" style="height: 10px; padding-top: 0px">
+							 	<div class="alert alert-light" style="height: 40px; padding-top: 0px">
 								    Recorded on:  DATE: {{ datisd.date }}  |  TIME: {{ datisd.time }}<br>
                                     <strong>STATUS: {{ datisd.status }} </strong>
 								</div>
@@ -191,11 +190,11 @@
 					  	</div>
 				  		
 					</div>				  		
-
+				</div>
 				  {% endfor %}
 				</div>
 	
-				<div class="col-sm-5" >
+				 <div class="col-sm-5" >
 	            	<div class="sidebar s" >
 		                <div class="col-sm-12">
 		                  <div class="card mb-3 sidecard" style="width: 22rem; " >
@@ -215,7 +214,7 @@
 		                    <div class="col">
 		                      <div class="card sidecard" style="width:10rem;" >
 		                            <div class="card-body" data-toggle="modal" data-target="#contactsuper" href='#'>
-		                                <h6>CONTACT ENGINEER</h6>
+		                                <h6>CONTACT SUPERVISOR</h6>
 		                            </div>
 		                        </div>     
 		                    </div>
@@ -236,7 +235,7 @@
 			                            </tr>
 			                        </thead>
 		                          	<tbody>
-		                            {% for log in logs %}
+		                            {% for log in datisdlogs %}
 			                            <tr>
 			                                <td>{{ log.log_id }}</td>
 			                                <td>{{ log.remarks }}</td>
@@ -372,14 +371,17 @@
 		                <div class="modal-dialog">
 		                  	<div class="modal-content">
 		                    	<div class="modal-header">
-			                      <h4 class="modal-title">ENGINEER</h4>
+			                      <h4 class="modal-title">SUPERVISOR</h4>
 			                      <button type="button" class="close" data-dismiss="modal">&times;</button>
 			                    </div>
 			                    <div class="modal-body">
-			                      <h5>Suraj Shah</h5>
-			                      <h6>Email: <a href="mailto:surajshah@aai.com">surajshah@aai.com</a></h6>
-			                      <h6>Phone: +919876543210</h6>
-			                    </div>
+									{% for sup in supdetails %}
+									<h5>{{ sup.name }}</h5>
+									<h6>Email: <a href="/email">{{ sup.email }}</a></h6>
+									<!--put the contact in the a href as mailto:{{ contact }} and outside in phone too-->
+									<h6>Phone: {{ sup.contact }}</h6>
+									{% endfor %}
+							   </div>
 			                    <div class="modal-footer">
 			                      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 			                    </div>  

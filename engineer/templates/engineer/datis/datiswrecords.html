@@ -5,7 +5,7 @@
   <title>Weekly DATIS Maintenance Report</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" type="text/css" href="{% static '/datisstyle.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'engineer/datisstyle.css' %}">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -23,7 +23,7 @@
       <div class="title-header">PREVENTIVE MAINTENANCE LOG<img src="{% static '/images/aai.jpg' %}"></div>
     </nav>
     <br>        
-        <table class="table table-bordered table-condensed table-striped table-hover todaytasks">
+        <table class="table table-bordered table-condensed table-striped table-hover todaytasks mantab">
             <thead>
                 <tr>  
 
@@ -32,12 +32,17 @@
                     
                   <th>Date</th>
                   <th>Time</th>
+                  <th>Status</th>
                   <th>Server A/B</th>
                   <th>UPS Input</th>
                <th>UPS Output</th>
                      <th>Dust Free</th>
                   <th>LAN Status</th>
+                  <th>Unit Incharge Approval</th>
+                  <th>Approval Date</th>
+                  <th>Approval time</th>
                   <th>Test</th>
+             
               <!--   <th>datetime_of_servers_wrt_GPS_CLK</th>
                   <th>status_of_Disk_array</th>
                   <th>VHFTX_ATIS_status</th>
@@ -53,11 +58,15 @@
                 <tr>
                   <td>{{ datisw.date }}</td>
                   <td>{{ datisw.time }}</td>
+                  <td>{{ datisw.status }}</td>
                  <td>{{ datisw.serveraorb }}</td>
                   <td>{{ datisw.ups_ip }}</td>
                   <td>{{ datisw.ups_op }}</td>
                   <td>{{ datisw.dust_free }}</td>
                   <td>{{ datisw.lan_status }}</td>
+                  <td>{{ datisw.unit_incharge_approval }}</td>
+                  <td>{{ datisw.approval_date }}</td>
+                  <td>{{ datisw.approval_time }}</td>
                   {% if datisw.serveraorb == "A" or datisw.serveraorb == "B" %}  
                   {% if datisw.ups_ip < 231 and datisw.ups_ip > 199 %}
                   {% if datisw.ups_op == 230 and datisw.dust_free == "OK" and datisw.lan_status == "OK" %}

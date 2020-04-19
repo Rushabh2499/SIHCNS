@@ -5,8 +5,7 @@
     <title>Weekly DATIS Maintenance Entry</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="{% static '/datisstyle.css' %}">
-    
+    <link rel="stylesheet" type="text/css" href="{% static 'engineer/datisstyle.css' %}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <!--<script src="strength.js"></script> temp-->
@@ -28,7 +27,7 @@
         </nav>
         <br>
         <div class="row">
-                <div class="col-sm-8">
+                <div class="col-sm-7">
                     <form method='POST' action='/datiswrepsub/{{ id }}' id="form-v">
                         {% csrf_token %}
                         <div class="card" style="text-align: center;">
@@ -86,32 +85,34 @@
 </div>
     </form>
 </div>
-<div>
-<div class="sidebar">
-                        <div class="col-sm-10">
-                            <div class="card mb-3 sidecard" style="width: 14rem; height: 9rem">
-                              <div class="card-body" data-toggle="modal" data-target="#standardcheck" href='#'>
-                                <h5><br><!--<a data-toggle="modal" data-target="#standardcheck" href='#'>-->CHECK STANDARDS<!--</a>--></h5>
-                              </div>
-                            </div>
-                        </div>
-  
-                        <div class="col-sm-10">
-                            <div class="card mb-3 sidecard" style="width: 14rem; height: 9rem">
-                              <div class="card-body" data-toggle="modal" data-target="#pastlog" href='#'>
-                                <h5><br><!--<a href="#" class="stretched-link text-white" onclick="window.open('/datisdailyrec/{{ id }}','_blank')">-->PAST EQUIPMENT LOGS<!--</a>--></h5>
-                              </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-10">
-                            <div class="card mb-3 sidecard" style="width: 14rem; height: 9rem">
-                              <div class="card-body" data-toggle="modal" data-target="#contactsuper" href='#'>
-                                <h5><br><!--<a data-toggle="modal" data-target="#contactsuper" href='#'>-->CONTACT SUPERVISOR<!--</a>--></h5>
-                              </div>
-                            </div>
-                        </div>
+<div class="col-sm-5" >
+                <div class="sidebar s s_01" >
+                    <div class="col-sm-12">
+                      <div class="card mb-3 sidecard" style="width: 22rem; padding-top:10px; padding-bottom: 10px;" >
+                          <div class="card-body" data-toggle="modal" data-target="#pastlog" href='#' >
+                              <h6>MAINTENANCE HISTORY</h6>
+                          </div>
+                        </div>    
                     </div>
+                    <div class="row rows">
+                        <div class="col">
+                            <div class="card sidecard"  style="margin-left: 1rem; width:10rem;">
+                                <div class="card-body" data-toggle="modal" data-target="#standardcheck" href='#'>
+                                    <h6>CHECK STANDARDS</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                          <div class="card sidecard" style="width:10rem;" >
+                                <div class="card-body" data-toggle="modal" data-target="#contactsuper" href='#'>
+                                    <h6>CONTACT SUPERVISOR</h6>
+                                </div>
+                            </div>     
+                        </div>
+                    </div>    
+                  </div>
                 </div>
+
    <!-- <td><button class="btn btn-success" onclick="window.open('/datisweeklyrec/{{ id }}','_blank')" >Past Equipment Logs</button></td>
     <td><button class="btn btn-success" onclick="window.open('/standards','_blank')">Check Standards</button></td>
     <td><button onclick="window.location.href= '/datisdaily/{{ id }}'"> Contact Supervisor</button></td>
@@ -169,14 +170,14 @@
 </div>
 
 <div class="modal fade" id="pastlog">
-                    <div class="modal-dialog modal-lg" style="overflow-y: auto;">
+                    <div class="modal-dialog modal-lg">
                       <div class="modal-content">
                         <div class="modal-header">
-                          <h4 class="modal-title">Past Maintenance Log</h4>
+                          <h4 class="modal-title">Maintenance History</h4>
                           <button type="button" class="close" data-dismiss="modal">&times;</button>
                         </div>
                         <div class="modal-body">
-                          <table class="table table-bordered table-condensed table-striped table-hover todaytasks">
+                          <table class="table table-bordered table-condensed table-striped table-hover todaytasks mantab">
             <thead>
                 <tr>  
                     <th>Date</th>
@@ -236,10 +237,14 @@
                           <button type="button" class="close" data-dismiss="modal">&times;</button>
                         </div>
                         <div class="modal-body">
-                          <h5>Suraj Shah</h5>
-                          <h6>Email: <a href="mailto:surajshah@aai.com">surajshah@aai.com</a></h6>
-                          <h6>Phone: +919876543210</h6>
-                        </div>
+                          {% for sup in supdetails %}
+                          <h5>{{ sup.name }}</h5>
+                          <h6>Email: <a href="/email">{{ sup.email }}</a></h6>
+                     
+                      <!--put the contact in the a href as mailto:{{ contact }} and outside in phone too-->
+                      <h6>Phone: {{ sup.contact }}</h6>
+                      {% endfor %}
+                     </div>
                         <div class="modal-footer">
                           <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                         </div>  

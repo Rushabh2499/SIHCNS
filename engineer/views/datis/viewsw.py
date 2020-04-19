@@ -8,7 +8,7 @@ def datisweeklyrec(request, id):
   if request.session.has_key('uid'):
     cursor = connection.cursor() 
     datis_w = models.Datisweekly.objects.all()
-    datis_w = datis_w.values('p_id','date','time','serveraorb','ups_ip','ups_op','dust_free','lan_status','remarks')
+    datis_w = datis_w.values('p_id','date','time','status','serveraorb','ups_ip','ups_op','dust_free','lan_status','unit_incharge_approval','approval_date','approval_time')
     datis_w = datis_w.filter(emp_id=id)
     return render(request,'engineer/datis/datiswrecords.html',{'datis_w':datis_w,'id':id}) 
   else : 
@@ -21,8 +21,13 @@ def datisw(request, id) :
     datis_w = datis_w.filter(emp_id=id)
     datisw = datis_w
     datis_w = datis_w.filter(date=date.today())
+    supdetails = models.Supervisor.objects.all()
+    supdetails = supdetails.values('name','contact','email').filter(dept='C')
+    datiswlogs = models.Datiswlogs.objects.all()
+    datiswlogs = datiswlogs.filter(date=date.today())    
+    
     if datis_w :
-       return render(request,'engineer/datis/datisweeklyrep.html',{'datis_w':datis_w,'id':id,'datisw':datisw}) 
+       return render(request,'engineer/datis/datisweeklyrep.html',{'datiswlogs':datiswlogs,'supdetails':supdetails,'datis_w':datis_w,'id':id,'datisw':datisw}) 
     else :
        messages.add_message(request,30, 'You cannot make changes to pending report!')
        return routebackdatisd(request, id)
@@ -34,7 +39,10 @@ def datiswrep(request, id) :
     datis_w = models.Datisweekly.objects.all()
     datis_w = datis_w.values('p_id','date','time','serveraorb','ups_ip','ups_op','dust_free','lan_status','remarks')
     datis_w = datis_w.filter(emp_id=id)
-    return render(request,'engineer/datis/datiswrepsub.html',{'datis_w':datis_w,'id':id}) 
+    supdetails = models.Supervisor.objects.all()
+    supdetails = supdetails.values('name','contact','email').filter(dept='C')
+   
+    return render(request,'engineer/datis/datiswrepsub.html',{'datis_w':datis_w,'id':id,'supdetails':supdetails}) 
     
 def datiswrepsubw(request, id) :  
     a_id = models.Engineer.objects.all()
@@ -116,7 +124,12 @@ def datiswrepsubw(request, id) :
     datis_w = datis_w.values('p_id','date','time','serveraorb','ups_ip','ups_op','dust_free','lan_status','remarks')
     datisw = datis_w.filter(emp_id=id)
     datis_w = datis_w.filter(date=currdate)
-    return render(request,'engineer/datis/datisweeklyrep.html',{'datis_w':datis_w,'id':id,'datisw':datisw})      
+    supdetails = models.Supervisor.objects.all()
+    supdetails = supdetails.values('name','contact','email').filter(dept='C')
+    datiswlogs = models.Datiswlogs.objects.all()
+    datiswlogs = datiswlogs.filter(date=date.today())    
+    
+    return render(request,'engineer/datis/datisweeklyrep.html',{'datiswlogs':datiswlogs,'datis_w':datis_w,'id':id,'datisw':datisw,'supdetails':supdetails})      
 
 def editdatisweekly(request, p_id) :
     cursor = connection.cursor() 
@@ -127,7 +140,12 @@ def editdatisweekly(request, p_id) :
     datis_w = datisw.filter(emp_id=emp_id)
     datisw = datisw.filter(p_id=p_id)
     datis_id = datisw.values('p_id').filter(p_id=p_id)[0]['p_id']
-    return render(request,'engineer/datis/editdatiswrepsub.html',{'datisw':datisw,'id':datis_id,'datis_w':datis_w})
+    supdetails = models.Supervisor.objects.all()
+    supdetails = supdetails.values('name','contact','email').filter(dept='C')
+    datiswlogs = models.Datiswlogs.objects.all()
+    datiswlogs = datiswlogs.filter(date=date.today())    
+     
+    return render(request,'engineer/datis/editdatiswrepsub.html',{'datiswlogs':datiswlogs,'datisw':datisw,'id':datis_id,'datis_w':datis_w,'supdetails':supdetails})
 
 def updatisweekly(request, id) :
     p_id = models.Datisweekly.objects.all()
@@ -221,7 +239,11 @@ def updatisweekly(request, id) :
     datis_w = datis_w.values('p_id','date','time','serveraorb','ups_ip','ups_op','dust_free','lan_status','remarks')
     datisw = datis_w.filter(emp_id=emp_id)
     datis_w = datis_w.filter(date=currdate)
-    return render(request,'engineer/datis/datisweeklyrep.html',{'datis_w':datis_w,'id':emp_id,'datisw':datisw})      
+    supdetails = models.Supervisor.objects.all()
+    supdetails = supdetails.values('name','contact','email').filter(dept='C')
+    datiswlogs = models.Datiswlogs.objects.all()
+    datiswlogs = datiswlogs.filter(date=date.today())    
+    return render(request,'engineer/datis/datisweeklyrep.html',{'datiswlogs':datiswlogs,'datis_w':datis_w,'id':emp_id,'datisw':datisw,'supdetails':supdetails})      
 
 def repsubwerrors(request,p_id,id):
     cursor = connection.cursor() 
@@ -243,6 +265,8 @@ def finalwrepsub(request,p_id,id):
     sql = "INSERT INTO datiswlogs (emp_id,p_id,remarks,value,date,time) values (%s ,%s,%s, %s , %s,%s)"
     cursor.execute(sql,val)
     cursor.execute("update datisweekly set status = %s where p_id = %s",["COMPLETED WITH ERRORS",p_id])
+    cursor.execute("update datisweekly set unit_incharge_approval = %s where p_id = %s",[None,p_id])
+   
     #code for notification to supervisor will come over here 
     if request.session.has_key('uid'):
         cursor = connection.cursor() 
@@ -251,7 +275,12 @@ def finalwrepsub(request,p_id,id):
         datis_w = datis_w.values('p_id','date','time','serveraorb','ups_ip','ups_op','dust_free','lan_status','remarks')
         datisw = datis_w.filter(emp_id=id)
         datis_w = datis_w.filter(date=currdate)
-        return render(request,'engineer/datis/datisweeklyrep.html',{'datis_w':datis_w,'id':id,'f':f,'datisw':datisw})      
+        supdetails = models.Supervisor.objects.all()
+        supdetails = supdetails.values('name','contact','email').filter(dept='C')
+        datiswlogs = models.Datiswlogs.objects.all()
+        datiswlogs = datiswlogs.filter(date=date.today())    
+    
+        return render(request,'engineer/datis/datisweeklyrep.html',{'datiswlogs':datiswlogs,'datis_w':datis_w,'id':id,'f':f,'datisw':datisw,'supdetails':supdetails})      
     else : 
         return render(request,'login/login.html')
 

@@ -19,7 +19,7 @@
         <nav class="navbar sticky-top">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a href='#' onclick="window.location.href='/routebackdd/{{ id }}'" class="taskbut"><img src="{% static '/images/task.png' %}"></a>
+                    <a href='#' onclick="window.location.href='/routebackdd/{{ temp.p_token }}'" class="taskbut"><img src="{% static '/images/task.png' %}"></a>
                 </li>
             </ul>
             <div class="title-header">PREVENTIVE MAINTENANCE LOG<img src="{% static '/images/aai.jpg' %}"></div>
@@ -30,7 +30,7 @@
         <div class="row">
             <div class="col-sm-7">
 
-                    {% if f != 1 %}
+                    {% if temp.unit_incharge_approval == NONE %}
                     {% if temp.room_temp < 25 and temp.status_of_servera == "MAINS" and temp.status_of_serverb == "STANDBY" and temp.status_of_ups == "NORMAL" and temp.status_of_ac == "SVCBL" or temp.room_temp < 25 and temp.status_of_servera == "STANDBY" and temp.status_of_serverb == "MAINS" and temp.status_of_ups == "NORMAL" and temp.status_of_ac == "SVCBL" %}
                 <div class="alert alert-success">
                     <strong> All maintenance entries matched with standard values.</strong> 
@@ -41,6 +41,18 @@
                                               
                 </div>
                 {% endif %}
+                {% else %}
+                {% if temp.unit_incharge_approval == "NO" %}
+                  <div class="alert alert-danger">
+                    <strong>Report Declined; Waiting for update.</strong>
+                  </div>
+                {% endif %}
+                {% if temp.unit_incharge_approval == "YES" %}
+                  <div class="alert alert-success">
+                    <strong>Report Approved.</strong> 
+                  </div> 
+                {% endif %}
+
                 {% endif %}
                 <div class="card" style="text-align: center;">                  
                     <form id="form-v">                    
@@ -99,210 +111,287 @@
 
                                 
                                 <hr>
-                                {% if temp.status != "PENDING" %}
-                                  {% if temp.status == "COMPLETED WITH ERROR" %}                      
-                                      <button style="width: 100px; margin-right: 10%;"class="btn submitbut" onclick="window.location.href='{% url 'supervisor:sendmail' temp.emp_id%}'">REPORT</button>
+                                {% if temp.status != "PENDING" and temp.unit_incharge_approval == NONE %}
+                                  {% if temp.status == "COMPLETED WITH ERRORS" %}                      
+                                      <button type="button" data-toggle="modal" data-target="#report" style="width: 100px; margin-right: 10%;"class="btn submitbut">DECLINE</button>
+                                      
                                   {% endif %}
 
-                                      <button class="btn submitbut" onclick="window.location.href='{% url 'supervisor:verify' names temp.p_id%}'">VERIFY</button>
+                                      <button class="btn submitbut" onclick="window.location.href='{% url 'supervisor:verify' names=names id=temp.p_token %}'">APPROVE</button>
                                 {% endif %}
+
+                                <div class="modal fade" id="report">
+                                      <div class="modal-dialog">
+                                        <div class="modal-content">
+                                          <div class="modal-header">
+                                            <h4 class="modal-title">SEND REPORT FOR RECHECKING</h4>
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                          </div>
+                                          <div class="modal-body">
+                                           <div class="helloform" style="padding:0">
+                                              <form method='post' action="{% url 'supervisor:sent' %}" >
+                                                  {% csrf_token %}
+                                                  <br>
+                                                  <div class="form-group row has-warning">
+                                                      <label for="to" class="col-sm-6 col-form-label">TO:</label>
+                                                      <div>
+                                                        <input class="form-control form-control-sm" type='text' readonly value="{{temp.email}}"  ></input><!-- Non functional -->
+                                                      </div>
+                                                  </div>
+                                                 
+                                                  <div class="form-group row has-warning">
+                                                      <label for="name" class="col-sm-6 col-form-label">NAME:</label>
+                                                      <div>
+                                                        <input class="form-control form-control-sm" type='text' readonly value="{{temp.name}}" ></input><!-- Non functional -->
+                                                      </div>
+                                                  </div>
+                                                  <div class="form-group row has-warning">
+                                                      <label for="des" class="col-sm-6 col-form-label">DESIGNATION:</label>
+                                                      <div>
+                                                        <input class="form-control form-control-sm" type='text' readonly value="{{temp.edesignation}}"  ></input><!-- Non functional -->
+                                                      </div>
+                                                  </div>
+                                                  <hr>
+                                                  <!-- <div class="form-group row has-warning">
+                                                      <label for="cc" class="col-sm-6 col-form-label">CC:</label>
+                                                      <div>
+                                                        <input class="form-control form-control-sm" type='text' placeholder='CC'></input>
+                                                      </div>
+                                                  </div>
+                                                  <hr>
+                                                  <div class="form-group row has-warning">
+                                                      <label for="bcc" class="col-sm-6 col-form-label">BCC:</label>
+                                                      <div>
+                                                        <input class="form-control form-control-sm" type='text' placeholder='BCC' ></input>
+                                                      </div>
+                                                  </div>
+                                                  <hr> 
+                                                  <div class="form-group row has-warning">
+                                                      <label for="Subject" class="col-sm-6 col-form-label">SUBJECT:</label>
+                                                      <div>
+                                                        <input class="form-control form-control-sm" type='text'></input>
+                                                      </div>
+                                                  </div>
+                                                  <hr>-->
+                                                  <div class="form-group row has-warning">
+                                                      <label for="body" class="col-sm-6 col-form-label">BODY:</label>
+                                                      <div>
+                                                        <textarea rows="5" placeholder="Enter message" size="100" name='feedback' value="Hello {$name}, this is regarding the issue."></textarea> 
+                                                      </div>
+                                                  </div>
+                                                  <hr>                                                  
+                                                  <input type="submit" value="SEND">  
+                                              </form>
+                                            </div>
+                                          </div>
+                                          <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                          </div>  
+                                        </div>
+                                      </div>
+                                    </div>    
+
                         </div>
                     </form>                                      
                 </div>                      
             </div>
+<!--if statement
+            <div class="alert alert-success">
+                    <strong>Report sent</strong> 
+                </div>  -->               
 
             <div class="col-sm-5" >
-            	<div class="sidebar s" >
-	                <div class="col-sm-12">
-	                  <div class="card mb-3 sidecard" style="width: 22rem; " >
-	                      <div class="card-body" data-toggle="modal" data-target="#pastlog" href='#' >
-	                          <h6>MAINTENANCE HISTORY</h6>
-	                      </div>
-                  	  </div>    
-                	</div>
-                	<div class="row rows">
-	                    <div class="col">
-	                      	<div class="card sidecard"  style="margin-left: 1rem; width:10rem;">
-	                          	<div class="card-body" data-toggle="modal" data-target="#standardcheck" href='#'>
-	                              	<h6>CHECK STANDARDS</h6>
-	                          	</div>
-	                      	</div>
-	                    </div>
-	                    <div class="col">
-	                      <div class="card sidecard" style="width:10rem;" >
-	                            <div class="card-body" data-toggle="modal" data-target="#contactsuper" href='#'>
-	                                <h6>CONTACT ENGINEER</h6>
-	                            </div>
-	                        </div>     
-	                    </div>
-                	</div>    
-              	</div>
+                <div class="sidebar s" >
+                    <div class="col-sm-12">
+                      <div class="card mb-3 sidecard" style="width: 22rem; " >
+                          <div class="card-body" data-toggle="modal" data-target="#pastlog" href='#' >
+                              <h6>MAINTENANCE HISTORY</h6>
+                          </div>
+                      </div>    
+                    </div>
+                    <div class="row rows">
+                        <div class="col">
+                            <div class="card sidecard"  style="margin-left: 1rem; width:10rem;">
+                                <div class="card-body" data-toggle="modal" data-target="#standardcheck" href='#'>
+                                    <h6>CHECK STANDARDS</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                          <div class="card sidecard" style="width:10rem;" >
+                                <div class="card-body" data-toggle="modal" data-target="#contactsuper" href='#'>
+                                    <h6>CONTACT ENGINEER</h6>
+                                </div>
+                            </div>     
+                        </div>
+                    </div>    
+                </div>
 
                 <div> 
-                  	<div class="logr">                       
+                    <div class="logr">                       
                         <div class="card sidecard logrtitle"> REPORT LOG </div>
                         <div class="tablogr">
-	                        <table class= "table-bordered table-condensed table-striped table-hover todaytasks tabr">
-		                        <thead >
-		                            <tr>
-		                              <th>Log_ID</th>
-		                              <th>Remarks</th>
-		                              <th>Value</th>
-		                              <th>Date-Time</th>  
-		                            </tr>
-		                        </thead>
-	                          	<tbody>
-	                            {% for log in logs %}
-		                            <tr>
-		                                <td>{{ log.log_id }}</td>
-		                                <td>{{ log.remarks }}</td>
-		                                <td>{{ log.value }}</td>
-		                                <td>{{ log.time }}<br>{{ log.date }}</td>
-		                             </tr>
-	                            {% endfor %}
-	                          </tbody>                           
-	                        </table>
-                    	</div>
-                  	</div>
+                            <table class= "table-bordered table-condensed table-striped table-hover todaytasks tabr">
+                                <thead >
+                                    <tr>
+                                      <th>Log_ID</th>
+                                      <th>Remarks</th>
+                                      <th>Value</th>
+                                      <th>Date-Time</th>  
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for log in logs %}
+                                    <tr>
+                                        <td>{{ log.log_id }}</td>
+                                        <td>{{ log.remarks }}</td>
+                                        <td>{{ log.value }}</td>
+                                        <td>{{ log.time }}<br>{{ log.date }}</td>
+                                     </tr>
+                                {% endfor %}
+                              </tbody>                           
+                            </table>
+                        </div>
+                    </div>
                 </div>   
               
-          		<div class="modal fade" id="standardcheck">
-				    <div class="modal-dialog">
-      				    <div class="modal-content">
-      				      	<div class="modal-header">
-      				          	<h4 class="modal-title">Standards</h4>
-      				          	<button type="button" class="close" data-dismiss="modal">&times;</button>
-      				      	</div>
-    				        <div class="modal-body">
-    				          	<table class="table table-bordered table-condensed table-striped table-hover todaytasks">
-	    				          	<tr>
-	    				          		<th>VALUE LABEL</th>
-	    				          		<th>NORMAL VALUE</th>
-	    				          	</tr>
-	    				          	<tr>
-	    				          		<td>Room Temperature</td>
-	    				          		<td>24 C</td>
-	    				          	</tr>
-	    				          	
-	    								    <tr>
-	    				          		<td>Status of AC</td>
-	    				          		<td>Svcbl</td>
-	    				          	</tr>
-	    				          	<tr>
-	    				          		<td>Status OF UPS</td>
-	    				          		<td>Nml</td>
-	    				          	</tr>
-	    				          	<tr>
-	    				          		<td>Status of Server A</td>
-	    				          		<td>Main/Stby</td>
-	    				          	</tr>
-	    				          	<tr>
-	    				          		<td>Status of Server B</td>
-	    				          		<td>Main/Stdby</td>
-	    				          	</tr>
-	    				          	<!--	<tr>
-	    				          		<td>Date and time of servers wrt GPS CLK</td>
-	    				          		<td>Correct</td>
-	    				          	</tr>
-	    				          		<tr>
-	    				          		<td>Status of Disk Array</td>
-	    				          		<td>OK</td>
-	    				          	</tr>
-	    				          		<tr>
-	    				          		<td>Status of VHF TX used for ATIS</td>
-	    				          		<td>On-Line</td>
-	    				          	</tr>
-	    				          		<tr>
-	    				          		<td>Status of VHF RX used for ATIS</td>
-	    				          		<td>On-Line</td>
-	    				          	</tr>
-	    				          		<tr>
-	    				          		<td>DATIS update</td>
-	    				          		<td>OK</td>
-	    				          	</tr>
-	    				          		<tr>
-	    				          		<td>Audio Quality of Datis Announcement</td>
-	    				          		<td>Good</td>
-	    				          	</tr>-->
-    				          </table>
-    				        </div>
-    				        <div class="modal-footer">
-    				          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-    				        </div>  
-      				    </div>
-  				  	</div>
-  				</div>
+                <div class="modal fade" id="standardcheck">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Standards</h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <table class="table table-bordered table-condensed table-striped table-hover todaytasks">
+                                    <tr>
+                                        <th>VALUE LABEL</th>
+                                        <th>NORMAL VALUE</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Room Temperature</td>
+                                        <td>24 C</td>
+                                    </tr>
+                                    
+                                            <tr>
+                                        <td>Status of AC</td>
+                                        <td>Svcbl</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Status OF UPS</td>
+                                        <td>Nml</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Status of Server A</td>
+                                        <td>Main/Stby</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Status of Server B</td>
+                                        <td>Main/Stdby</td>
+                                    </tr>
+                                    <!--    <tr>
+                                        <td>Date and time of servers wrt GPS CLK</td>
+                                        <td>Correct</td>
+                                    </tr>
+                                        <tr>
+                                        <td>Status of Disk Array</td>
+                                        <td>OK</td>
+                                    </tr>
+                                        <tr>
+                                        <td>Status of VHF TX used for ATIS</td>
+                                        <td>On-Line</td>
+                                    </tr>
+                                        <tr>
+                                        <td>Status of VHF RX used for ATIS</td>
+                                        <td>On-Line</td>
+                                    </tr>
+                                        <tr>
+                                        <td>DATIS update</td>
+                                        <td>OK</td>
+                                    </tr>
+                                        <tr>
+                                        <td>Audio Quality of Datis Announcement</td>
+                                        <td>Good</td>
+                                    </tr>-->
+                              </table>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            </div>  
+                        </div>
+                    </div>
+                </div>
 
-              	<div class="modal fade" id="pastlog">
-	                <div class="modal-dialog modal-lg">
-	                  	<div class="modal-content">
-		                    <div class="modal-header">
-		                      <h4 class="modal-title">Maintenance History</h4>
-		                      <button type="button" class="close" data-dismiss="modal">&times;</button>
-		                    </div>
-		                    <div class="modal-body">
-			                    <table class="table table-bordered table-condensed table-striped table-hover todaytasks mantab">
-			                        <thead>
-			                            <tr>  
-			                              <th>Date</th>
-			                                <th>Time</th>
-			                                <th>Room Temp</th>
-			                                <th>Status of AC</th>
-			                              <th>Status of UPS</th>
-			                                <th>Status of server A</th>
-			                                <th>Status of server B</th>
-			                                <th>Remarks</th>
-			                                <th>Test</th>
-			                            </tr>
-			                        </thead>
-			                        <tbody>
-			                            {% for datisdd in datisd %}
-			                            <tr>
-			                             
-			                              <td>{{ datisdd.date }}</td>
-			                                <td>{{ datisdd.time }}</td>
-			                                <td>{{ datisdd.room_temp }}</td>
-			                                <td>{{ datisdd.status_of_ac }}</td>
-			                                <td>{{ datisdd.status_of_ups }}</td>
-			                                <td>{{ datisdd.status_of_servera }}</td>
-			                                <td>{{ datisdd.status_of_serverb }}</td>
-			                                <td>{{ datisdd.remarks }}</td>
-			                            {% if datisd.room_temp < 25 and datisd.status_of_servera == "MAINS" and datisd.status_of_serverb == "STANDBY" and datisd.status_of_ups == "NORMAL" and datisd.status_of_ac == "SVCBL" or datisd.room_temp < 25 and datisd.status_of_servera == "STANDBY" and datisd.status_of_serverb == "MAINS" and datisd.status_of_ups == "NORMAL" and datisd.status_of_ac == "SVCBL" %}
-			                                <td>Pass</td>
-			                            {% else %}
-			                                <td>Fail</td>
-			                            {% endif %}  
-			                            </tr>
-			                            {% endfor %}
-			                        </tbody>
-			                    </table>
-		                    </div>
-		                    <div class="modal-footer">
-		                      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-			                </div>  
-	                 	</div>
-	                </div>
-              	</div>
+                <div class="modal fade" id="pastlog">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                              <h4 class="modal-title">Maintenance History</h4>
+                              <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <table class="table table-bordered table-condensed table-striped table-hover todaytasks mantab">
+                                    <thead>
+                                        <tr>  
+                                          <th>Date</th>
+                                            <th>Time</th>
+                                            <th>Room Temp</th>
+                                            <th>Status of AC</th>
+                                          <th>Status of UPS</th>
+                                            <th>Status of server A</th>
+                                            <th>Status of server B</th>
+                                            <th>Remarks</th>
+                                            <th>Test</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody><!-- Need to change variables -->
+                                        {% for datisdd in datisd %}
+                                        <tr>
+                                         
+                                          <td>{{ datisdd.date }}</td>
+                                            <td>{{ datisdd.time }}</td>
+                                            <td>{{ datisdd.room_temp }}</td>
+                                            <td>{{ datisdd.status_of_ac }}</td>
+                                            <td>{{ datisdd.status_of_ups }}</td>
+                                            <td>{{ datisdd.status_of_servera }}</td>
+                                            <td>{{ datisdd.status_of_serverb }}</td>
+                                            <td>{{ datisdd.remarks }}</td>
+                                        {% if datisd.room_temp < 25 and datisd.status_of_servera == "MAINS" and datisd.status_of_serverb == "STANDBY" and datisd.status_of_ups == "NORMAL" and datisd.status_of_ac == "SVCBL" or datisd.room_temp < 25 and datisd.status_of_servera == "STANDBY" and datisd.status_of_serverb == "MAINS" and datisd.status_of_ups == "NORMAL" and datisd.status_of_ac == "SVCBL" %}
+                                            <td>Pass</td>
+                                        {% else %}
+                                            <td>Fail</td>
+                                        {% endif %}  
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            </div>  
+                        </div>
+                    </div>
+                </div>
 
-              	<div class="modal fade" id="contactsuper">
-	                <div class="modal-dialog">
-	                  	<div class="modal-content">
-	                    	<div class="modal-header">
-		                      <h4 class="modal-title">ENGINEER</h4>
-		                      <button type="button" class="close" data-dismiss="modal">&times;</button>
-		                    </div>
-		                    <div class="modal-body">
-		                      <h5>Suraj Shah</h5>
-		                      <h6>Email: <a href="mailto:surajshah@aai.com">surajshah@aai.com</a></h6>
-		                      <h6>Phone: +919876543210</h6>
-		                    </div>
-		                    <div class="modal-footer">
-		                      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-		                    </div>  
-	                  </div>
-	                </div>
-              	</div>                 
-        	</div>
+                <div class="modal fade" id="contactsuper">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                              <h4 class="modal-title">ENGINEER</h4><!-- Need to enter details -->
+                              <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                              <h5>{{Engineer Name}}</h5>
+                              <h6>Email: <a href="mailto:surajshah@aai.com">{{engineer@emai}}</a></h6>
+                              <h6>Phone: {{engineer contact}}</h6>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            </div>  
+                      </div>
+                    </div>
+                </div>                 
+            </div>
         </div>
     </div>   
     <script>

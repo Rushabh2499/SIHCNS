@@ -30,6 +30,7 @@ ALLOWED_HOSTS = ['127.0.0.1']
 
 # Application definition
 STATIC_URL = '/static/'
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 EMAIL_USE_TLS = True
@@ -90,7 +91,7 @@ WSGI_APPLICATION = 'admin.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'cnsbhu',
+        'NAME': 'cns',
         'USER':'root',
         'PASSWORD':'',
         'HOST':'localhost',
@@ -135,4 +136,4 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_URL = '/static/'
+

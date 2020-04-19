@@ -1,0 +1,8 @@
+<html>
+    <form method='POST' action='/sent/'>
+        {% csrf_token %}
+		<input tpye="text" name="mail"  placeholder="Enter the message" />
+        <button>SUBMIT</button>
+
+    </form>
+</html>

@@ -6,7 +6,6 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	 <link rel="stylesheet" type="text/css" href="{% static 'supervisor/home.css' %}">
-	 
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"> 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -35,12 +34,8 @@
 					  	
 					    <h5 class="card-title">{{sup.name}}</h5>
 						<div class="data-emp">
-							<h6 class="card-title">{{sup.designation}} {{ sup.uid }}</h6><!-- Retrieve Designation -->
-
-    						 {% csrf_token %}
-							<br>
 							
-							<h6 class="card-title">{{air.name}}</h6><!-- Retrieve Airport name -->
+							<h6 class="card-subsubtitle">{{air.name}}</h6><!-- Retrieve Airport name -->
 							
 							<br>
 							<br>
@@ -50,13 +45,32 @@
 				<div class="card cardcontact">	
 					<div class="card-body headcard">
 							DGM: {{dgm.name}} 
-							Email:{{dgm.email}} <!-- Retrieve EmailID --> 
+							<!--Email:{{dgm.email}}  Retrieve EmailID --> 
 							<br>
-							Contact:{{dgm.contact}}  <!-- Retrieve contact -->
+						   <button class="btn btn-primary contactbut" data-toggle="modal" data-target="#contactsuper" href='#'>Contact</a>
 							<br>
-						   <a href="#" class="btn btn-primary contactbut">Contact</a>
-							<br>
+
 					</div>
+
+				</div>
+				<div class="modal fade" id="contactsuper">
+				    <div class="modal-dialog">
+				      <div class="modal-content">
+				        <div class="modal-header">
+				          <h4 class="modal-title">SUPERVISOR</h4>
+				          <button type="button" class="close" data-dismiss="modal">&times;</button>
+				        </div>
+				        <div class="modal-body">
+				          <h5>{{dgm.name}}</h5>
+				          <h6>Email: <a href="mailto:{{dgm.email}}">{{dgm.email}}</a></h6>
+				          <!--put the contact in the a href as mailto:{{ contact }} and outside in phone too-->
+				          <h6>Phone: {{dgm.contact}}</h6>
+				        </div>
+				        <div class="modal-footer">
+				          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				        </div>  
+				      </div>
+				    </div>
 				</div>
 			</div>	
 			<div class="col-md-2">
@@ -66,41 +80,69 @@
 					<div class="card tabcard">
 						<ul class="nav nav-pills nav-stacked">
 						    <li class="active"><a class="todays" data-toggle="pill" href="#today" >Pending Approvals</a></li>
+						    <li><a class="todays" data-toggle="pill" href="#pending" >Pending Submissions</a></li>
 						    <li><a class="faculty" data-toggle="pill" href="#employ" >Engineers</a></li>
 						    <li><a class="faculty" data-toggle="pill" href="#facilities" >Facilities</a></li>
+						    
 						 </ul>
-						 <button class="btn btn-primary logout" onclick="window.location.href='/logout/{{ sup.id }}'"> Logout</button></td><!-- Link logout button -->
+						 <button class="btn btn-primary logout" onclick="window.location.href='/logout/{{ sup.supervisor_id }}'"> Logout</button></td><!-- Link logout button -->
 					</div>
 				</div>
 
 				<div class="col-md-4 card tabcol">
 					<div class="tab-content">
-			    		<div id="today" class="tab-pane fade in active fac">
+			    		<div id="today" class="tab-pane fade in active tod">
 								<table class="table table-bordered table-condensed table-striped table-hover todaytasks">
 									<tr>
 							      		<th>Submitted on</th>
 							      		<th>Task Name</th>
-							      		<th>Status</th>
+							      		<th>Submission Type</th>
+							      		<th>Approval Status</th>
 						      		</tr>
 						      		{% for i in datis %}
-								    <tr data-href="/schoice/{{i.p_id}}/{{i.type}}">
+						      		{% if i.status != "PENDING" and i.unit_incharge_approval != "YES" %}
+								    <tr data-href="{% url 'supervisor:details' id=i.token name=i.type%}">								    	
 								        <td>{{i.date}}</td>
 								        <td>{{i.type}}</td>
 								        <td>{{i.status}}</td>
+								        <td>{{i.unit_incharge_approval}}</td>								       
+								    </tr>
+								    {% endif %}
+								    {% endfor %}
+						      		
+								</table>
+						</div>		
+						<div id="pending" class="tab-pane fade in tod">
+								<table class="table table-bordered table-condensed table-striped table-hover todaytasks">
+									<tr>
+										<th>Deadline</th>
+							      		<th>Attempted on</th>
+							      		<th>Task Name</th>
+							      		<th>Employee ID</th>
+						      		</tr>
+						      		{% for i in datis %}
+						      		{% if i.status == "PENDING" %}
+								    <tr data-href="{% url 'supervisor:details' id=i.token name=i.type%}">
+								    	
+								    	<td>{{i.repdead}}</td>
+								        <td>{{i.date}}</td>
+								        <td>{{i.type}}</td>
+								        <td>{{i.emp_id}}</td>
 								        <!-- <td><a href="/schoice/{{i.p_id}}/{{i.type}} ">{{i.p_id}}</a> </td> -->     
 								    </tr>
+								    {% endif %}
 								    {% endfor %}
 								</table>
-						</div>						
-						<div id="employ" class="tab-pane fade fac">
+						</div>							
+						<div id="employ" class="tab-pane fade tod">
 							<table class="table table-bordered table-condensed table-striped table-hover todaytasks">
-							    <tr>
+							    <tr >
 							    	<th>Employee ID</th>
-							    	<th>Name</th>
-							    	<th>Designatiom</th>
+							    	<th>Employee Name</th>
+							    	<th>Employee Designation</th>
 							    </tr>
 							    {% for i in eng %}
-							    <tr data-href="/schoice/employee/{{i.emp_id}}">
+							    <tr data-href="{% url 'supervisor:empdetails' i.token%}">
 									<td>{{i.emp_id}}</td>
 									<td>{{i.name}}</td>
 									<td>{{i.designation}}</td>
@@ -109,6 +151,7 @@
 							    {% endfor %}
 							</table>
 						</div>
+						
 						<div id="facilities" class="tab-pane fade fac">
 							 	 
 							<div id="facfix"> 
@@ -117,75 +160,109 @@
 								<button class="tablink" onclick="openCity('Monthly', this, 'blue')">Monthly</button>
 							</div>
 							<div id="Daily" class="tabcontent">
-								<table class="table table-bordered table-condensed table-striped table-hover todaytasks">
-
-									<tr>
-										<td>
-											<a href="{% url 'supervisor:cdvordaily' %}">cdvordaily</a>
-										</td>
-										
-									</tr>
-									<tr>
-										<td>
-											<a href="{% url 'supervisor:datisdaily' %}">datisdaily</a>
-										</td>
-										
-									</tr>
-									<tr>
-										<td>
-											<a href="{% url 'supervisor:dmedaily' %}">dmedaily</a>
-								    
-										</td>
-										
-									</tr>
-									<tr>
-										<td>
-											<a href="{% url 'supervisor:dscndaily' %}">dscnrdaily</a>
-										</td>
-										
-									</tr>
-									<tr>
-										<td>
-											<a href="{% url 'supervisor:ndbdaily' %}">ndbdaily</a>
-										</td>
-										
-									</tr>
-									<tr>
-										<td>
-											
-								    	<a href="{% url 'supervisor:scctvdaily' %}">scctvdaily</a>
-								    
-										</td>
-										
-									</tr>
-								    <tr>
-								    	<td>
-								    		<tr><a href="{% url 'supervisor:vhfdaily' %}">vhfdaily</a></tr>
-								    	</td>
-								    </tr>
-								    
-								</table>
+								<h3 class="dateset">Daily</h3>
 								
+								<table class="table table-bordered table-condensed table-striped table-hover todaytasks">
+								{% if sup.dept == 'C' %}
+									<tr data-href="{% url 'supervisor:datisdaily' %}">
+										<td>DATIS</td>
+									</tr>
+									<tr data-href="{% url 'supervisor:vhfdaily' %}">
+										<td>VHF</td>
+									</tr>
+									<tr data-href="{% url 'supervisor:dscndaily' %}">
+										<td>DSCN</td>
+								{% endif %}
+								{% if sup.dept == 'N' %}
+									</tr>
+									<tr data-href="{% url 'supervisor:cdvordaily' %}">
+										<td>CDVOR</td>
+									</tr>
+									<tr data-href="{% url 'supervisor:dmedaily' %}">
+										<td>DME</td>			
+									</tr>
+									<tr data-href="{% url 'supervisor:ndbdaily' %}">	
+										<td>NDB</td>
+									</tr>
+								{% endif %}
+								{% if sup.dept == 'S' %}
+									
+									<tr data-href="{% url 'supervisor:scctvdaily' %}">
+										<td>SCCTV</td>
+									</tr>
+									{% endif %}
+								</table>
 							</div>
-
 							<div id="Weekly" class="tabcontent">
-								<a href="{% url 'supervisor:cdvorweekly' %}">cdvorweekly</a><br>
-							    <a href="{% url 'supervisor:datisweekly' %}">datisweekly</a><br>
-							    <a href="{% url 'supervisor:dmeweekly' %}">dmeweekly</a><br>
-							    <a href="{% url 'supervisor:dscnweekly' %}">dscnrweekly</a><br>
-							    <a href="{% url 'supervisor:ndbweekly' %}">ndbweekly</a><br>
-							    <a href="{% url 'supervisor:scctvweekly' %}">scctvweekly</a><br>
-							    <a href="{% url 'supervisor:vhfweekly' %}">vhfweekly</a><br>
-							</div>
+								{% if sup.dept == 'C' %}
+								<h3 class="dateset">Weekly</h3>
+								<table class="table table-bordered table-condensed table-striped table-hover todaytasks">
+									<tr data-href="{% url 'supervisor:datisdaily' %}">
+										<td>DATIS</td>
+									</tr>
+									<tr data-href="{% url 'supervisor:vhfdaily' %}">
+										<td>VHF</td>
+									</tr>
+									<tr data-href="{% url 'supervisor:dscndaily' %}">
+										<td>DSCN</td>
+									{% endif %}
 
+									{% if sup.dept == 'N' %}
+									</tr>
+									<tr data-href="{% url 'supervisor:cdvordaily' %}">
+										<td>CDVOR</td>
+									</tr>
+									<tr data-href="{% url 'supervisor:dmedaily' %}">
+										<td>DME</td>			
+									</tr>
+									<tr data-href="{% url 'supervisor:ndbdaily' %}">	
+										<td>NDB</td>
+									</tr>
+									{% endif %}
+
+									{% if sup.dept == 'S' %}
+									
+									<tr data-href="{% url 'supervisor:scctvdaily' %}">
+										<td>SCCTV</td>
+									</tr>
+									{% endif %}
+							</table>
+							</div>
 							<div id="Monthly" class="tabcontent">
-								<a href="{% url 'supervisor:cdvormonthly' %}">cdvormonthly</a><br>
-							    <a href="{% url 'supervisor:dmemonthly' %}">dmemonthly</a><br>
-							    <a href="{% url 'supervisor:dscnmonthly' %}">dscnrmonthly</a><br>
-							    <a href="{% url 'supervisor:ndbmonthly' %}">ndbmonthly</a><br>
-							    <a href="{% url 'supervisor:scctvmonthly' %}">scctvmonthly</a><br>
-							    <a href="{% url 'supervisor:vhfmonthly' %}">vhfmonthly</a><br>
-							</div>							
+								<h3 class="dateset">Monthly</h3>
+								<table class="table table-bordered table-condensed table-striped table-hover todaytasks">
+								{% if sup.dept == 'C' %}
+									<tr data-href="{% url 'supervisor:datisdaily' %}">
+										<td>DATIS</td>
+									</tr>
+									<tr data-href="{% url 'supervisor:vhfdaily' %}">
+										<td>VHF</td>
+									</tr>
+									<tr data-href="{% url 'supervisor:dscndaily' %}">
+										<td>DSCN</td>
+									{% endif %}
+
+									{% if sup.dept == 'N' %}
+									</tr>
+									<tr data-href="{% url 'supervisor:cdvordaily' %}">
+										<td>CDVOR</td>
+									</tr>
+									<tr data-href="{% url 'supervisor:dmedaily' %}">
+										<td>DME</td>			
+									</tr>
+									<tr data-href="{% url 'supervisor:ndbdaily' %}">	
+										<td>NDB</td>
+									</tr>
+									{% endif %}
+
+									{% if sup.dept == 'S' %}
+									
+									<tr data-href="{% url 'supervisor:scctvdaily' %}">
+										<td>SCCTV</td>
+									</tr>
+									{% endif %}
+								</table>
+							</div>
 						</div>						
 					</div>
 				</div>

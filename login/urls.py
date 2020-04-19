@@ -24,7 +24,6 @@ urlpatterns = [
     path('validate/',views.validate),
     path('dhomeview/',views.dhomeview),
     path('dhomeviews/<int:id>',views.dhomeview),
-    path('standards/<int:id>',views.std),
     
 
     #vhf 
@@ -91,8 +90,9 @@ urlpatterns = [
     path('datisdailyrec/<int:id>',datviewsd.datisdailyrec),
     path('repsuberrors/<int:p_id>/<int:id>',datviewsd.repsuberrors),
     path('finalrepsub/<int:p_id>/<int:id>',datviewsd.finalrepsub),
+    #path('email/',datviewsd.email),
+    path('sent/',datviewsd.sent),
     
-  #  path('email/',datviewsd.email),
     #weekly
     path('datisweekly/<int:id>',datviewsw.datisw),
     path('datisweeklyrep/<int:id>',datviewsw.datiswrep),

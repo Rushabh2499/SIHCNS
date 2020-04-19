@@ -1,4 +1,6 @@
-.body{ overflow: hidden; }
+.body{ overflow: hidden; 
+  font-family: 'Open Sans',sans-serif;
+}}
 a{ text-decoration: none !important; }
 .active a 
 {
@@ -20,7 +22,6 @@ a{ text-decoration: none !important; }
 .todaytasks td{
 	border-width: 4px 0px 4px 0px !important; border-style: solid; border-color: rgba(235, 243, 255, 1)! important ;  text-align: left; margin:5px; color: black !important;
 }
-.todaytasks td a { display: block; width: 100%; height: 100%; }
 .container{
 	box-shadow:1px 0px 10px 1px #333; position: relative; 
 	height: auto;
@@ -50,6 +51,14 @@ a{ text-decoration: none !important; }
 {
 	text-align: center; font-size: 22px; color: #1E72FA; text-decoration: bold;
 }
+.card-subtitle
+{
+	text-align: center; font-size: 18px; color: #1E72FA; text-decoration: bold;
+}
+.card-subtitle
+{
+	text-align: center; font-size: 14px; color: #1E72FA; text-decoration: bold;
+}
 .data-emp
 {
 	background-color:#FFFFFF; border-radius: 30px; border-color:grey; color: #1E72FA; text-align: center; font-size: 12px;
@@ -78,36 +87,13 @@ a{ text-decoration: none !important; }
 {
 	color: rgba(83, 98, 203, 1);
 }
-.factab{
-	table-layout: fixed; 
-}
-.factab th
-{
-	background-color: rgba(32, 48, 203, 1) ! important; border: 4px solid rgba(235, 243, 255, 1) !important ;  text-align: center; padding-bottom:2px; padding-top:2px;color: white !important;
-}
-
-.factab tr
-{
-	border: 4px solid rgba(235, 243, 255, 1)! important ;  text-align: center; padding-bottom:2px; padding-top:2px;  color: black !important;
-}
-.factab td
-{
-	border: 4px solid rgba(235, 243, 255, 1)! important ;  text-align: center; padding-bottom:2px; padding-top:2px; color: black !important;
-}
 .topic
 {
 	border: none;
 }
 .tabcard
 {
-	font-family: 'Gotu', sans-serif; width: 24rem; height:32rem; background-color:#1E72FA; border-radius:15px 0px 0px 15px;
-}
-.tabcard2
-{
-	font-family: 'Gotu', sans-serif; 
-	width: 24rem; 
-	background-color:#1E72FA; 
-	border-radius:15px 15px 15px 15px;
+	font-family: 'Gotu', sans-serif; width: 24rem; height:28rem; background-color:#1E72FA; border-radius:15px 0px 0px 15px;
 }
 .todays
 {
@@ -119,7 +105,7 @@ a{ text-decoration: none !important; }
 }
 .logout
 {
-	margin-top: 150px; margin-left: 130px; height:30x; border-radius:30px !important; background-color: #EBF3FF !important; color: black !important;
+	margin-top: 70px; margin-left: 130px; height:30x; border-radius:30px !important; background-color: #EBF3FF !important; color: black !important;
 }
 .factab a
 {
@@ -127,11 +113,8 @@ a{ text-decoration: none !important; }
 }
 .tabcol
 {
-	background-color: rgba(235, 243, 255, 1) ; width: 52rem !important; 
-	height:32rem !important; border-radius: 0px 15px 15px 0px;
-	padding-bottom: 50px !important;
-
-}
+	background-color: rgba(235, 243, 255, 1) ; width: 52rem !important; height:28rem !important; border-radius: 0px 15px 15px 0px;
+	}
 .todaytab
 {
 	width: 50rem; height:26rem; background-color: rgba(235, 243, 255, 1);
@@ -164,7 +147,7 @@ a{ text-decoration: none !important; }
 .standtab th{ border:4px solid black; padding:3px; }
 .standtab tr{ border:4px solid black; padding:3px; }
 .standtab td{ border:4px solid black; padding:3px;}
-#facfix{ padding-top: 0px; width: 49rem; position: absolute;}
+#facfix{ padding-top: 0px; width: 49rem; position: fixed;}
 
 .details{border-radius: 30px !important;}
 .standards{border-radius: 30px !important;  

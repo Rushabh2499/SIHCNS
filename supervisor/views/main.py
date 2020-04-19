@@ -2,11 +2,12 @@ from django.shortcuts import render
 from login import models as models
 from django.http import HttpResponse,HttpResponseRedirect
 from django.db import connection
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+import datetime
 from django.urls import reverse
 from django.contrib import messages
 from django.core.mail import send_mail
+from cryptography.fernet import Fernet as frt
+
 # Create your views here.
 def choice(request):
     # uid=request.POST.get('daily')
@@ -40,16 +41,16 @@ def choice(request):
     
     
     if 'weekly' in request.POST:
-        context={
-        'cdvorweekly':[entry for entry in models.Cdvorweekly.objects.all().values()],
-        'datisweekly':[entry for entry in models.Datisweekly.objects.all().values()],
-        'dmeweekly':[entry for entry in models.Dmeweekly.objects.all().values()],
-        'dscnweekly':[entry for entry in models.Dscnweekly.objects.all().values()],
-        'ndbweekly':[entry for entry in models.Ndbweekly.objects.all().values()],
-        'scctvweekly':[entry for entry in models.Scctvweekly.objects.all().values()],
-        # 'vhfmonthly':[entry for entry in models.Vhfmonthly.objects.all().values()]
-        }
-        context['cdvorweekly']=checkpara(context['cdvorweekly'])
+        # context={
+        # 'cdvorweekly':[entry for entry in models.Cdvorweekly.objects.all().values()],
+        # 'datisweekly':[entry for entry in models.Datisweekly.objects.all().values()],
+        # 'dmeweekly':[entry for entry in models.Dmeweekly.objects.all().values()],
+        # 'dscnweekly':[entry for entry in models.Dscnweekly.objects.all().values()],
+        # 'ndbweekly':[entry for entry in models.Ndbweekly.objects.all().values()],
+        # 'scctvweekly':[entry for entry in models.Scctvweekly.objects.all().values()],
+        # # 'vhfmonthly':[entry for entry in models.Vhfmonthly.objects.all().values()]
+        # }
+        # context['cdvorweekly']=checkpara(context['cdvorweekly'])
         
         # defect={'defect':defect} 
         # context.update(defect)
@@ -58,7 +59,7 @@ def choice(request):
         # print(context['cdvorweekly'])     
         return render(request,'supervisor/weekly.html',context)
     
-    return render(request,'supervisor/supervisor.html')
+    return render(request,'supervisor/home.html')
 
 def  checkpara(temp):
     err_list=[]
@@ -74,8 +75,8 @@ def  checkpara(temp):
     # print(temp)
     return temp
 def details(request,id,name):
-    
-    if request.session['type']=='s':
+    id=decode(request,id)
+    if request.session.get('type')=='s':
             
         # print(name)
         
@@ -92,7 +93,7 @@ def details(request,id,name):
         logname=logname.replace('yearly','y')
         print(logname)
         name=name[0].lower()+name[1:]
-        # logname=name+'logs'
+        # # logname=name+'logs'
         str1='logs=models.'
         str2='.objects.filter(p_id='
         str3=').values()'
@@ -100,18 +101,23 @@ def details(request,id,name):
         request.session['name']=name
         que=str1+logname+str2+str(id)+str3
         exec(que,globals())
-        print("logs:")
-        print(logs)
-        
-        return render(request,'supervisor/imp_details.html',{'temp':temp[0],'names':name,'logs':logs})
-        # return render(request,'supervisor/imp_details.html',{'temp':temp[0],'names':name})
+        # print("logs:")
+        # print(logs)
+        i=temp[0]
+        i['e_token']=encode(request,str(i['emp_id']))
+        i['p_token']=encode(request,str(i['p_id']))
+        # print(i)
+        return render(request,'supervisor/imp_details.html',{'temp':i,'names':name,'logs':logs})
+        # return render(request,'supervisor/imp_details.html',{'temp':i,'names':name})
 
 def mail(request,id):
     # print(reverse("supervisor:choice"))
     # print(sid)
+    id=decode(request,id)
     mail= models.Engineer.objects.filter(emp_id=id).values('email')
     
     print(mail[0]['email'])
+    
     return render(request,"supervisor/sendmail.html",{'eid':mail[0]['email'],'uid':id})
 
 def sent(request):
@@ -124,50 +130,93 @@ def sent(request):
     str2='.objects.get(p_id='
     str3=')'
     names1=request.session['name'].capitalize()
-    que=str1+names1+str2+str(request.session['pid'])+str3  
+    pid=request.session['pid']
+    que=str1+names1+str2+str(request.session['pid'])+str3
+    del request.session['name']
+    del request.session['pid']
     exec(que,globals())
-    temp.status='PENDING'
+    now = datetime.datetime.now()
+    date=now.strftime("%Y-%m-%d")
+    time=now.strftime("%H:%M:%S")
+    temp.approval_date=date
+    temp.approval_time=time
+    temp.unit_incharge_approval='NO'
     print("temp")
-    
-    temp.save()   
+    temp.status="PENDING"
+    temp.save()
+      
     print(temp)
     send_mail('urgent',mail,'aai.urgent@gmail.com',['naik.varun99@gmail.com'],fail_silently=False)
-    return HttpResponse(send)
+    # return render(request,'supervisor/imp_details.html',{'temp':temp[0],'names':names1,'logs':logs})
+    return HttpResponseRedirect(reverse('supervisor:details',kwargs={'id':encode(request,str(pid)), 'name':names1}))
 
 def verify(request,names,id):
+    ids=id
+    id=decode(request,id)
+    print(id)
     str1='temp=models.'
     str2='.objects.get(p_id='
     str3=')'
     names1=names.capitalize()
-    # print('here')
-    # print(names1)
-    que=str1+names1+str2+str(id)+str3
+  
+    que=str1+names1+str2+id+str3
+    print(que)
     exec(que,globals())
-    temp.s_verify=request.session.get('uid')
+    now = datetime.datetime.now()
+    date=now.strftime("%Y-%m-%d")
+    time=now.strftime("%H:%M:%S")
+    temp.unit_incharge_approval='YES'
+    temp.approval_date=date
+    temp.approval_time=time
     temp.save()
     str1='context=[entry for entry in models.'
     str2='.objects.all().values()]'
-   
+    now = datetime.datetime.now()
     names1=names.capitalize()
     # print('here')
     # print(names1)
     que=str1+names1+str2
+    
     exec(que,globals())
     for i in context:
-       if i['s_verify']==None:
+       i['token']=encode(request,str(i['p_id'])) 
+       if i['unit_incharge_approval']=='YES':
+           i['flag']=1
+       elif i['unit_incharge_approval']=='NO':
            i['flag']=0
        else:
-           i['flag']=1
+            i['flag']='not set'
     # cdvordaily=[entry for entry in models.Cdvordaily.objects.all().values()]
-    return render(request,'supervisor/list_details.html',{'context':context,'name':names1})
+    print("com")
+    print(context)
+   
+    return HttpResponseRedirect(reverse('supervisor:details',kwargs={'id':ids, 'name':names1}))
 
 def empdetails(request,id):
-     datisdaily=[entry for entry in models.Datisdaily.objects.filter(emp_id=id).values()]
+     id=decode(request,id)
+     datisdaily=[entry for entry in models.Datisdaily.objects.filter(emp_id=id).values().order_by('-date')]
                 
-     datisweekly=[entry for entry in models.Datisweekly.objects.filter(emp_id=id).values()]
+     datisweekly=[entry for entry in models.Datisweekly.objects.filter(emp_id=id).values().order_by('-date')]
      datis=datisdaily+[i for i in datisweekly]
+     print(datis)
      for i in datis:
-        eng=models.Engineer.objects.filter(emp_id=i['emp_id']).values() 
+        eng=models.Engineer.objects.filter(emp_id=i['emp_id']).values()
+         
         print(eng[0]['name'])
-        i.update({'type':'Datisdaily','e_name':eng[0]['name'],'e_desig':eng[0]['designation']})
+        i.update({'type':'Datisdaily','e_name':eng[0]['name'],'e_desig':eng[0]['designation'],'token':encode(request,str(i['p_id']))})
+     print(datis)
      return render(request,'supervisor/employee_details.html',{'datis':datis})
+
+def encode(request,s):
+
+    f=frt(request.session['key'].encode('utf-8'))
+    token = f.encrypt(s.encode('utf-8'))
+    # print(token.decode('utf-8'))
+    return token.decode('utf-8')
+
+def decode(request,s):
+    f=frt(request.session['key'].encode('utf-8'))
+    token = f.decrypt(s.encode('utf-8'))
+    # print(token.decode('utf-8'))
+    return token.decode('utf-8')
+

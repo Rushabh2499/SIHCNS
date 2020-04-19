@@ -1,16 +1,17 @@
 from django.contrib import admin
-from django.urls import path,include
+from django.conf.urls import include,url
+from django.urls import path
 from . import views
 from engineer import views as eviews
 app_name='supervisor'
 urlpatterns = [
-    
-    path('',views.main.choice,name='choice'),
-    path('<int:id>/<str:name>', views.main.details),
-    path('sendmail/<int:id>/',views.main.mail,name='sendmail'),
+    path('employee/<str:id>',views.main.empdetails,name='empdetails'),
+    # path('',views.main.choice,name='choice'),
+    path('<str:id>/<str:name>', views.main.details,name='details'),
+    path('sendmail/<str:id>/',views.main.mail,name='sendmail'),
     path('sent/',views.main.sent,name='sent'),
-    path('cdvordaily/',views.cdvor.daily,name='cdvordaily'),
-    path('datisdaily/',views.datis.daily,name='datisdaily'),
+    path('abc/',views.cdvor.daily,name='cdvordaily'),
+    path('xyz/',views.datis.daily,name='datisdaily'),
     path('dmedaily/',views.dme.daily,name='dmedaily'),
     path('dscndaily/',views.dscn.daily,name='dscndaily'),
     path('ndb/',views.ndb.daily,name='ndbdaily'),
@@ -31,8 +32,8 @@ urlpatterns = [
     path('ndb/',views.ndb.monthly,name='ndbmonthly'),
     path('vhfmonthly/',views.vhf.monthly,name='vhfmonthly'),
     path('scctvmonthly/',views.scctv.monthly,name='scctvmonthly'),
-    path('verify/<str:names>/<int:id>',views.main.verify,name='verify'),
-    path('employee/<int:id>',views.main.empdetails)
+    path('verify/<str:names>/<str:id>',views.main.verify,name='verify'),
+    
    
     # path('employee/',views.employee)
     # path('officer/',views.officer)

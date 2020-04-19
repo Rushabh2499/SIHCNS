@@ -5,7 +5,7 @@
     <title>Weekly DATIS Maintenance Report</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="{% static '/datisstyle.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'engineer/datisstyle.css' %}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -28,6 +28,9 @@
         <div class="row">
             <div class="col-sm-3"></div>
             <div class="col-sm-6">
+              <div class="alert alert-danger">
+                <strong>Maintenance failed!!!</strong> 
+                Please try again.
     <form method='POST' action='/finalwrepsub/{{ p_id }}/{{ id }}'>
         {% csrf_token %}
         {% for datisdw in datisw %}
@@ -86,7 +89,7 @@
                 </div>
 
                 <hr>
-                 <div class="alert alert-info">
+                 <div class="alert" style="background-color: #DBDBDB;">
                         <strong>Remarks</strong>(Final submission)</div>
     
             <!-- <div class="col-sm-1"></div> -->
@@ -101,6 +104,7 @@
                     <input required type="text" name="remarks" class="form-control form-control-sm" rows="5" id="procedure" placeholder="Please specify the reason why error prevails in brief.">-->
                     <hr>
                     <button class="btn submitbut">FINAL SUBMIT</button>
+                  </div>
                     {% endfor %}
               </div>
           </div>

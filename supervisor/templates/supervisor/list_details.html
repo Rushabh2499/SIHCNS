@@ -87,8 +87,9 @@
 					</div>
 					<div class="card tabcard" style="height:35rem !important; background-color: #ffffff">
 						<ul class="nav nav-pills nav-stacked">
-						    <li class="active"><a class="todays" data-toggle="pill" href="#today" style="margin-top:50%; ">Pending Approvals</a></li>
-						    <li><a class="faculty" data-toggle="pill" href="#employ" >Approved</a></li>
+						    <li style="border: black;"><a class="todays" data-toggle="pill" href="#pending" >Unverified</a></li>
+						    <li><a class="todays" data-toggle="pill" href="#approved" >Approved</a></li>
+						    <li><a class="todays" data-toggle="pill" href="#declined" >Declined</a></li>
 						    
 						 </ul>
 					</div>
@@ -96,24 +97,24 @@
 			</div>
 			<div class="col-md-4 card tabcol" style="height:35rem!important;">
 				<div class="tab-content">
-		    		<div id="today" class="tab-pane fade fac in active">		  
+		    		<div id="pending" class="tab-pane fade fac">		  
 				        <table class="table table-bordered table-condensed table-striped table-hover todaytasks">
 				            <thead>
-				                <tr>  
-				                	<th>Report ID</th>
+				                <tr>
 				                	<th>Date</th>
 				                  	<th>Time</th>
+				                  	<th>EmployeeID</th>
 				                  	<th>Status</th>
 				                </tr>
 				            </thead>
 				            <tbody>
 				            	<h1> Unverified </h1>
 				                {% for i in context %}
-				                {% if i.s_verify == None %}
-				                <tr data-href="/schoice/{{i.p_id}}/{{name}} ">
-				                 	<td>{{i.p_id}}</td>
+				                {% if i.unit_incharge_approval == None %}
+				                <tr data-href="/schoice/{{i.token}}/{{name}} ">
 				                	<td>{{i.date}}</td>
 				                	<td>{{i.time}}</td>
+				                	<td>{{i.emp_id}}</td>
 						            <td>{{i.status}}</td>
 				                </tr>
 				                {% endif %}
@@ -122,31 +123,53 @@
 				        </table>
 				    </div>
 
-				    <div id="employ" class="tab-pane fade fac">
+				    <div id="approved" class="tab-pane fade fac">
 						<table class="table table-bordered table-condensed table-striped table-hover todaytasks">
-						   <h1> Verified </h1>
+						   <h1> Approved</h1>
 						   <thead>
-				                <tr>  
-				                	<th>Report ID</th>
+				                <tr>
 				                	<th>Date</th>
 				                  	<th>Time</th>
+				                  	<th>EmployeeID</th>
 				                  	<th>Status</th>
 				                </tr>
 				            </thead>
 							{% for i in context %}
-							{% if i.s_verify != None and i.status != "PENDING" %}
-							<tr data-href="/schoice/{{i.p_id}}/{{name}} ">
-			                 	<td>{{i.p_id}}</td>
+							{% if i.unit_incharge_approval == "YES" %}
+							<tr data-href="/schoice/{{i.token}}/{{name}} ">
 			                	<td>{{i.date}}</td>
 			                	<td>{{i.time}}</td>
+			                	<td >{{i.emp_id}}</td>
 					            <td>{{i.status}}</td>
 				            </tr>
 							{% endif %}
 							{% endfor %}   
 						</table>
 					</div>
+					<div id="declined" class="tab-pane fade fac">
+						<table class="table table-bordered table-condensed table-striped table-hover todaytasks">
+						   <h1> Declined </h1>
+						   <thead>
+				                <tr>
+				                	<th>Date</th>
+				                  	<th>Time</th>
+				                  	<th>EmployeeID</th>
+				                  	<th>Status</th>
+				                </tr>
+				            </thead>
+							{% for i in context %}
+							{% if i.unit_incharge_approval == "NO" %}
+							<tr data-href="/schoice/{{i.token}}/{{name}} ">
+			                	<td>{{i.date}}</td>
+			                	<td>{{i.time}}</td>
+			                	<td >{{i.emp_id}}</td>
+					            <td>{{i.status}}</td>
+				            </tr>
+							{% endif %}
+							{% endfor %}   
+						</table>
+					</div>	
 				</div>
-
 			</div>
 
 

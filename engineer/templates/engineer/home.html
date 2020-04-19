@@ -7,7 +7,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	 <link rel="stylesheet" type="text/css" href="{% static 'engineer/home.css' %}">
 	 
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"> 
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	<!-- <script type="text/javascript" src="https://me.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=rSsOun_tWZ6BU_i_eIBZTpxWchstms3OKuEZYQsU3YaQ4wjhYzhfYZ7MBL8aFWsSrcatFSrVC5ORl3KZ8wGh1Ke_WRvOEZGZu1Q7NpMlidQ0htj0bpdotO-_Dg4OJ0JiCihTIxH1fRk5eQ9UR58dC8EI5HGkNOKr9t8uJTCYkN86to-WRn-Mk7DzLs-AhO0EtgGYOnzW_XMxftxnB-ZzI0fxharehlD-DIMiKQppRUQtuGON_AcgKcew6YxTRJ3EizH2Uy6XfidG22tlM7nZqpLVCqpXkuH-k0pG2H4WfI5NSmxARosKCfyRfXKUmkeHPLN0SEDC_tPM17H-Z-ArzegzKsbogJdblww2KwyH6o_P7ScfRsMToZcv4XYnE4lCzcbqXOZUgm-5Y7WSIb5ChzImsWIc3pTcT1xHnhLEv2BogbhqitM4DlLQwZKhcwh14URdp1dpXhOLDjTY132FtdYqaFW3rtXEXcm-IgrFTa103Lv2HrTv658DG0ByYwDKBvGhjqx22U7OKfkVkiw6r7xaS8FM4c3BMWz0EJu0TFdFYc_Ss8bdwNyu_OJSk25KiZBstkpIzk16nkTmrsXvW3bxFDJwG198NB5589K4YfjAmKa6LHXyEIFKDKqyYi5DPV8eMKoeWM1YLxx4kTnRo47Jdp-YTL17ugxUTxhgun_-fQKcS5ylGya1JPYSMeqdfDdbLdz3Uwcvtw25sze_hN6T4Ktxbv2yp9PLQcjbsc0oCX7QRU3V4eGc28C6_BLtIjQ1vweQSiAPbUqVIyXS35KjWlKeQt0OP5fAM9IB6jRK5G_JOgtMMZYxCP4tP8gKHzkEE_wvLQXC47eXfwieDwZmAlV-tTUOuEE3M1px_tzhxB7t5kzkX1e1DeJWgbLcsWeXWMiBvMO8T-0KGmFtbwPyNTSP3ooyW5r8tH3xh5_RqFt568n2Pma0v1Wp716Y6t7zTqeefwQ6X9YggofibLnnOkQIrZLY1kp4S6AkMNgHu12TGyneNk-L3xo9MYewiVDBVueSfIA9PBzls5vIYN0UC_IeIMRfs5Hi3Q50mqo6sCNewxGVh_f-u8xD48eWweS289xJm1Q7n1bzTLD863DejQg5Dki3x17ka6Jvq1XWmQckir_o_AVMM2BR6tCftZVDXvCuFKC-nXmYEkaXGLudKhHYIBRTF13Hra906V1wzIw4dn-O37T5FseLRi1NtEuEuZrUBvhLAkoDON_aDA" charset="UTF-8"></script> -->
+ 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -52,7 +54,7 @@
 						<!-- NEED TO FETCH SUPERVISOR NAME -->
 					  <div class="card-body headcard">
 							<br>
-							Head
+							Supervisor
 							<br>
 							{% for supdetails1 in supdetails %}
 						    Name: {{ supdetails1.name }} 
@@ -88,7 +90,8 @@
 							<tr>
 					      		<th>Deadline</th>
 					      		<th>Task Name</th>
-					      		<th>Status</th>
+								  <th>Status</th>
+								  
 				      		</tr>
 				      		<!-- DATIS DAILY -->
 				      		{% if datisd_deadline <= currdate %} 
@@ -203,7 +206,7 @@
 								</tr>
 								{% else %}
 								<tr data-href='/datisweeklyrec/{{ id }}' > 
-									<td>{{ datiswsub_on }}</td>    
+									<td>{{ wdate }}</td>    
 									<td>DATIS Weekly</td>
 									<td>Completed with errors</td>
 								  </tr>
@@ -218,6 +221,7 @@
 			  			<button class="tablink" onclick="openCity('Daily', this, 'blue')" id="defaultOpen">Daily</button>
 						<button class="tablink" onclick="openCity('Weekly', this, 'blue')">Weekly</button>
 						<button class="tablink" onclick="openCity('Monthly', this, 'blue')">Monthly</button>
+				
 					</div>
 						<div id="Daily" class="tabcontent">	
 	  						<h3 class="dateset">Daily</h3>
@@ -242,7 +246,7 @@
 					             {% endif %}
 					    			<td>{{ datisdsub_on }}</td>
 					    			<td><button class="btn standards" data-toggle="modal" data-target="#datisdaily">STANDARDS</button></td>
-					    			<td><button class="btn standards" onclick="window.location.href='/standards/{{ id }}'">MORE DETAILS</button></td>
+					    			<td><button class="btn standards" onclick="window.location.href='/datisdailyrec/{{ id }}'">MORE DETAILS</button></td>
 					    		</tr>
 					    		
 					    		 		<tr data-href='#'>

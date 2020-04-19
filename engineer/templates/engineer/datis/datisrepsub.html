@@ -28,7 +28,7 @@
 		</nav>
 		<br>
 			<div class="row">
-				<div class="col-sm-8">
+				<div class="col-sm-7">
 					<form method='POST' action='/datisrepsub/{{ id }}' id="form-v">
 						{% csrf_token %}
 					    <div class="card" style="text-align: center;">
@@ -178,32 +178,34 @@
 				  	</form>
 				</div>
 	
-				<div>
-					<div class="sidebar">
-						<div class="col-sm-10">
-							<div class="card mb-3 sidecard" style="width: 14rem; height: 9rem">
-							  <div class="card-body" data-toggle="modal" data-target="#standardcheck" href='#'>
-							    <h5><br><!--<a data-toggle="modal" data-target="#standardcheck" href='#'>-->CHECK STANDARDS<!--</a>--></h5>
-							  </div>
-							</div>
-						</div>
-  
-						<div class="col-sm-10">
-							<div class="card mb-3 sidecard" style="width: 14rem; height: 9rem">
-							  <div class="card-body" data-toggle="modal" data-target="#pastlog" href='#'>
-							    <h5><br><!--<a href="#" class="stretched-link text-white" onclick="window.open('/datisdailyrec/{{ id }}','_blank')">-->PAST EQUIPMENT LOGS<!--</a>--></h5>
-							  </div>
-							</div>
-						</div>
-						<div class="col-sm-10">
-							<div class="card mb-3 sidecard" style="width: 14rem; height: 9rem">
-							  <div class="card-body" data-toggle="modal" data-target="#contactsuper" href='#'>
-							    <h5><br><!--<a data-toggle="modal" data-target="#contactsuper" href='#'>-->CONTACT SUPERVISOR<!--</a>--></h5>
-							  </div>
-							</div>
-						</div>
-					</div>
-				</div>
+				<div class="col-sm-5" >
+	            	<div class="sidebar s s_01" >
+		                <div class="col-sm-12">
+		                  <div class="card mb-3 sidecard" style="width: 22rem; padding-top:10px; padding-bottom: 10px;" >
+		                      <div class="card-body" data-toggle="modal" data-target="#pastlog" href='#' >
+		                          <h6>MAINTENANCE HISTORY</h6>
+		                      </div>
+	                  	  </div>    
+	                	</div>
+	                	<div class="row rows">
+		                    <div class="col">
+		                      	<div class="card sidecard"  style="margin-left: 1rem; width:10rem;">
+		                          	<div class="card-body" data-toggle="modal" data-target="#standardcheck" href='#'>
+		                              	<h6>CHECK STANDARDS</h6>
+		                          	</div>
+		                      	</div>
+		                    </div>
+		                    <div class="col">
+		                      <div class="card sidecard" style="width:10rem;" >
+		                            <div class="card-body" data-toggle="modal" data-target="#contactsuper" href='#'>
+		                                <h6>CONTACT SUPERVISOR</h6>
+		                            </div>
+		                        </div>     
+		                    </div>
+	                	</div>    
+	              	</div>
+	              </div>
+
 				<div class="modal fade" id="standardcheck">
 				    <div class="modal-dialog" >
 				      <div class="modal-content">
@@ -238,7 +240,7 @@
 				          		<td>Status of Server B</td>
 				          		<td>Main/Stdby</td>
 				          	</tr>
-				          		<tr>
+				          	<!--	<tr>
 				          		<td>Date and time of servers wrt GPS CLK</td>
 				          		<td>Correct</td>
 				          	</tr>
@@ -261,7 +263,7 @@
 				          		<tr>
 				          		<td>Audio Quality of Datis Announcement</td>
 				          		<td>Good</td>
-				          	</tr>
+				          	</tr>-->
 				          </table>
 				        </div>
 				        <div class="modal-footer">
@@ -273,14 +275,14 @@
 </div>
 
 <div class="modal fade" id="pastlog">
-				    <div class="modal-dialog modal-lg" style="overflow-y: auto;">
+				    <div class="modal-dialog modal-lg">
 				      <div class="modal-content">
 				        <div class="modal-header">
-				          <h4 class="modal-title">Past Maintenance Log</h4>
+				          <h4 class="modal-title">Maintenance History</h4>
 				          <button type="button" class="close" data-dismiss="modal">&times;</button>
 				        </div>
 				        <div class="modal-body">
-				          <table class="table table-bordered table-condensed table-striped table-hover todaytasks">
+				          <table class="table table-bordered table-condensed table-striped table-hover todaytasks mantab">
             <thead>
                 <tr>  
                 	<th>Date</th>
@@ -336,9 +338,13 @@
 				          <button type="button" class="close" data-dismiss="modal">&times;</button>
 				        </div>
 				        <div class="modal-body">
-				          <h5>Suraj Shah</h5>
-				          <h6>Email: <a href="mailto:surajshah@aai.com">surajshah@aai.com</a></h6>
-				          <h6>Phone: +919876543210</h6>
+							{% for sup in supdetails %}
+				          <h5>{{ sup.name }}</h5>
+				          <h6>Email: <a data-toggle="modal" data-target="#report" href="/email">{{ sup.email }}</a></h6>
+						 
+						  <!--put the contact in the a href as mailto:{{ contact }} and outside in phone too-->
+						  <h6>Phone: {{ sup.contact }}</h6>
+						  {% endfor %}
 				        </div>
 				        <div class="modal-footer">
 				          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -346,6 +352,50 @@
 				      </div>
 				    </div>
 				</div>
+				
+				<div class="modal fade" id="report">
+					<div class="modal-dialog">
+					  <div class="modal-content">
+						<div class="modal-header">
+						  <h4 class="modal-title">SEND REPORT TO SUPERVISOR</h4>
+						  <button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+						<div class="modal-body">
+						 <div class="helloform" style="padding:0">
+							<form method='post' action="/sent/" >
+								{% csrf_token %}
+								{% for sup in supdetails %}
+				         		<br>
+								<div class="form-group row has-warning">
+									<label for="to" class="col-sm-6 col-form-label">TO: {{ sup.name }}</label>
+								<div class="form-group row has-warning">
+									<label for="Subject" class="col-sm-6 col-form-label">SUBJECT:</label>
+									<div>
+									  <input class="form-control form-control-sm" type='text'></input>
+									</div>
+								</div>
+								<hr>
+								<div class="form-group row has-warning">
+									<label for="body" class="col-sm-6 col-form-label">BODY:</label>
+									<div>
+									  <textarea rows="5" placeholder="Enter message" size="100" name='feedback' value="Hello {{ sup.name }}, this is regarding the issue."></textarea> 
+									</div>
+								</div>
+								<hr>                                                  
+								<input type="submit" value="SEND">
+								{% endfor %} 
+							</form>
+						  </div>
+						</div>
+						<div class="modal-footer">
+						  <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+						</div>  
+					  </div>
+					</div>
+				  </div>    
+				  
+				
+				
 			</div>
 
 	</div>

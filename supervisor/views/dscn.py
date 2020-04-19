@@ -1,20 +1,43 @@
 from django.shortcuts import render
 from login import models as models
 from django.http import HttpResponse,HttpResponseRedirect
+# from . import main
+from . import main
 def daily(request):
-    dscndaily=[entry for entry in models.Dscndaily.objects.all().values()]
-    return render(request,'supervisor/list_details.html',{'context':dscndaily,'name':'Dscndaily'})     
-
-def monthly(request):
-    Dscnmonthly=[entry for entry in models.Dscnmonthly.objects.all().values()]
-    return render(request,'supervisor/list_details.html',{'context':Dscnmonthly,'name':'Dscnmonthly'})
-
-def weekly(request):
-    datisdaily=[entry for entry in models.Datisdaily.objects.all().values()]
-    for i in datisdaily:
-       if i['s_verify']==None:
+    dscndaily=[entry for entry in models.Dscndaily.objects.all().values().order_by('-date')]
+    for i in dscndaily:
+       i['token']=main.encode(request,str(i['p_id']))
+       if i['unit_incharge_approval']=="YES":
+           i['flag']=1
+       elif['unit_incharge_approval']=="NO":
            i['flag']=0
        else:
-           i['flag']=1
+           i['flag']=9
     
-    return render(request,'supervisor/daily_details.html',{'context':datisdaily,'name':'Datisdaily'})
+    return render(request,'supervisor/list_details.html',{'context':dscndaily,'name':'Dscndaily'})
+
+def monthly(request):
+    dscnmonthly=[entry for entry in models.Dscnmonthly.objects.all().values().order_by('-date')]
+    for i in dscnmonthly:
+        i['token']=main.encode(request,str(i['p_id']))
+        if i['unit_incharge_approval']=="YES":
+           i['flag']=1
+        elif['unit_incharge_approval']=="NO":
+           i['flag']=0
+        else:
+           i['flag']=9
+    
+    return render(request,'supervisor/list_details.html',{'context':dscnmonthly,'name':'Dscnmonthly'})
+
+def weekly(request):
+    dscnweekly=[entry for entry in models.Dscnweekly.objects.all().values().order_by('-date')]
+    for i in dscnweekly:
+        i['token']=main.encode(request,str(i['p_id']))
+        if i['unit_incharge_approval']=="YES":
+           i['flag']=1
+        elif['unit_incharge_approval']=="NO":
+           i['flag']=0
+        else:
+           i['flag']=9
+    
+    return render(request,'supervisor/list_details.html',{'context':dscnweekly,'name':'Dscnweekly'})
