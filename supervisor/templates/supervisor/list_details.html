@@ -61,10 +61,10 @@
 <body>
     <div class="container" >	
 	    		
-		<!--<div class="title-header"><a href='#' onclick="window.location.href='/routebackdd/{{ id }}'" class="taskbut"><img src="{% static '/images/task.png' %}"></a>PREVENTIVE MAINTENANCE LOG<img src="{% static '/images/aai.jpg' %}" ></div>-->
+		
 		<nav class="navbar sticky-top">
 			<ul class="navbar-nav">
-	    		<li class="nav-item">
+	    		<li class="nav-item" style="list-style-type:none;">
 	      			<a href='#' onclick="window.location.href='/routebackdd/{{ id }}'" class="taskbut"><img src="{% static '/images/task.png' %}"></a>		
 	    		</li>
 	    	</ul>
@@ -72,9 +72,9 @@
 			
 		</nav>
 		<div class="row">
-			<div class="card" style="width: 14rem; height: 7rem; text-align: center; margin-left:45%">
-				<div class="card-body" style="font-family: 'Times New Roman', Times, serif; font-weight: bold; font-size: 20px; box-shadow: 2px 2px 5px 1px #009; ">
-					        <h2 class="card-title">{{ name }}</h2>
+			<div class="card" style="width:80%; height: 7rem; margin-left:10%; text-align: center;">
+				<div class="card-body" style="font-family: 'Times New Roman', Times, serif; font-weight: bold; font-size: 20px; box-shadow: 4px 4px 10px #1E72FA;background-color: #EBF4FF">
+					        <h2 class="title" style="border-bottom: black; padding:10px; font-weight: bold;">{{ name }}</h2>
 					<!-- Enter the maintainence type details here -->
 			 	</div>
 			</div>
@@ -85,11 +85,11 @@
 				<div class="col-md-3" >
 					<div class="row"> 
 					</div>
-					<div class="card tabcard" style="height:35rem !important; background-color: #ffffff">
+					<div class="card tabcard" style="height:35rem !important; background-color: #ffffff!important">
 						<ul class="nav nav-pills nav-stacked">
-						    <li style="border: black;"><a class="todays" data-toggle="pill" href="#pending" >Unverified</a></li>
-						    <li><a class="todays" data-toggle="pill" href="#approved" >Approved</a></li>
-						    <li><a class="todays" data-toggle="pill" href="#declined" >Declined</a></li>
+						    <li style="background-color:#DBDBDB;"><a class="todays" data-toggle="pill" href="#pending" >Unverified</a></li>
+						    <li style="background-color:#DBDBDB;"><a class="todays" data-toggle="pill" href="#approved" >Approved</a></li>
+						    <li style="background-color:#DBDBDB;"><a class="todays" data-toggle="pill" href="#declined" >Declined</a></li>
 						    
 						 </ul>
 					</div>
@@ -97,6 +97,10 @@
 			</div>
 			<div class="col-md-4 card tabcol" style="height:35rem!important;">
 				<div class="tab-content">
+					<div id="default" class="tab-pane fade in active tod ">		  
+				       <h5 style="margin:7rem; font-weight: bold; font-family: 'Times New Roman', Times, serif; ">On left, choose the section of report to be viewed.</h5>
+				    </div>
+
 		    		<div id="pending" class="tab-pane fade fac">		  
 				        <table class="table table-bordered table-condensed table-striped table-hover todaytasks">
 				            <thead>

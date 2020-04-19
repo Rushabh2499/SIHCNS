@@ -24,16 +24,29 @@
         </nav>
         <br>
         
-        <div class="card mb-3 sidecard" style="width: 14rem; height: 7rem">
-            <div class="card-body">
-                <!-- Enter the respective employee details -->
-                Name: <br>
-                Designation:<br>
-                <button class="btn btn-white">Contact</button><!-- Convert button to modal -->
-                Email: <br>
-                Phno:<br>
+        <div class="card" style="width:80%; height: 8rem; margin-left:10%; text-align: center;">
+             <div class="card-body" style="font-family: 'Times New Roman', Times, serif; font-weight: bold; font-size: 1px; box-shadow: 4px 4px 10px #1E72FA;background-color: #EBF4FF">
+                            <h2 class="title" style="border-bottom: black; font-weight: bold;">Name:'NAME...'<br> Designation: 'Designation'</h2>
             </div>
         </div>
+                <div class="modal fade" id="contactsuper">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                              <h4 class="modal-title">ENGINEER</h4><!-- Need to enter details -->
+                              <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                              <h5>'Engineer Name'</h5>
+                              <h6>Email: <a href="mailto:surajshah@aai.com">'engineer@emai'</a></h6>
+                              <h6>Phone:'engineer contact'</h6>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            </div>  
+                        </div>
+                    </div>
+                </div>
 
         <br>        
         <table class="table table-bordered table-condensed table-striped table-hover todaytasks">

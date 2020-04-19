@@ -12,9 +12,9 @@ a{ text-decoration: none !important; }
 .table-striped > tbody > tr:nth-child(even) > td, .table-striped > tbody > tr:nth-child(even) > th {
    background-color: #A4A4A4;
 }
-.todaytasks{ table-layout: fixed; }
+.todaytasks{ table-layout: fixed; word-wrap: break-word; }
 .todaytasks th{
-  background-color: rgba(32, 48, 203, 1) ! important; border-width: 4px 0px 4px 0px !important; border-style: solid; border-color: rgba(235, 243, 255, 1)! important ; text-align: left; color: white !important;
+   background-color: rgba(32, 48, 203, 1) ! important; border-width: 4px 0px 4px 0px !important; border-style: solid; border-color: rgba(235, 243, 255, 1)! important ; text-align: left; color: white !important;
 }
 .todaytasks tr{
 	border-width: 4px 0px 4px 0px !important; border-style: solid; border-color: rgba(235, 243, 255, 1)! important ; text-align: left; margin:5px; color: black !important;
@@ -55,7 +55,7 @@ a{ text-decoration: none !important; }
 {
 	text-align: center; font-size: 18px; color: #1E72FA; text-decoration: bold;
 }
-.card-subtitle
+.card-subsubtitle
 {
 	text-align: center; font-size: 14px; color: #1E72FA; text-decoration: bold;
 }
@@ -81,7 +81,7 @@ a{ text-decoration: none !important; }
 }
 .fac
 {
-	font-family: 'Gotu', sans-serif;  overflow-y: auto; max-height: 28rem; max-width: 49rem ; overflow-x: hidden;
+	font-family: 'Gotu', sans-serif;  overflow-y: auto; max-height: 28rem; max-width: 49rem ; overflow-x: hidden; 
 }
 .dateset
 {
