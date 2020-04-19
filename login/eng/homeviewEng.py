@@ -31,7 +31,7 @@ def dhomeview(request,id) :
     supdetails = supdetails.values('name','contact','email').filter(dept='C')
     statusd = "" 
         #!!!!!!!!!!!!!!!!!datis daily!!!!!!!!!!!!!!!!!!!!!!!!
-    uia = "---"
+    uia = None
     currdate = date.today()
     currtime = datetime.now().strftime("%H:%M:%S")            
     datisdsub_on = cursor.execute("select date from datisdaily where date = %s",[date.today()])    
@@ -60,15 +60,21 @@ def dhomeview(request,id) :
         datisd_deadline = datisd_deadline.values('date').filter(a_id=1)[0]['date']
         datisdsub_on = datisd_deadline
         datisd_deadline = datisd_deadline + timedelta(days=2)
-        if (datisd_deadline <= date.today()) :    
+        tempdate = datisdsub_on + timedelta(days=1)
+        i = 1 
+        while i == 1 and tempdate != date.today() : 
+         if (datisd_deadline <= date.today()) :    
             remarks = "---Report not submitted---"
             statusd = "COMPLETED"
-            val = ((date.today()-timedelta(days=1)),id,statusd,'2',remarks)
-            sql = "INSERT INTO datisdaily (date,emp_id,status,f_id,remarks) values (%s ,%s,%s, %s,%s)"
+            val = (tempdate,currtime,'1',id,statusd,'2',remarks)
+            sql = "INSERT INTO datisdaily (date,time,a_id,emp_id,status,f_id,remarks) values (%s ,%s,%s,%s,%s, %s,%s)"
             cursor.execute(sql,val)  
             datisdsub_on = date.today()-timedelta(days=1)    
-        else : 
-            datisd_deadline = date.today()
+            tempdate = tempdate + timedelta(days=1)
+         else : 
+            break
+        datisd_deadline = date.today()
+          
     #!!!!!!!!!!!!!!!!!!!!!!!datis weekly!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     p_id = models.Datisweekly.objects.all()
     p_id = p_id.values('p_id')
@@ -84,11 +90,23 @@ def dhomeview(request,id) :
     wdate = str(wdate)
     wdate = datetime.strptime(wdate, "%Y-%m-%d").date()
     temp = wdate
+    temp1 = wdate1 + timedelta(days=7)
     wdate = wdate + timedelta(days=7) 
     dwr = 0
     datiswsub_on = temp
     datiswsub_deadline =  wdate 
     status = ""
+    status = models.Datisweekly.objects.all()
+    status = status.values('date','status','unit_incharge_approval')
+    status = status.order_by('-date')
+    uia = status
+    uia = uia.values('unit_incharge_approval')
+    uia = uia.values('unit_incharge_approval').filter(a_id=1)[0]['unit_incharge_approval']
+    status = status.values('status')
+    status = status.values('status').filter(a_id=1)[0]['status']
+    f = 1   
+    flag = cursor.execute("select date from datisweekly where date = %s",[date.today()])    
+        
     if currdate > wdate :  #if it goes beyond 7 days
         remarks = "Report not submitted"
         value = "No Entry" 
@@ -96,31 +114,29 @@ def dhomeview(request,id) :
         sql = "INSERT INTO datiswlogs (emp_id,p_id,remarks,value,date,time) values (%s ,%s,%s ,%s, %s,%s)"
         cursor.execute(sql,val)
         dwr = 0
-        
-    elif currdate == temp : # report submitted today
-        status = models.Datisweekly.objects.all()
-        status = status.values('date','status','unit_incharge_approval')
-        status = status.order_by('-date')
-        uia = status
-        uia = uia.values('unit_incharge_approval')
-        uia = uia.values('unit_incharge_approval').filter(a_id=1)[0]['unit_incharge_approval']
-        status = status.values('status')
-        status = status.values('status').filter(a_id=1)[0]['status']
-        if status == "COMPLETED" :
-            dwr=1  
-        elif status == "PENDING" :
-            dwr=0
-            datiswsub_deadline = wdate1 + timedelta(days=7)   
-        elif status == "COMPLETED WITH ERRORS" and uia == None :
-            datiswsub_deadline = wdate1 + timedelta(days=7)
-            wdate = datiswsub_deadline
-            dwr=1
-        elif status == "COMPLETED WITH ERRORS" and uia == "YES" :
-            datiswsub_deadline = wdate
-            wdate = wdate1 + timedelta(days=7)
-            dwr=1
+        f=0 
+    if flag :    
+        if  f == 0 or temp1 < temp : #report submitted after deadline
+            datiswsub_deadline = temp1    
+            if status == "COMPLETED" or status == "COMPLETED WITH ERRORS" :
+                dwr=1  
+            elif status == "PENDING" :
+                dwr=0
             
-    print(dwr)
+        elif temp == temp1 and temp == currdate : # report submitted on same day as deadline
+            datiswsub_deadline = temp    
+            if status == "COMPLETED" or status == "COMPLETED WITH ERRORS" :
+                dwr=1  
+            elif status == "PENDING" :
+                dwr=0
+            
+        elif temp1 < wdate and temp1 > temp : #report submitted before the deadline 
+            datiswsub_deadline = temp1   
+            if status == "COMPLETED" or status == "COMPLETED WITH ERRORS" :
+                dwr=1  
+            elif status == "PENDING" :
+                dwr=0
+    print(datiswsub_on)
     
     #!!!!!!!!!!!!!!!!!!!!!vhfdaily!!!!!!!!!!!!!!!!!!!!!!!!
     vdr = 0

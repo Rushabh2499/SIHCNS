@@ -106,12 +106,14 @@
             </form>
 
             <div class="row row1" style="align-items: right; padding-left: 27%; padding-bottom: 1%">
+              {% if f != 1 %}
                   {% if datisw.ups_ip < 231 and datisw.ups_ip > 199 and datisw.ups_op == 230 and datisw.dust_free == "OK" and datisw.lan_status == "OK" %}
                   <p></p>
                  {% else %}
                   <p></p>
                <button style="width: 100px; margin-right: 10%;"class="btn submitbut" onclick="window.location.href='/editdatisw/{{ datisw.p_id }}'">EDIT</button>
                <button  class="btn submitbut" onclick="window.location.href='/repsubwerrors/{{ datisw.p_id }}/{{ id }}'">SUBMIT WITH ERRORS</button>
+               {% endif %}
                {% endif %}
             </div>
           </div>

@@ -1,13 +1,11 @@
 from django.shortcuts import render
 from django.db import connection
 from datetime import date,datetime,timedelta
-# Create your views here.
 from login import models as models
 from django.core.mail import send_mail
 from django.contrib import messages
 from login import views 
 # Create your views here.
-
 def sent(request):
     if request.session.has_key('uid'):
         id = request.session['uid']
@@ -66,23 +64,7 @@ def routebackdatisd(request, id) :
             datisdsub_on = currdate
             ddr = 1
    
-    else :
-        datisd_deadline = models.Datisdaily.objects.all()
-        datisd_deadline = datisd_deadline.values('date')
-        datisd_deadline = datisd_deadline.order_by('-date')
-        datisd_deadline = datisd_deadline.values('date').filter(a_id=1)[0]['date']
-        datisdsub_on = datisd_deadline
-        datisd_deadline = datisd_deadline + timedelta(days=2)
-        if (datisd_deadline <= date.today()) :    
-            #remarks = "---Report not submitted---"
-            #statusd = "COMPLETED"
-            #val = ((date.today()-timedelta(days=1)),id,status,'2',remarks)
-            #sql = "INSERT INTO datisdaily (date,emp_id,status,f_id,remarks) values (%s ,%s,%s, %s,%s)"
-            #cursor.execute(sql,val)  
-            datisdsub_on = date.today()-timedelta(days=1)    
-        else : 
-            datisd_deadline = date.today()
-   
+        
     #!!!!!!!!!!!!!!!!!!!!!!!datis weekly!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     p_id = models.Datisweekly.objects.all()
     p_id = p_id.values('p_id')
@@ -98,37 +80,49 @@ def routebackdatisd(request, id) :
     wdate = str(wdate)
     wdate = datetime.strptime(wdate, "%Y-%m-%d").date()
     temp = wdate
+    temp1 = wdate1 + timedelta(days=7)
     wdate = wdate + timedelta(days=7) 
     dwr = 0
     datiswsub_on = temp
     datiswsub_deadline =  wdate 
     status = ""
+    status = models.Datisweekly.objects.all()
+    status = status.values('date','status','unit_incharge_approval')
+    status = status.order_by('-date')
+    uia = status
+    uia = uia.values('unit_incharge_approval')
+    uia = uia.values('unit_incharge_approval').filter(a_id=1)[0]['unit_incharge_approval']
+    status = status.values('status')
+    status = status.values('status').filter(a_id=1)[0]['status']
+    f = 1   
+    flag = cursor.execute("select date from datisweekly where date = %s",[date.today()])    
+        
     if currdate > wdate :  #if it goes beyond 7 days
         dwr = 0
-        
-    elif currdate == temp : # report submitted today
-        status = models.Datisweekly.objects.all()
-        status = status.values('date','status','unit_incharge_approval')
-        status = status.order_by('-date')
-        uia = status
-        uia = uia.values('unit_incharge_approval').filter(a_id=1)[0]['unit_incharge_approval']
-        print(uia)
-        status = status.values('status')
-        status = status.values('status').filter(a_id=1)[0]['status']
-        if status == "COMPLETED" :
-            dwr=1  
-        elif status == "PENDING" :
-            dwr=0
-            datiswsub_deadline = wdate1 + timedelta(days=7)    
-        elif status == "COMPLETED WITH ERRORS" and uia == None :
-            datiswsub_deadline = wdate1 + timedelta(days=7)
-            wdate = datiswsub_deadline
-            dwr=1
-        elif status == "COMPLETED WITH ERRORS" and uia == "YES" :
-            datiswsub_deadline = wdate
-            wdate = wdate1 + timedelta(days=7)
-            dwr=1
-        
+        f=0 
+    if flag :    
+        if  f == 0 or temp1 < temp : #report submitted after deadline
+            datiswsub_deadline = temp1    
+            if status == "COMPLETED" or status == "COMPLETED WITH ERRORS" :
+                dwr=1  
+            elif status == "PENDING" :
+                dwr=0
+            
+        elif temp == temp1 and temp == currdate : # report submitted on same day as deadline
+            datiswsub_deadline = temp    
+            if status == "COMPLETED" or status == "COMPLETED WITH ERRORS" :
+                dwr=1  
+            elif status == "PENDING" :
+                dwr=0
+            
+        elif temp1 < wdate and temp1 > temp : #report submitted before the deadline 
+            datiswsub_deadline = temp1   
+            if status == "COMPLETED" or status == "COMPLETED WITH ERRORS" :
+                dwr=1  
+            elif status == "PENDING" :
+                dwr=0
+        print(dwr)   
+    print(datiswsub_on)    
     #!!!!!!!!!!!!!!!!!!!!!vhfdaily!!!!!!!!!!!!!!!!!!!!!!!!
     vdr = 0
     statusvd = ""
@@ -274,26 +268,30 @@ def routebackdatisd(request, id) :
     return render(request,'login/login.html')  
 
 def datisd(request, id) :
-  if request.session.has_key('uid') :
+ if request.session.has_key('uid'):
+   uid=request.session['uid'] 
+   if int(uid) == int(id):
      cursor = connection.cursor() 
      currdate = date.today()
      datis_d = models.Datisdaily.objects.all()
      datis_d = datis_d.values('p_id','date','status','time','room_temp','status_of_ac','status_of_ups','status_of_servera','status_of_serverb','remarks')
      datis_d = datis_d.filter(emp_id=id)
-     datisd = datis_d
+     datisd = datis_d.order_by('-p_id')
      datis_d = datis_d.filter(date=currdate)     
       #'datetime_of_servers_wrt_gps_clk','status_of_disk_array','vhftx_atis_status','vhfrx_atis_status','datis_update','audio_quality','remarks','unit_incharge_approval')
      if datis_d :
         datisdlogs = models.Datisdlogs.objects.all()
-        datisdlogs = datisdlogs.filter(date=date.today())
+        datisdlogs = datisdlogs.filter(date=date.today()).order_by('-log_id')
         supdetails = models.Supervisor.objects.all()
         supdetails = supdetails.values('name','contact','email').filter(dept='C')
         return render(request,'engineer/datis/datisdailyrep.html',{'supdetails':supdetails,'datis_d':datis_d,'id':id,'datisd':datisd,'datisdlogs':datisdlogs}) 
      else :
         messages.add_message(request,30, 'You cannot make changes to pending report!')
         return routebackdatisd(request, id)
-  else : 
-          return render(request,'login/login.html')
+   else :
+       return routebackdatisd(request, uid)
+ else : 
+   return render(request,'login/login.html')
 
 def datisdailyrec(request, id) :
  if request.session.has_key('uid'):
@@ -302,53 +300,61 @@ def datisdailyrec(request, id) :
      cursor = connection.cursor() 
      datis_d = models.Datisdaily.objects.all()
      datis_d = datis_d.values('p_id','date','time','status','room_temp','status_of_ac','status_of_ups','status_of_servera','status_of_serverb','unit_incharge_approval','approval_date','approval_time')
-     datis_d = datis_d.filter(emp_id=id)     
-     currdate = date.today()
+     datis_d = datis_d.filter(emp_id=id).order_by('-p_id')     
      #'datetime_of_servers_wrt_gps_clk','status_of_disk_array','vhftx_atis_status','vhfrx_atis_status','datis_update','audio_quality','remarks','unit_incharge_approval')
      return render(request,'engineer/datis/datisdrecords.html',{'datis_d':datis_d,'id':id}) 
   else :
-     datis_d = models.Datisdaily.objects.all()
-     datis_d = datis_d.values('p_id','date','time','status','room_temp','status_of_ac','status_of_ups','status_of_servera','status_of_serverb','unit_incharge_approval','approval_date','approval_time')
-     datis_d = datis_d.filter(emp_id=uid)     
-     return render(request,'engineer/datis/datisdrecords.html',{'datis_d':datis_d,'id':uid}) 
+      return routebackdatisd(request, uid)
  else : 
-     return render(request,'login/login.html')
+   return render(request,'login/login.html')
 
 def datisdrep(request, id) :
-  if request.session.has_key('uid'): 
+ cursor = connection.cursor() 
+ if request.session.has_key('uid') : 
+   temp = cursor.execute("select date from datisdaily where date = %s",[date.today()])    
+   uid=request.session['uid'] 
+   if int(uid) == int(id) and temp == 0:
      supdetails = models.Supervisor.objects.all()
      supdetails = supdetails.values('name','contact','email').filter(dept='C')
      datis_d = models.Datisdaily.objects.all()
      datis_d = datis_d.values('p_id','date','time','room_temp','status_of_ac','status_of_ups','status_of_servera','status_of_serverb','remarks')
-     datis_d = datis_d.filter(emp_id=id) 
+     datis_d = datis_d.filter(emp_id=id).order_by('-p_id') 
      return render(request,'engineer/datis/datisrepsub.html',{'id':id,'datis_d':datis_d,'supdetails':supdetails}) 
-  else : 
+   else :
+      return routebackdatisd(request, uid)  
+ else : 
      return render(request,'login/login.html')
  
 def editdatisdaily(request, p_id) :
-     #currdate= date.today()
  if request.session.has_key('uid'):
+   temp = models.Datisdaily.objects.all().values('status').order_by('-date').filter(date=date.today())[0]['status']
+   emp_id = models.Datisdaily.objects.all().values('emp_id').filter(p_id=p_id)[0]['emp_id']
+   uid=request.session['uid'] 
+   if int(uid) == int(emp_id) and temp == "PENDING" :
      emp_id = models.Datisdaily.objects.all()
      emp_id = emp_id.values('emp_id').filter(p_id=p_id)[0]['emp_id']
      datisd = models.Datisdaily.objects.all()
-     datisd = datisd.values('p_id','emp_id','date','status','room_temp','status_of_ac','status_of_ups','status_of_servera','status_of_serverb','remarks')
-     datis_d = datisd.filter(emp_id=emp_id)     
+     datisd = datisd.values('p_id','emp_id','date','time','status','room_temp','status_of_ac','status_of_ups','status_of_servera','status_of_serverb','remarks')
+     datis_d = datisd.filter(emp_id=emp_id).order_by('-p_id')     
      datisd = datisd.filter(p_id=p_id)
      datis_id = datisd.values('p_id').filter(p_id=p_id)[0]['p_id']
      datisdlogs = models.Datisdlogs.objects.all()
-     datisdlogs = datisdlogs.filter(date=date.today())    
+     datisdlogs = datisdlogs.filter(date=date.today()).order_by('-log_id')    
      supdetails = models.Supervisor.objects.all()
      supdetails = supdetails.values('name','contact','email').filter(dept='C')
-     
      return render(request,'engineer/datis/editdatisrepsub.html',{'supdetails':supdetails,'datisd':datisd,'id':datis_id,'datis_d':datis_d,'datisdlogs':datisdlogs}) 
+   else :
+     return routebackdatisd(request, uid)  
  else : 
      return render(request,'login/login.html')
  
 def updatisdaily(request, id) :
- if request.session.has_key('uid'):  
+ if request.session.has_key('uid'): 
+   uid=request.session['uid'] 
+   emp_id = models.Datisdaily.objects.all()
+   emp_id = emp_id.values('emp_id').filter(p_id=id)[0]['emp_id']
+   if int(uid) == int(emp_id) :
     currtime = datetime.now().strftime("%H:%M:%S")
-    emp_id = models.Datisdaily.objects.all()
-    emp_id = emp_id.values('emp_id').filter(p_id=id)[0]['emp_id']
     currdate= date.today()
     cursor = connection.cursor() 
     p_id = models.Datisdaily.objects.all()
@@ -435,6 +441,8 @@ def updatisdaily(request, id) :
     supdetails = models.Supervisor.objects.all()
     supdetails = supdetails.values('name','contact','email').filter(dept='C')
     return render(request,'engineer/datis/datisdailyrep.html',{'datisdlogs':datisdlogs,'supdetails':supdetails,'datis_d':datis_d,'id':emp_id,'datisd':datisd}) 
+   else :
+     return routebackdatisd(request, uid)  
  else : 
      return render(request,'login/login.html')
        
@@ -531,12 +539,16 @@ def datisdrepsubm(request, id) :
      return render(request,'login/login.html')
  
 def repsuberrors(request,p_id, id):
- if request.session.has_key('uid'):  
+ if request.session.has_key('uid'): 
+   uid=request.session['uid'] 
+   if int(uid) == int(id) :
     cursor = connection.cursor() 
     datisd = models.Datisdaily.objects.all()
     datisd = datisd.values('p_id','emp_id','date','room_temp','status','status_of_ac','status_of_ups','status_of_servera','status_of_serverb','remarks')
     datisd = datisd.filter(p_id=p_id)
     return render(request,'engineer/datis/datisfinalrep.html',{'datisd':datisd,'p_id':p_id,'id':id}) 
+   else :
+    return routebackdatisd(request, uid)  
  else : 
     return render(request,'login/login.html')
  

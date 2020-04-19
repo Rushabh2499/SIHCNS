@@ -200,13 +200,13 @@
 		                      {% if dwr == 1 and datiswsub_on == currdate %}
 							     {% if status == "COMPLETED"  %}  
 							    <tr data-href='/datisweeklyrec/{{ id }}' > 
-			                      <td>{{ datiswsub_on }}</td>    
+			                      <td>{{ datiswsub_deadline }}</td>    
 			                      <td>DATIS Weekly</td>
 			                      <td>Completed</td>
 								</tr>
 								{% else %}
 								<tr data-href='/datisweeklyrec/{{ id }}' > 
-									<td>{{ wdate }}</td>    
+									<td>{{ datiswsub_deadline  }}</td>    
 									<td>DATIS Weekly</td>
 									<td>Completed with errors</td>
 								  </tr>
@@ -278,11 +278,7 @@
 					    			<th>Previous Records</th>
 					    		</tr>
 
-									{% if status == "PENDING" %}
-									<td>{{ wdate }}</td>
-									{% else %}
-									<td>{{ datiswsub_deadline }}</td>    
-									{% endif %}
+								   <td>{{ wdate }}</td>
 									{% if dwr == 1 and datiswsub_on == currdate %}
 									{% if status == "COMPLETED" or status == "COMPLETED WITH ERRORS" %}
 									<td><button disabled class="btn standards" onclick="window.location.href='/datisweeklyrec/{{ id }}'">DATIS</button></td>
@@ -295,9 +291,9 @@
 								   {% elif datiswsub_deadline == currdate %}
 									 {% if status == "PENDING" %}
 									 <td><button class="btn standards" onclick="window.location.href='/datisweekly/{{ id }}'">DATIS</button></td>
-								    {% else %}
+								     {% else %}
 									<td><button class="btn standards" onclick="window.location.href='/datisweeklyrep/{{ id }}'">DATIS</button></td>
-								{% endif %}
+								    {% endif %}
 								  {% else %}
 								  {% if status == "PENDING" %}
 					     		  <td><button class="btn standards" onclick="window.location.href='/datisweekly/{{ id }}'">DATIS</button></td>

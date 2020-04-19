@@ -217,6 +217,7 @@ textarea {
 }
 .mantab{
 	table-layout: fixed;
+	word-wrap:break-word;
 }
 .rows{
 	padding: 0px 0px 0px 0px;
