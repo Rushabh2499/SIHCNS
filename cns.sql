@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Apr 19, 2020 at 11:00 AM
+-- Generation Time: Apr 20, 2020 at 06:16 PM
 -- Server version: 5.7.26
 -- PHP Version: 7.2.18
 
@@ -48,9 +48,9 @@ CREATE TABLE IF NOT EXISTS `airport` (
 
 INSERT INTO `airport` (`a_id`, `name`, `altitude`, `area`, `dgm_id`, `longitude`, `latitude`, `code`) VALUES
 (1, 'Vadodara', 129, 149, 2102, '22.3325', '73.2171', 'BDQ'),
-(2, 'Dabolim', 132, 121, NULL, '15.3803', '73.8350', 'GOI'),
-(3, 'Sahar', 142, 125, NULL, '19.0896', '72.8656', 'BOM'),
-(4, 'Delhi', 151, 120, NULL, '28.5562', '77.1000', 'DEL');
+(2, 'Dabolim', 132, 121, 2121, '15.3803', '73.8350', 'GOI'),
+(3, 'Sahar', 142, 125, 2111, '19.0896', '72.8656', 'BOM'),
+(4, 'Delhi', 151, 120, 2131, '28.5562', '77.1000', 'DEL');
 
 -- --------------------------------------------------------
 
@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS `auth_permission` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `auth_permission_content_type_id_codename_01ab375a_uniq` (`content_type_id`,`codename`),
   KEY `auth_permission_content_type_id_2f476e4b` (`content_type_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=213 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=181 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `auth_permission`
@@ -284,39 +284,7 @@ INSERT INTO `auth_permission` (`id`, `name`, `content_type_id`, `codename`) VALU
 (177, 'Can add django session', 45, 'add_djangosession'),
 (178, 'Can change django session', 45, 'change_djangosession'),
 (179, 'Can delete django session', 45, 'delete_djangosession'),
-(180, 'Can view django session', 45, 'view_djangosession'),
-(181, 'Can add datisdlogs', 46, 'add_datisdlogs'),
-(182, 'Can change datisdlogs', 46, 'change_datisdlogs'),
-(183, 'Can delete datisdlogs', 46, 'delete_datisdlogs'),
-(184, 'Can view datisdlogs', 46, 'view_datisdlogs'),
-(185, 'Can add datiswlogs', 47, 'add_datiswlogs'),
-(186, 'Can change datiswlogs', 47, 'change_datiswlogs'),
-(187, 'Can delete datiswlogs', 47, 'delete_datiswlogs'),
-(188, 'Can view datiswlogs', 47, 'view_datiswlogs'),
-(189, 'Can add dscndlogs', 48, 'add_dscndlogs'),
-(190, 'Can change dscndlogs', 48, 'change_dscndlogs'),
-(191, 'Can delete dscndlogs', 48, 'delete_dscndlogs'),
-(192, 'Can view dscndlogs', 48, 'view_dscndlogs'),
-(193, 'Can add vhfdlogs', 49, 'add_vhfdlogs'),
-(194, 'Can change vhfdlogs', 49, 'change_vhfdlogs'),
-(195, 'Can delete vhfdlogs', 49, 'delete_vhfdlogs'),
-(196, 'Can view vhfdlogs', 49, 'view_vhfdlogs'),
-(197, 'Can add vhfmlogs', 50, 'add_vhfmlogs'),
-(198, 'Can change vhfmlogs', 50, 'change_vhfmlogs'),
-(199, 'Can delete vhfmlogs', 50, 'delete_vhfmlogs'),
-(200, 'Can view vhfmlogs', 50, 'view_vhfmlogs'),
-(201, 'Can add vhfylogs', 51, 'add_vhfylogs'),
-(202, 'Can change vhfylogs', 51, 'change_vhfylogs'),
-(203, 'Can delete vhfylogs', 51, 'delete_vhfylogs'),
-(204, 'Can view vhfylogs', 51, 'view_vhfylogs'),
-(205, 'Can add mcdo', 52, 'add_mcdo'),
-(206, 'Can change mcdo', 52, 'change_mcdo'),
-(207, 'Can delete mcdo', 52, 'delete_mcdo'),
-(208, 'Can view mcdo', 52, 'view_mcdo'),
-(209, 'Can add employee', 53, 'add_employee'),
-(210, 'Can change employee', 53, 'change_employee'),
-(211, 'Can delete employee', 53, 'delete_employee'),
-(212, 'Can view employee', 53, 'view_employee');
+(180, 'Can view django session', 45, 'view_djangosession');
 
 -- --------------------------------------------------------
 
@@ -396,7 +364,7 @@ CREATE TABLE IF NOT EXISTS `cdvordaily` (
   `f_id` varchar(10) NOT NULL,
   `p_id` int(11) NOT NULL AUTO_INCREMENT,
   `s_verify` int(11) DEFAULT NULL,
-  `status` varchar(30) NOT NULL,
+  `status` varchar(30) NOT NULL DEFAULT 'PENDING',
   PRIMARY KEY (`p_id`),
   KEY `emp_id` (`emp_id`),
   KEY `CDVORDaily_ibfk_1` (`a_id`)
@@ -407,8 +375,8 @@ CREATE TABLE IF NOT EXISTS `cdvordaily` (
 --
 
 INSERT INTO `cdvordaily` (`date`, `a_id`, `emp_id`, `Azimuth_angle`, `30Hz_modulation`, `9960Hz_modulation`, `9960Hz_deviation`, `field_intensity`, `ident_modulation`, `REMARKS`, `Unit_incharge_approval`, `f_id`, `p_id`, `s_verify`, `status`) VALUES
-('2020-04-12 12:33:14', 1, 4121, 24, 30, 30, 16, 0, 10, NULL, 'YES', '1', 1, NULL, ''),
-('2020-04-12 12:33:15', 1, 4123, 23, 28, 32, 17, 1, 11, NULL, 'YES', '2', 2, NULL, '');
+('2020-04-17 19:53:06', 1, 4121, 24, 30, 30, 16, 0, 10, NULL, 'NO', '1', 1, NULL, 'PENDING'),
+('2020-04-17 19:53:06', 1, 4123, 23, 28, 32, 17, 1, 11, NULL, 'YES', '2', 2, NULL, 'PENDING');
 
 -- --------------------------------------------------------
 
@@ -563,7 +531,7 @@ CREATE TABLE IF NOT EXISTS `datisdaily` (
   KEY `a_id` (`a_id`),
   KEY `emp_id` (`emp_id`),
   KEY `f_id` (`f_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=77 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `datisdaily`
@@ -575,20 +543,15 @@ INSERT INTO `datisdaily` (`p_id`, `date`, `time`, `a_id`, `emp_id`, `Status`, `f
 (3, '2020-03-26', '14:05:02', 1, 4156, 'COMPLETED', 2, 24, 'SVCBL', 'NORMAL', 'MAINS', 'MAINS', 'CORRECT', 'OK', 'ON LINE', 'ON LINE', 'OK', 'GOOD', NULL, 'YES', 'PASS', NULL, NULL),
 (4, '2020-03-27', '16:28:16', 1, 4156, 'COMPLETED', 2, 24, 'SVCBL', 'NORMAL', 'MAINS', 'MAINS', 'CORRECT', 'OK', 'ON LINE', 'OM LINE', 'OK', 'GOOD', NULL, 'YES', 'PASS', NULL, NULL),
 (5, '2020-03-28', '14:01:01', 1, 4144, 'COMPLETED', 2, 24, 'SVCBL', 'NORMAL', 'MAINS', 'MAINS', 'CORRECT', 'OK', 'ON LINE', 'ON LINE', 'OK', 'GOOD', NULL, 'YES', 'PASS', NULL, NULL),
-(6, '2020-03-29', '23:35:25', 1, 4144, 'COMPLETED', 2, 24, 'SVCBL', 'NORMAL', 'MAINS', 'MAINS', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(7, '2020-03-30', '11:57:01', 1, 4156, 'COMPLETED', 2, 24, 'SVCBL', 'NORMAL', 'MAINS', 'MAINS', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(8, '2020-03-31', '16:41:26', 1, 4156, 'PENDING', 2, 24, 'SVCBL', 'NORMAL', 'MAINS', 'MAINS', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(9, '2020-04-01', '01:10:31', 1, 4144, 'COMPLETED', 2, 24, 'SVCBL', 'NORMAL', 'MAINS', 'MAINS', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(10, '2020-04-06', '19:06:51', 1, 4144, 'COMPLETED', 2, 24, 'SVCBL', 'NORMAL', 'MAINS', 'MAINS', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(19, '2020-04-07', '22:52:02', 1, 4156, 'COMPLETED', 2, 24, 'SVCBL', 'NORMAL', 'MAINS', 'MAINS', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(31, '2020-04-08', '16:45:06', 1, 4156, 'COMPLETED', 2, 26, 'SVCBL', 'NORMAL', 'MAINS', 'MAINS', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(19, '2020-04-07', '22:52:02', 1, 4156, 'COMPLETED', 2, 24, 'SVCBL', 'NORMAL', 'MAINS', 'MAINS', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'YES', NULL, '2020-04-18', '20:30:48'),
 (32, '2020-04-13', '15:14:07', 1, 4156, 'PENDING', 2, 24, 'SVCBL', 'NORMAL', 'MAINS', 'MAINS', 'CORRECT', 'OK', 'ON LINE', 'ON LINE', 'OK', 'GOOD', NULL, 'YES', 'PASS', NULL, NULL),
-(37, '2020-04-14', NULL, NULL, 4156, 'COMPLETED', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '---Report not submitted---', NULL, NULL, NULL, NULL),
-(38, '2020-04-15', '00:34:52', 1, 4156, 'COMPLETED', 2, 24, 'SVCBL', 'NORMAL', 'MAINS', 'STANDBY', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(70, '2020-04-16', '13:34:55', 1, 4156, 'COMPLETED', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '---Report not submitted---', NULL, NULL, NULL, NULL),
-(73, '2020-04-17', '13:51:57', 1, 4156, 'COMPLETED', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '---Report not submitted---', NULL, NULL, NULL, NULL),
-(75, '2020-04-18', '13:53:04', 1, 4156, 'COMPLETED', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '---Report not submitted---', NULL, NULL, NULL, NULL),
-(76, '2020-04-19', '13:53:35', 1, 4156, 'COMPLETED', 2, 24, 'SVCBL', 'NORMAL', 'MAINS', 'STANDBY', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'YES', NULL, '2020-04-19', '14:26:42');
+(38, '2020-04-15', '00:34:52', 1, 4156, 'COMPLETED', 2, 24, 'SVCBL', 'NORMAL', 'MAINS', 'STANDBY', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'YES', NULL, '2020-04-19', '17:26:38'),
+(40, '2020-04-16', NULL, NULL, 4156, 'COMPLETED', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '---Report not submitted---', 'YES', NULL, '2020-04-18', '18:41:03'),
+(55, '2020-04-17', NULL, NULL, 4156, 'COMPLETED', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '---Report not submitted---', 'YES', NULL, '2020-04-18', '18:34:35'),
+(57, '2020-04-17', NULL, NULL, 4156, 'COMPLETED', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '---Report not submitted---', 'YES', NULL, '2020-04-18', '20:30:38'),
+(58, '2020-04-18', '13:47:38', 1, 4156, 'COMPLETED', 2, -23, 'SVCBL', 'NORMAL', 'MAINS', 'STANDBY', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'YES', NULL, '2020-04-18', '18:33:13'),
+(60, '2020-04-19', '23:08:57', 1, 4156, 'COMPLETED', 2, 0, 'SVCBL', 'NORMAL', 'MAINS', 'STANDBY', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'YES', NULL, '2020-04-19', '23:25:51'),
+(62, '2020-04-20', '21:38:41', 1, 4156, 'COMPLETED WITH ERRORS', 2, 25, 'SVCBL', 'NOT NORMAL', 'MAINS', 'STANDBY', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -608,34 +571,29 @@ CREATE TABLE IF NOT EXISTS `datisdlogs` (
   PRIMARY KEY (`log_id`),
   KEY `emp_id` (`emp_id`),
   KEY `p_id` (`p_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=112 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=96 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `datisdlogs`
 --
 
 INSERT INTO `datisdlogs` (`log_id`, `emp_id`, `p_id`, `value`, `Remarks`, `Date`, `time`) VALUES
-(1, 4169, 1, '25', 'Temperature exceeds 24 degrees', '2020-03-24', '14:01:01'),
-(2, 4169, 1, 'HIGH', 'Status of ups not NORMAL', '2020-03-24', '14:01:01'),
-(3, 4169, 1, 'NOT MAINS', 'Status of ServerB is not MAINS', '2020-03-24', '14:01:01'),
-(4, 4169, 1, '26', 'Temperature not normal(update)', '2020-03-24', '14:01:11'),
-(5, 4169, 1, 'All parameters NORMAL', 'Parameter/s fixed', '2020-03-24', '14:01:11'),
-(6, 4156, 3, '25', 'Temperature exceeds 24 degrees', '2020-03-26', '11:57:01'),
 (7, 4156, 3, 'NOT NORMAL', 'Status of ups not NORMAL', '2020-03-26', '11:57:01'),
 (8, 4156, 3, 'NOT NORMAL', 'Status of ups not NORMAL(update)', '2020-03-26', '12:26:47'),
 (9, 4156, 3, '25', 'Temperature not normal(update)', '2020-03-26', '12:26:57'),
 (10, 4156, 3, 'NOT NORMAL', 'Status of ups not NORMAL(update)', '2020-03-26', '12:27:05'),
 (11, 4156, 3, 'All parameters NORMAL', 'Parameter/s fixed', '2020-03-26', '12:27:30'),
-(12, 4144, 10, 'MAIN', 'Status of ServerA is not MAINS', '2020-04-01', '19:06:51'),
-(13, 4144, 10, 'MAIN', 'Status of ServerA is not MAINS(update)', '2020-04-01', '19:06:58'),
-(14, 4144, 10, 'All parameters NORMAL', 'Parameter/s fixed', '2020-04-01', '19:15:15'),
-(28, 4156, 10, '24', 'Status of ups not NORMAL', '2020-04-07', '22:52:02'),
 (29, 4156, 19, '24', 'Parameter/s fixed', '2020-04-07', '22:52:19'),
 (62, 4156, 19, '26', 'Temperature exceeds 24 degrees', '2020-04-08', '16:45:06'),
-(63, 4156, 31, 'Final submit with errors', 'OOPS', '2020-04-08', '16:45:36'),
 (71, 4156, 38, 'Final submit with errors', 'OK', '2020-04-15', '20:18:00'),
 (72, 4156, 38, '24', 'Parameter/s fixed and also-', '2020-04-15', '20:28:50'),
-(111, 4156, 76, 'All parameters NORMAL', 'Parameters normal at the first submit!', '2020-04-19', '13:53:35');
+(78, 4156, 38, 'NON SVCBL', 'Status of ac not correct', '2020-04-18', '13:47:38'),
+(90, 4156, 62, 'NOT NORMAL', 'Status of ups not NORMAL', '2020-04-20', '21:38:41'),
+(91, 4156, 62, 'MAINS', 'Status of ServerA and serverB is on MAINS', '2020-04-20', '21:38:41'),
+(92, 4156, 62, '25', 'Temperature not normal(update)', '2020-04-20', '21:58:42'),
+(93, 4156, 62, 'NOT NORMAL', 'Status of ups not NORMAL(update)', '2020-04-20', '21:58:42'),
+(94, 4156, 62, 'ok', 'Procedure Followed', '2020-04-20', '21:58:42'),
+(95, 4156, 62, 'okk', 'Final submit with errors', '2020-04-20', '21:59:02');
 
 -- --------------------------------------------------------
 
@@ -672,7 +630,7 @@ CREATE TABLE IF NOT EXISTS `datisweekly` (
   KEY `a_id` (`a_id`),
   KEY `emp_id` (`emp_id`),
   KEY `f_id` (`f_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `datisweekly`
@@ -680,12 +638,13 @@ CREATE TABLE IF NOT EXISTS `datisweekly` (
 
 INSERT INTO `datisweekly` (`p_id`, `date`, `time`, `a_id`, `f_id`, `emp_id`, `Status`, `serverAorB`, `UPS_ip`, `UPS_op`, `Dust_free`, `LAN_status`, `time_sync`, `Audio_quality`, `ptt_off_interval_seconds`, `main_to_standby_changeover`, `status_of_ROP`, `REMARKS`, `Unit_incharge_approval`, `s_verify`, `approval_date`, `approval_time`) VALUES
 (1, '2020-03-11', '11:08:08', 1, 2, 4156, 'PENDING', 'B', 210, 230, 'OK', 'OK', 'OK', 'GOOD', 15, 'OK', 'OK', 'Residual dust was found on the system. Cleaning was performed.', 'YES', 3112, NULL, NULL),
-(2, '2020-03-18', '10:05:05', 1, 2, 4169, 'COMPLETED', 'A', 230, 230, 'OK', 'OK', 'OK', 'GOOD', 15, 'OK', 'OK', NULL, NULL, 3112, NULL, NULL),
+(2, '2020-03-18', '10:05:05', 1, 2, 4169, 'COMPLETED', 'A', 230, 230, 'OK', 'OK', 'OK', 'GOOD', 15, 'OK', 'OK', NULL, 'YES', 3112, '2020-04-18', '18:34:14'),
 (3, '2020-03-25', '15:00:46', 1, 2, 4144, 'COMPLETED', 'A', 200, 230, 'OK', 'OK', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3112, NULL, NULL),
 (4, '2020-03-30', '13:13:10', 1, 2, 4144, 'COMPLETED', 'A', 230, 230, 'OK', 'OK', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3112, NULL, NULL),
 (10, '2020-04-07', '22:43:40', 1, 2, 4156, 'COMPLETED', 'A', 220, 230, 'OK', 'OK', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (12, '2020-04-08', '17:16:01', 1, 2, 4156, 'COMPLETED', 'A', 224, 230, 'NOT OK', 'OK', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(15, '2020-04-11', '23:39:58', 1, 2, 4156, 'COMPLETED', 'A', 220, 230, 'OK', 'OK', NULL, NULL, NULL, NULL, NULL, NULL, 'YES', NULL, '2020-04-18', '23:59:09');
+(20, '2020-04-10', '22:08:19', 1, 2, 4156, 'COMPLETED WITH ERRORS', 'A', 45, 234, 'OK', 'OK', NULL, NULL, NULL, NULL, NULL, NULL, 'YES', NULL, '2020-04-19', '22:17:54'),
+(24, '2020-04-20', '23:04:14', 1, 2, 4156, 'COMPLETED WITH ERRORS', 'A', 220, 229, 'OK', 'OK', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -695,23 +654,23 @@ INSERT INTO `datisweekly` (`p_id`, `date`, `time`, `a_id`, `f_id`, `emp_id`, `St
 
 DROP TABLE IF EXISTS `datiswlogs`;
 CREATE TABLE IF NOT EXISTS `datiswlogs` (
-  `logs_id` int(11) NOT NULL AUTO_INCREMENT,
+  `log_id` int(11) NOT NULL AUTO_INCREMENT,
   `emp_id` int(11) NOT NULL,
   `p_id` int(11) NOT NULL,
   `Remarks` varchar(100) NOT NULL,
   `value` varchar(30) NOT NULL,
   `date` date NOT NULL,
   `time` time NOT NULL,
-  PRIMARY KEY (`logs_id`),
+  PRIMARY KEY (`log_id`),
   KEY `emp_id` (`emp_id`),
   KEY `p_id` (`p_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=127 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=108 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `datiswlogs`
 --
 
-INSERT INTO `datiswlogs` (`logs_id`, `emp_id`, `p_id`, `Remarks`, `value`, `date`, `time`) VALUES
+INSERT INTO `datiswlogs` (`log_id`, `emp_id`, `p_id`, `Remarks`, `value`, `date`, `time`) VALUES
 (1, 4144, 3, 'UPS_ip not in corrent range', '190', '2020-03-25', '15:00:46'),
 (2, 4144, 3, 'Not Dustfree', 'NOT OK', '2020-03-25', '15:00:46'),
 (3, 4144, 3, 'Parameter/s fixed', 'All parameters NORMAL', '2020-03-25', '15:01:04'),
@@ -723,11 +682,14 @@ INSERT INTO `datiswlogs` (`logs_id`, `emp_id`, `p_id`, `Remarks`, `value`, `date
 (29, 4156, 12, 'Not Dustfree', 'NOT OK', '2020-04-08', '17:16:01'),
 (30, 4156, 12, 'Not Dustfree(update)', 'A', '2020-04-08', '17:16:13'),
 (31, 4156, 12, 'OOPS', 'Final submit with errors', '2020-04-08', '17:16:23'),
-(63, 4156, 12, 'Report not submitted', 'No Entry', '2020-04-16', '21:46:58'),
-(74, 4156, 12, 'Report not submitted', 'No Entry', '2020-04-17', '23:34:10'),
-(92, 4156, 15, 'UPS_op value not normal', '229', '2020-04-18', '23:39:58'),
-(93, 4156, 15, 'Parameter/s fixed', 'A', '2020-04-18', '23:50:08'),
-(126, 4156, 15, 'Report not submitted', 'No Entry', '2020-04-19', '16:29:00');
+(92, 4156, 20, 'Report not submitted', 'No Entry', '2020-04-17', '22:31:54'),
+(93, 4156, 20, 'Report not submitted', 'No Entry', '2020-04-18', '22:31:54'),
+(94, 4156, 20, 'Report not submitted', 'No Entry', '2020-04-19', '22:31:54'),
+(101, 4156, 24, 'UPS_op value not normal', '229', '2020-04-20', '23:04:14'),
+(102, 4156, 24, 'Lan status not OK', 'NOT OK', '2020-04-20', '23:04:14'),
+(105, 4156, 24, 'UPS_op value not normal(update)', '229', '2020-04-20', '23:15:19'),
+(106, 4156, 24, 'Procedure Followed', 'okk cool', '2020-04-20', '23:15:19'),
+(107, 4156, 24, 'Final submit with errors', 'ok cool', '2020-04-20', '23:21:38');
 
 -- --------------------------------------------------------
 
@@ -755,7 +717,10 @@ CREATE TABLE IF NOT EXISTS `dgm` (
 --
 
 INSERT INTO `dgm` (`dgm_id`, `name`, `designation`, `a_id`, `contact`, `password`, `head_id`, `email`) VALUES
-(2102, 'Linus Torvaldas', 'DGM', 1, 904471123, 'pbkdf2_sha256$180000$7LqYYghTlDpY$lXlFwMM4SieeCYZgavDkqEp+I2djxOpf3wqQO8xXC5Q=', 1101, 'yes@gmail.com');
+(2102, 'Linus Torvaldas', 'DGM', 1, 904471123, 'pbkdf2_sha256$180000$7LqYYghTlDpY$lXlFwMM4SieeCYZgavDkqEp+I2djxOpf3wqQO8xXC5Q=', 1101, 'yes@gmail.com'),
+(2111, 'nisarg', 'DGM', 3, 21423, 'pbkdf2_sha256$180000$09KcfPsyU3Bv$wcFubUhX0ytB2QtXkPMVZLgssg+L/R6zfma1uPcYwow=', 1101, 'asdsad@ymail.com'),
+(2121, 'ronaldo', 'DGM', 2, 325234, 'pbkdf2_sha256$180000$UP32hN0mNayv$fa5QGPHN15UN/AdtcfNqA6ALw0vu3m2Uy2IDy7+bv7M=', 1101, 'ok@gmail.com'),
+(2131, 'torentino', 'DGM', 4, 4534, 'pbkdf2_sha256$180000$5LSOl4daoaDe$QnS6ZdjAKIdGsI+pRs/aJMLA57+KZ4Kd/PjJ3i2Z/CA=', 1101, 'na@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -791,7 +756,7 @@ CREATE TABLE IF NOT EXISTS `django_content_type` (
   `model` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `django_content_type_app_label_model_76bd3d3b_uniq` (`app_label`,`model`)
-) ENGINE=MyISAM AUTO_INCREMENT=54 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=46 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `django_content_type`
@@ -842,15 +807,7 @@ INSERT INTO `django_content_type` (`id`, `app_label`, `model`) VALUES
 (42, 'login', 'djangoadminlog'),
 (43, 'login', 'djangocontenttype'),
 (44, 'login', 'djangomigrations'),
-(45, 'login', 'djangosession'),
-(46, 'login', 'datisdlogs'),
-(47, 'login', 'datiswlogs'),
-(48, 'login', 'dscndlogs'),
-(49, 'login', 'vhfdlogs'),
-(50, 'login', 'vhfmlogs'),
-(51, 'login', 'vhfylogs'),
-(52, 'login', 'mcdo'),
-(53, 'login', 'employee');
+(45, 'login', 'djangosession');
 
 -- --------------------------------------------------------
 
@@ -865,7 +822,7 @@ CREATE TABLE IF NOT EXISTS `django_migrations` (
   `name` varchar(255) NOT NULL,
   `applied` datetime(6) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `django_migrations`
@@ -891,8 +848,7 @@ INSERT INTO `django_migrations` (`id`, `app`, `name`, `applied`) VALUES
 (17, 'login', '0001_initial', '2020-03-20 18:42:13.378825'),
 (18, 'login', '0002_delete_manors', '2020-03-20 18:42:13.407074'),
 (19, 'sessions', '0001_initial', '2020-03-20 18:42:13.839124'),
-(20, 'login', '0003_authgroup_authgrouppermissions_authpermission_authuser_authusergroups_authuseruserpermissions_django', '2020-03-20 18:52:30.753958'),
-(21, 'login', '0004_datisdlogs_datiswlogs_dscndlogs_employee_mcdo_vhfdlogs_vhfmlogs_vhfylogs', '2020-04-17 17:23:07.471156');
+(20, 'login', '0003_authgroup_authgrouppermissions_authpermission_authuser_authusergroups_authuseruserpermissions_django', '2020-03-20 18:52:30.753958');
 
 -- --------------------------------------------------------
 
@@ -914,9 +870,10 @@ CREATE TABLE IF NOT EXISTS `django_session` (
 --
 
 INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALUES
-('apkpwyumkay3eapig6kgijz4ns5021xt', 'NDEzY2Q0YjY3NDUyY2IwNjM3MTkwODI5ZmUxM2JjZGE2Nzc0Njg3Yjp7ImtleSI6IjFSYmhOdElXSDB0d1pPNFZOaEpEWWpsV1JjaWtOVzl1eGFEQTEwOHRVZ1k9IiwiZGVwdCI6IkMiLCJ0eXBlIjoicyIsInVpZCI6IjMxOTMiLCJwaWQiOiI0NCIsIm5hbWUiOiJkYXRpc2RhaWx5In0=', '2020-05-01 16:09:58.020908'),
-('ohcqcwsohp8dof5hst8ufcq74h84axww', 'NmE1ZGM2NDBiNTc1MGEwNzJlZTA1MzMwNTU1MTdiMTU0ZTE5NmZjZTp7InR5cGUiOiJlIiwidWlkIjoiNDE1NiJ9', '2020-05-01 20:27:39.680378'),
-('xckvi11tozyls7plur26ttwinyes35yv', 'NmE1ZGM2NDBiNTc1MGEwNzJlZTA1MzMwNTU1MTdiMTU0ZTE5NmZjZTp7InR5cGUiOiJlIiwidWlkIjoiNDE1NiJ9', '2020-05-03 10:59:00.223354');
+('it71ceko34m645tiza9kfdgqof7l6auj', 'NmE1ZGM2NDBiNTc1MGEwNzJlZTA1MzMwNTU1MTdiMTU0ZTE5NmZjZTp7InR5cGUiOiJlIiwidWlkIjoiNDE1NiJ9', '2020-05-02 08:31:35.963882'),
+('bii06z0wmmubt3005b96nkx0yvbs8gps', 'NmE1ZGM2NDBiNTc1MGEwNzJlZTA1MzMwNTU1MTdiMTU0ZTE5NmZjZTp7InR5cGUiOiJlIiwidWlkIjoiNDE1NiJ9', '2020-05-03 18:09:34.053341'),
+('k94jx8fbsvr06gqu6i4pkud8s855bbbr', 'Mjc2Nzk0OWZiNzFkZmM4MmI1MzlkMTBjNWUzMDlmZDQzOGQ0MjA1Njp7ImtleSI6Ik5nNFRPVTNOQlJSLS1YLUM3QjVyb0tnNXpwQzg5bHlFNE5sS0NRNVhMbW89IiwiZGVwdCI6Ik4iLCJ0eXBlIjoicyIsInVpZCI6IjMxMTIiLCJwaWQiOiIwIiwibmFtZSI6ImRtZW1vbnRobHkifQ==', '2020-05-01 20:09:07.806931'),
+('dgkldv4t7f22pd5w6fgwcpp1v5gzzklw', 'NmE1ZGM2NDBiNTc1MGEwNzJlZTA1MzMwNTU1MTdiMTU0ZTE5NmZjZTp7InR5cGUiOiJlIiwidWlkIjoiNDE1NiJ9', '2020-05-04 17:02:57.945458');
 
 -- --------------------------------------------------------
 
@@ -945,6 +902,7 @@ CREATE TABLE IF NOT EXISTS `dmedaily` (
   `s_verify` varchar(11) DEFAULT NULL,
   `approval_date` date DEFAULT NULL,
   `approval_time` time DEFAULT NULL,
+  `status` varchar(30) NOT NULL DEFAULT 'PENDING',
   PRIMARY KEY (`p_id`),
   UNIQUE KEY `date` (`date`,`a_id`) USING BTREE,
   KEY `a_id` (`a_id`),
@@ -955,9 +913,9 @@ CREATE TABLE IF NOT EXISTS `dmedaily` (
 -- Dumping data for table `dmedaily`
 --
 
-INSERT INTO `dmedaily` (`date`, `a_id`, `emp_id`, `f_id`, `eqpt_shelter_cleanliness`, `Battery_room_cleanliness`, `AC_status`, `eqpt_shelter_temperature`, `mains_power_supply`, `stabiliser_output`, `batterybank_voltage`, `status_of_monitor`, `unusual_noise`, `REMARKS`, `Unit_incharge_approval`, `p_id`, `s_verify`, `approval_date`, `approval_time`) VALUES
-('2020-04-12 11:51:12', 1, 4123, '2', 'DUST FREE', 'NOT CLEAN', 'SERVICABLE', 24, 215, 221, 24, 'OK', 'YES', 'Battery room found not clean. Noise was audible from the DME.Issue no. 520', 'NO', 10, NULL, NULL, NULL),
-('2020-04-12 11:51:27', 1, 4129, '2', 'DUST FREE', 'DUST FREE', 'SERVICABLE', 22, 221, 219, 24, 'OK', 'NO', NULL, 'YES', 11, NULL, NULL, NULL);
+INSERT INTO `dmedaily` (`date`, `a_id`, `emp_id`, `f_id`, `eqpt_shelter_cleanliness`, `Battery_room_cleanliness`, `AC_status`, `eqpt_shelter_temperature`, `mains_power_supply`, `stabiliser_output`, `batterybank_voltage`, `status_of_monitor`, `unusual_noise`, `REMARKS`, `Unit_incharge_approval`, `p_id`, `s_verify`, `approval_date`, `approval_time`, `status`) VALUES
+('2020-04-12 11:51:12', 1, 4123, '2', 'DUST FREE', 'NOT CLEAN', 'SERVICABLE', 24, 215, 221, 24, 'OK', 'YES', 'Battery room found not clean. Noise was audible from the DME.Issue no. 520', 'NO', 10, NULL, NULL, NULL, 'PENDING'),
+('2020-04-12 11:51:27', 1, 4129, '2', 'DUST FREE', 'DUST FREE', 'SERVICABLE', 22, 221, 219, 24, 'OK', 'NO', NULL, 'YES', 11, NULL, NULL, NULL, 'PENDING');
 
 -- --------------------------------------------------------
 
@@ -1102,7 +1060,7 @@ CREATE TABLE IF NOT EXISTS `dscndlogs` (
   `p_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`log_id`),
   KEY `emp_id` (`emp_id`),
-  KEY `p_id` (`p_id`)
+  KEY `dscndlogs_ibfk_2` (`p_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
 --
@@ -1110,14 +1068,14 @@ CREATE TABLE IF NOT EXISTS `dscndlogs` (
 --
 
 INSERT INTO `dscndlogs` (`log_id`, `emp_id`, `remarks`, `value`, `date`, `time`, `p_id`) VALUES
-(1, 4144, 'Alarm LED was turned ON', 'ON', '2020-03-28', '23:50:12', 9),
-(2, 4144, 'UPS I/P Voltage exceeding normal voltage', '210', '2020-03-28', '23:50:12', 9),
-(3, 4144, 'UPS O/P Voltage exceeding normal voltage', '210', '2020-03-28', '23:50:12', 37),
-(4, 4144, 'UPS Battery Voltage exceeding normal voltage', '170', '2020-03-28', '23:50:12', 8),
-(5, 4144, 'Alarm LED was turned ON(update)', 'ON', '2020-03-28', '23:51:19', 38),
-(6, 4144, 'Parameter/s fixed', 'All parameters NORMAL', '2020-03-28', '23:52:09', 45),
-(7, 4169, 'Alarm LED was turned ON', 'ON', '2020-03-29', '01:13:31', 40),
-(8, 4144, 'Parameter/s fixed', 'All parameters NORMAL', '2020-03-29', '01:13:51', 40);
+(1, 4144, 'Alarm LED was turned ON', 'ON', '2020-03-28', '23:50:12', 4),
+(2, 4144, 'UPS I/P Voltage exceeding normal voltage', '210', '2020-03-28', '23:50:12', 4),
+(3, 4144, 'UPS O/P Voltage exceeding normal voltage', '210', '2020-03-28', '23:50:12', 1),
+(4, 4144, 'UPS Battery Voltage exceeding normal voltage', '170', '2020-03-28', '23:50:12', 1),
+(5, 4144, 'Alarm LED was turned ON(update)', 'ON', '2020-03-28', '23:51:19', 1),
+(6, 4144, 'Parameter/s fixed', 'All parameters NORMAL', '2020-03-28', '23:52:09', 2),
+(7, 4169, 'Alarm LED was turned ON', 'ON', '2020-03-29', '01:13:31', 1),
+(8, 4144, 'Parameter/s fixed', 'All parameters NORMAL', '2020-03-29', '01:13:51', 1);
 
 -- --------------------------------------------------------
 
@@ -1196,7 +1154,7 @@ CREATE TABLE IF NOT EXISTS `dscnweekly` (
 --
 
 INSERT INTO `dscnweekly` (`p_id`, `date`, `time`, `a_id`, `emp_id`, `f_id`, `Air_conditioning_check`, `Cleaning_DSCN_associated_eqpt`, `UPS1_UPS2_battery_backup`, `UPS_battery_voltage_on_load`, `Antenna_n_Cable_check`, `REMARKS`, `Unit_incharge_approval`, `approval_date`, `approval_time`, `s_verify`, `status`) VALUES
-(1, '2020-03-26', '14:06:03', 1, 4156, 3, 'ALL installed AC\'s working.', 'ALL DSCN related equipments were cleaned.', 'UPS1 & UPS2 battery backup maintained.', 'Can withstand load', 'All cables and Antenna properly connected', NULL, 'YES', NULL, NULL, NULL, '');
+(1, '2020-03-26', '14:06:03', 1, 4156, 3, 'ALL installed AC\'s working.', 'ALL DSCN related equipments were cleaned.', 'UPS1 & UPS2 battery backup maintained.', 'Can withstand load', 'All cables and Antenna properly connected', NULL, 'YES', NULL, NULL, NULL, 'PENDING');
 
 -- --------------------------------------------------------
 
@@ -1292,7 +1250,7 @@ CREATE TABLE IF NOT EXISTS `head` (
 --
 
 INSERT INTO `head` (`head_id`, `name`, `designation`, `contact`, `password`) VALUES
-(1101, 'Hannibal Lecter', 'ED CNS', 95187238, 'pbkdf2_sha256$180000$etVquvJaLhJ9$eL823OLaqGzqVY+2TI+vS0LFatJ280UlOWm9Ns63bdU=');
+(1101, 'Hannibal Lecter', 'ED CNS', 95187238, 'pbkdf2_sha256$180000$Q6fOe3VyK5li$36zjcFXU8UGpx3Q16ozZ4kB/e12+8P2Og0USItJkPZo=');
 
 -- --------------------------------------------------------
 
@@ -1734,7 +1692,7 @@ CREATE TABLE IF NOT EXISTS `vhfdaily` (
   KEY `a_id` (`a_id`),
   KEY `emp_id` (`emp_id`),
   KEY `f_id` (`f_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `vhfdaily`
@@ -1748,12 +1706,13 @@ INSERT INTO `vhfdaily` (`p_id`, `s_verify`, `date`, `time`, `emp_id`, `status`, 
 (5, NULL, '2020-03-31', '11:02:13', 4169, '', 1, 1, 1, 120, 'PASS', 'READY', 'RXN NORMAL', NULL, -83, NULL, 'YES', NULL, NULL),
 (6, NULL, '2020-04-01', '12:40:49', 4156, '', 1, 1, 1, 123, 'PASS', 'READY', 'RXN NORMAL', NULL, -83, NULL, 'YES', NULL, NULL),
 (7, NULL, '2020-04-02', '13:12:52', 4144, '', 1, 1, 1, 120, 'PASS', 'READY', 'RXN NORMAL', NULL, -82, NULL, 'YES', NULL, NULL),
-(8, NULL, '2020-04-07', '17:28:28', 4156, 'COMPLETED', 1, 1, 1, 120, 'PASS', 'READY', 'RXN NORMAL', NULL, -82, NULL, 'YES', NULL, NULL),
+(8, NULL, '2020-04-07', '17:28:28', 4156, 'COMPLETED', 1, 1, 1, 120, 'PASS', 'READY', 'RXN NORMAL', NULL, -82, NULL, 'YES', '2020-04-18', '21:46:46'),
 (9, NULL, '2020-04-14', '21:40:49', 4156, 'COMPLETED', 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '---Report not submitted---', NULL, NULL, NULL),
 (10, NULL, '2020-04-15', '00:24:04', 4156, '', 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '---Report not submitted---', NULL, NULL, NULL),
 (11, NULL, '2020-04-16', '16:51:37', 4156, '', 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '---Report not submitted---', NULL, NULL, NULL),
-(12, NULL, '2020-04-17', '00:01:58', 4156, '', 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '---Report not submitted---', NULL, NULL, NULL),
-(13, NULL, '2020-04-18', '00:08:00', 4156, '', 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '---Report not submitted---', NULL, NULL, NULL);
+(12, NULL, '2020-04-17', '13:41:02', 4156, '', 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '---Report not submitted---', 'YES', '2020-04-18', '22:29:49'),
+(13, NULL, '2020-04-18', '16:40:35', 4156, '', 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '---Report not submitted---', NULL, NULL, NULL),
+(14, NULL, '2020-04-19', '19:49:03', 4156, 'COMPLETED WITH ERRORS', 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '---Report not submitted---', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1769,30 +1728,32 @@ CREATE TABLE IF NOT EXISTS `vhfdlogs` (
   `value` varchar(30) NOT NULL,
   `date` date NOT NULL,
   `time` time NOT NULL,
+  `p_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`log_id`),
-  KEY `emp_id` (`emp_id`)
+  KEY `emp_id` (`emp_id`),
+  KEY `p_id` (`p_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `vhfdlogs`
 --
 
-INSERT INTO `vhfdlogs` (`log_id`, `emp_id`, `remarks`, `value`, `date`, `time`) VALUES
-(1, 4144, 'Bit test failed', 'FAIL', '2020-03-27', '22:37:04'),
-(2, 4144, 'Not Ready', 'NOT READY', '2020-03-27', '22:37:04'),
-(3, 4144, 'SQ Threshold above -80 Db', '-82', '2020-03-27', '22:37:04'),
-(4, 4144, 'Not Ready(update)', 'NOT READY', '2020-03-27', '22:37:39'),
-(5, 4144, 'SQ Threshold above -80 Db(update)', '-82', '2020-03-27', '22:37:39'),
-(6, 4144, 'SQ Threshold above -80 Db(update)', '-82', '2020-03-27', '22:37:57'),
-(7, 4144, 'Parameter/s fixed', 'All parameters NORMAL', '2020-03-27', '22:37:57'),
-(8, 4144, 'Bit test failed', 'READY', '2020-03-28', '11:02:13'),
-(9, 4144, 'Not Ready', 'OK', '2020-03-28', '11:02:13'),
-(10, 4144, 'SQ Threshold above -80 Db', '-83', '2020-03-28', '11:02:13'),
-(11, 4144, 'SQ Threshold above -80 Db(update)', '-83', '2020-03-28', '11:02:29'),
-(12, 4144, 'Parameter/s fixed', 'All parameters NORMAL', '2020-03-28', '11:02:29'),
-(13, 4156, 'SQ Threshold above -80 Db', '-83', '2020-04-01', '12:40:49'),
-(14, 4144, 'SQ Threshold above -80 Db', '-82', '2020-04-02', '13:12:52'),
-(15, 4156, 'SQ Threshold above -80 Db', '-82', '2020-04-03', '17:28:28');
+INSERT INTO `vhfdlogs` (`log_id`, `emp_id`, `remarks`, `value`, `date`, `time`, `p_id`) VALUES
+(1, 4144, 'Bit test failed', 'FAIL', '2020-03-27', '22:37:04', NULL),
+(2, 4144, 'Not Ready', 'NOT READY', '2020-03-27', '22:37:04', NULL),
+(3, 4144, 'SQ Threshold above -80 Db', '-82', '2020-03-27', '22:37:04', NULL),
+(4, 4144, 'Not Ready(update)', 'NOT READY', '2020-03-27', '22:37:39', NULL),
+(5, 4144, 'SQ Threshold above -80 Db(update)', '-82', '2020-03-27', '22:37:39', NULL),
+(6, 4144, 'SQ Threshold above -80 Db(update)', '-82', '2020-03-27', '22:37:57', NULL),
+(7, 4144, 'Parameter/s fixed', 'All parameters NORMAL', '2020-03-27', '22:37:57', NULL),
+(8, 4144, 'Bit test failed', 'READY', '2020-03-28', '11:02:13', NULL),
+(9, 4144, 'Not Ready', 'OK', '2020-03-28', '11:02:13', NULL),
+(10, 4144, 'SQ Threshold above -80 Db', '-83', '2020-03-28', '11:02:13', NULL),
+(11, 4144, 'SQ Threshold above -80 Db(update)', '-83', '2020-03-28', '11:02:29', NULL),
+(12, 4144, 'Parameter/s fixed', 'All parameters NORMAL', '2020-03-28', '11:02:29', NULL),
+(13, 4156, 'SQ Threshold above -80 Db', '-83', '2020-04-01', '12:40:49', NULL),
+(14, 4144, 'SQ Threshold above -80 Db', '-82', '2020-04-02', '13:12:52', NULL),
+(15, 4156, 'SQ Threshold above -80 Db', '-82', '2020-04-03', '17:28:28', NULL);
 
 -- --------------------------------------------------------
 
@@ -2002,7 +1963,7 @@ ALTER TABLE `datisdaily`
 --
 ALTER TABLE `datisdlogs`
   ADD CONSTRAINT `datisdlogs_ibfk_1` FOREIGN KEY (`emp_id`) REFERENCES `engineer` (`emp_id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `datisdlogs_ibfk_2` FOREIGN KEY (`p_id`) REFERENCES `datisdaily` (`p_id`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `datisdlogs_ibfk_2` FOREIGN KEY (`p_id`) REFERENCES `datisdaily` (`p_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `datisweekly`
@@ -2059,7 +2020,8 @@ ALTER TABLE `dscndaily`
 -- Constraints for table `dscndlogs`
 --
 ALTER TABLE `dscndlogs`
-  ADD CONSTRAINT `dscndlogs_ibfk_1` FOREIGN KEY (`emp_id`) REFERENCES `engineer` (`emp_id`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `dscndlogs_ibfk_1` FOREIGN KEY (`emp_id`) REFERENCES `engineer` (`emp_id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `dscndlogs_ibfk_2` FOREIGN KEY (`p_id`) REFERENCES `dscndaily` (`p_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `dscnmonthly`
@@ -2180,7 +2142,8 @@ ALTER TABLE `vhfdaily`
 -- Constraints for table `vhfdlogs`
 --
 ALTER TABLE `vhfdlogs`
-  ADD CONSTRAINT `vhfdlogs_ibfk_1` FOREIGN KEY (`emp_id`) REFERENCES `engineer` (`emp_id`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `vhfdlogs_ibfk_1` FOREIGN KEY (`emp_id`) REFERENCES `engineer` (`emp_id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `vhfdlogs_ibfk_2` FOREIGN KEY (`p_id`) REFERENCES `vhfdaily` (`p_id`);
 
 --
 -- Constraints for table `vhfmonthly`

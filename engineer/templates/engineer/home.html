@@ -6,8 +6,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	 <link rel="stylesheet" type="text/css" href="{% static 'engineer/home.css' %}">
-	  <link rel="stylesheet" type="text/css" href="home.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
  
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -37,12 +36,12 @@
 					  	{% for empdets in empdet %}
 					    <h5 class="card-title">{{empdets.name }}</h5>
 						<div class="data-emp">
-							<h6 class="card-subtitle">{{ empdets.designation }}</h6>
+							<h6 class="card-subsubtitle">{{ empdets.designation }}</h6>
 							{% endfor %}  
     						 {% csrf_token %}
 							<br>
 							{% for name1 in name %}
-							<h6 class="card-subsubtitle">{{ name1.name }} Airport</h6><
+							<h6 class="card-subsubtitle">{{ name1.name }} Airport</h6>
 							{% endfor %}							
 							<br>
 						</div>
@@ -74,9 +73,9 @@
 				        <div class="modal-body">
 				        	{% for supdetails1 in supdetails %}
 				          <h4>Name:{{supdetails1.name}}</h4>
-				          <h4>Email: <a href="mailto:{{ supdetails1.email }}">{{ supdetails1.email }}</a></h4>
+				          <h5>Email: <a href="mailto:{{ supdetails1.email }}">{{ supdetails1.email }}</a></h5>
 				          <!--put the contact in the a href as mailto:{{ contact }} and outside in phone too-->
-				          <h4>Phone: {{ supdetails1.contact }}</h4>
+				          <h5>Phone: {{ supdetails1.contact }}</h5>
 							{% endfor %}
 				        </div>
 				        
@@ -95,7 +94,8 @@
 				<div class="card tabcard">
 				<ul class="nav nav-pills nav-stacked">
 				    <li class="active"><a class="todays" data-toggle="pill" href="#today" >Today's Tasks</a></li>
-				    <li><a class="faculty" data-toggle="pill" href="#facilities" >Facilities</a></li>
+					<li><a class="faculty" data-toggle="pill" href="#facilities" >Facilities</a></li>
+					
 				 </ul>
 				 <button class="btn btn-primary logout" onclick="window.location.href='/logout/{{ id }}'"> Logout</button></td>
    
@@ -204,27 +204,26 @@
 									<td>Pending</td>
 								  </tr>
 								  {% endif %}
-								  {% else %}
+								  {% elif datiswsub_on == currdate %}
 								  {% if status == "PENDING" %}
-		                      	<tr data-href='/datisweekly/{{ id }}' >
-			                      <td>{{ datiswsub_deadline }}</td>    
-			                      <td>DATIS Weekly</td>
-			                      <td>Pending</td>
-								</tr>
-							   {% endif %}
-				 			{% endif %} 
+								  <tr data-href='/datisweekly/{{ id }}' >
+									<td>{{ datiswsub_deadline }}</td>    
+									<td>DATIS Weekly</td>
+									<td>Pending</td>
+					                {% endif %}
+						  	     {% endif %} 
 		                      {% endif %}
 		                      
 		                      {% if dwr == 1 and datiswsub_on == currdate %}
 							     {% if status == "COMPLETED"  %}  
 							    <tr data-href='/datisweeklyrec/{{ id }}' > 
-			                      <td>{{ datiswsub_on }}</td>    
+			                      <td>{{ datiswsub_deadline }}</td>    
 			                      <td>DATIS Weekly</td>
 			                      <td>Completed</td>
 								</tr>
 								{% else %}
 								<tr data-href='/datisweeklyrec/{{ id }}' > 
-									<td>{{ wdate }}</td>    
+									<td>{{ datiswsub_deadline }}</td>    
 									<td>DATIS Weekly</td>
 									<td>Completed with errors</td>
 								  </tr>
@@ -268,18 +267,18 @@
 					    		</tr>
 					    		
 					    		 		<tr data-href='#'>
-							    			<td>{{ vhfd_deadline }}</td>    
-				                            <td>VHF</td>
+							    			<td>02.04.2020</td>    
+				                            <td><button disabled class="btn standards" onclick="window.location.href='#'">VHF</button></td>
 				                            <td>{{ vhfdsub_on }}</td>
 							    			<td><button class="btn standards" data-toggle="modal" data-target="#vhfdaily">STANDARDS</button></td>
 							    			<td><button class="btn standards" href="/vhfdaily/{{ id }}">DETAILS</button></td>
 							    		</tr>
 							    		 <tr data-href='#'>
 							    			<td>01.04.2020</td>
-							    			<td>DSCN</td>
+							    			<td><button disabled class="btn standards" onclick="window.location.href='#'">DSCN</button></td>
 							    			<td>01.04.2020</td>
 							    			<td><button class="btn standards"data-toggle="modal" data-target="#dscndaily">STANDARDS</button></td>
-							    			<td><button class="btn standards" href="#">DETAILS</button></td> 
+							    			<td><button class="btn standards" href="#">MORE DETAILS</button></td> 
 							    		</tr>
 					    		
 					    	</table>
@@ -296,11 +295,8 @@
 					    			<th>Previous Records</th>
 					    		</tr>
 
-									{% if status == "PENDING" %}
+									
 									<td>{{ wdate }}</td>
-									{% else %}
-									<td>{{ datiswsub_deadline }}</td>    
-									{% endif %}
 									{% if dwr == 1 and datiswsub_on == currdate %}
 									{% if status == "COMPLETED" or status == "COMPLETED WITH ERRORS" %}
 									<td><button disabled class="btn standards" onclick="window.location.href='/datisweeklyrec/{{ id }}'">DATIS</button></td>
@@ -315,32 +311,32 @@
 									 <td><button class="btn standards" onclick="window.location.href='/datisweekly/{{ id }}'">DATIS</button></td>
 								    {% else %}
 									<td><button class="btn standards" onclick="window.location.href='/datisweeklyrep/{{ id }}'">DATIS</button></td>
-								{% endif %}
-								  {% else %}
-								  {% if status == "PENDING" %}
-					     		  <td><button class="btn standards" onclick="window.location.href='/datisweekly/{{ id }}'">DATIS</button></td>
-								   {% else %} 
-								   <td><button class="btn standards" onclick="window.location.href='/datisweeklyrep/{{ id }}'">DATIS</button></td>
-						 		 {% endif %}
-								   {% endif %} 
-								  {% endif %}
-								<td>{{ datiswsub_on }}</td>
+									{% endif %}
+									{% elif datiswsub_on == currdate %}
+									 {% if status == "PENDING" %}
+									 <td><button class="btn standards" onclick="window.location.href='/datisweekly/{{ id }}'">DATIS</button></td>
+									  {% endif %}
+									 {% else %}
+									<td><button class="btn standards" onclick="window.location.href='/datisweeklyrep/{{ id }}'">DATIS</button></td>
+									{% endif %}
+								    {% endif %}
+									<td>{{ datiswsub_on }}</td>
 				         			<td><button class="btn standards" data-toggle="modal" data-target="#datisweekly">STANDARDS</button></td>
 									 <td><button class="btn standards" onclick="window.location.href='/datisweeklyrec/{{ id }}'">MORE DETAILS</button></td>
 						     	</tr>
 					    		 <tr data-href='#'>
 					    			<td>01.04.2020</td>
-					    			<td>VHF RX</td>
+					    			<td><button disabled class="btn standards" onclick="window.location.href='#'">VHF RX</button></td>
 					    			<td>01.04.2020</td>
 					    			<td></td>
-					    			<td><button class="btn standards" href="#">DETAILS</button></td>
+					    			<td><button class="btn standards" href="#">MORE DETAILS</button></td>
 					    		</tr>
 					    		 <tr data-href='#'>
 					    			<td>01.04.2020</td>
-					    			<td>DSCN</td>
+					    			<td><button disabled class="btn standards" onclick="window.location.href='#'">DSCN</button></td>
 					    			<td>01.04.2020</td>
 					    			<td></td>
-					    			<td><button class="btn standards" href="#">DETAILS</button></td>
+					    			<td><button class="btn standards" href="#">MORE DETAILS</button></td>
 					    		</tr>
 					    	</table>
 							</div>
@@ -357,24 +353,24 @@
 					    		</tr>
 					    		 <tr data-href='#'>
 					    			<td>01.04.2020</td>
-					    			<td>DATIS</td>
+					    			<td><button disabled class="btn standards" onclick="window.location.href='#'">DATIS</button></td>
 					    			<td>01.04.2020</td>
 					    			<td></a></td>
-					    			<td><button class="btn standards" href="#">DETAILS</button></td>
+					    			<td><button class="btn standards" href="#">MORE DETAILS</button></td>
 					    		</tr>
 					    		 <tr data-href='#'>
 					    			<td>{{ vhfmsub_deadline }}</td>    
-			                        <td>VHF</td>
+			                        <td><button disabled class="btn standards" onclick="window.location.href='#'">VHF</button></td>
 			                        <td>{{ vhfmsub_on }}</td>  
 					    			<td><button class="btn standards" data-toggle="modal" data-target="#vhfmonthly">STANDARDS</button></td>
-					    			<td><button class="btn standards" href="/vhfmonthly/{{ id }}">DETAILS</button></td>
+					    			<td><button class="btn standards" href="/vhfmonthly/{{ id }}">MORE DETAILS</button></td>
 					    		</tr>
 					    		 <tr data-href='#'>
 					    			<td>01.04.2020</td>
-					    			<td>DSCN</td>
+					    			<td><button disabled class="btn standards" onclick="window.location.href='#'">DSCN</button></td>
 					    			<td>01.04.2020</td>
 					    			<td></td>
-					    			<td><button class="btn standards" href="#">DETAILS</button></td>
+					    			<td><button class="btn standards" href="#">MORE DETAILS</button></td>
 					    		</tr>
 					    	</table>
 							</div>
@@ -390,7 +386,7 @@
 				          <button type="button" class="close" data-dismiss="modal">&times;</button>
 				        </div>
 				        <div class="modal-body">
-				          <table class="standtab">
+				          <table class="standtab mantab">
 				          	<tr>
 				          		<th>VALUE LABEL</th>
 				          		<th>NORMAL VALUE</th>
@@ -416,7 +412,7 @@
 				          		<td>Status of Server B</td>
 				          		<td>Main/Stdby</td>
 				          	</tr>
-				          		<tr>
+				          	<!--	<tr>
 				          		<td>Date and time of servers wrt GPS CLK</td>
 				          		<td>Correct</td>
 				          	</tr>
@@ -439,7 +435,7 @@
 				          		<tr>
 				          		<td>Audio Quality of Datis Announcement</td>
 				          		<td>Good</td>
-				          	</tr>
+				          	</tr>-->
 				          </table>
 				        </div>
 				        <div class="modal-footer">
@@ -456,7 +452,7 @@
 				          <button type="button" class="close" data-dismiss="modal">&times;</button>
 				        </div>
 				        <div class="modal-body">
-				          <table class="standtab">
+				          <table class="standtab mantab">
 				          	<tr>
 				          		<th>VALUE LABEL</th>
 				          		<th>NORMAL VALUE</th>
@@ -478,7 +474,7 @@
 				          		<td>LAN Status</td>
 				          		<td>OK</td>
 				          	</tr>
-				          		<tr>
+				          	<!--	<tr>
 				          		<td>Time Sync</td>
 				          		<td>OK</td>
 				          	</tr>
@@ -489,7 +485,7 @@
 				          		<tr>
 				          		<td>PTT off Interval</td>
 				          		<td>15 seconds</td>
-				          	</tr>
+				          	</tr>-->
 				          </table>
 				        </div>
 				        <div class="modal-footer">
@@ -506,7 +502,7 @@
 				          <button type="button" class="close" data-dismiss="modal">&times;</button>
 				        </div>
 				        <div class="modal-body">
-				          <table class="standtab">
+				          <table class="standtab mantab">
 				          	<tr>
 				          		<th>VALUE LABEL</th>
 				          		<th>NORMAL VALUE</th>
@@ -548,7 +544,7 @@
 				          <button type="button" class="close" data-dismiss="modal">&times;</button>
 				        </div>
 				        <div class="modal-body">
-				          <table class="standtab">
+				          <table class="standtab mantab">
 				          	<tr>
 				          		<th>VALUE LABEL</th>
 				          		<th>NORMAL VALUE</th>
@@ -622,7 +618,7 @@
 				          <button type="button" class="close" data-dismiss="modal">&times;</button>
 				        </div>
 				        <div class="modal-body">
-				          <table class="standtab">
+				          <table class="standtab mantab">
 				          	<tr>
 				          		<th>VALUE LABEL</th>
 				          		<th>NORMAL VALUE</th>

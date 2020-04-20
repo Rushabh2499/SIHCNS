@@ -26,40 +26,40 @@
         <table class="table table-bordered table-condensed table-striped table-hover todaytasks mantab">
             <thead>
                 <tr>  
-                	<th>Date</th>
-					  <th>Time</th>
-					  <th>Status</th>
+                	<th>Date-Time</th>
+					  <th style="width: 150px;">Status</th>
                   	<th>Room Temperature</th>
                   	<th>Status of AC</th>
                		<th>Status of UPS</th>
                     <th>Status of server A</th>
                   	<th>Status of server B</th>
-					<th>Unit Incharge Approval</th>
+                    <th>Test</th>
+					          <th>Approval Status</th>
                   	<th>Approval Date</th>
                   	<th>Approval time</th>
-                  	<th>Test</th>
+                  	
                 </tr>
             </thead>
             <tbody>
                 {% for datisd in datis_d %}
                 <tr>
                  
-                	<td>{{ datisd.date }}</td>
-					  <td>{{ datisd.time }}</td>
-					  <td>{{ datisd.status }}</td>
+                	<td>{{ datisd.date }}<br>{{ datisd.time }}</td>
+					  <td style="width: 150px;">{{ datisd.status }}</td>
                   	  <td>{{ datisd.room_temp }}</td>
                   	<td>{{ datisd.status_of_ac }}</td>
                   	<td>{{ datisd.status_of_ups }}</td>
                   	<td>{{ datisd.status_of_servera }}</td>
                   	<td>{{ datisd.status_of_serverb }}</td>
-					  <td>{{ datisd.unit_incharge_approval }}</td>
+                    {% if datisd.room_temp < 25 and datisd.status_of_servera == "MAINS" and datisd.status_of_serverb == "STANDBY" and datisd.status_of_ups == "NORMAL" and datisd.status_of_ac == "SVCBL" or datisd.room_temp < 25 and datisd.status_of_servera == "STANDBY" and datisd.status_of_serverb == "MAINS" and datisd.status_of_ups == "NORMAL" and datisd.status_of_ac == "SVCBL" %}
+                    <td>Pass</td>
+                {% else %}
+                    <td>Fail</td>
+                {% endif %}  
+					          <td>{{ datisd.unit_incharge_approval }}</td>
                   	<td>{{ datisd.approval_date }}</td>
                   	<td>{{ datisd.approval_time }}</td>
-                      {% if datisd.room_temp < 25 and datisd.status_of_servera == "MAINS" and datisd.status_of_serverb == "STANDBY" and datisd.status_of_ups == "NORMAL" and datisd.status_of_ac == "SVCBL" or datisd.room_temp < 25 and datisd.status_of_servera == "STANDBY" and datisd.status_of_serverb == "MAINS" and datisd.status_of_ups == "NORMAL" and datisd.status_of_ac == "SVCBL" %}
-                  	<td>Pass</td>
-                {% else %}
-                   	<td>Fail</td>
-                {% endif %}  
+                      
                 </tr>
                 {% endfor %}
              </tbody>

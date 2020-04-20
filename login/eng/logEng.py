@@ -109,14 +109,13 @@ def logEng(request,id):
         uia = uia.values('unit_incharge_approval').filter(a_id=1)[0]['unit_incharge_approval']
         status = status.values('status')
         status = status.values('status').filter(a_id=1)[0]['status']
-        f = 1   
         flag = cursor.execute("select date from datisweekly where date = %s",[date.today()])    
             
         if currdate > wdate :  #if it goes beyond 7 days
             dwr = 0
-            f=0 
+        
         if flag :    
-            if  f == 0 or temp1 < temp : #report submitted after deadline
+            if  temp1 < temp : #report submitted after deadline
                 datiswsub_deadline = temp1    
                 if status == "COMPLETED" or status == "COMPLETED WITH ERRORS" :
                     dwr=1  
@@ -136,171 +135,8 @@ def logEng(request,id):
                     dwr=1  
                 elif status == "PENDING" :
                     dwr=0
-        
-    #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!vhfdaily!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        vdr = 0
-        statusvd=''
-        currdate = date.today()            
-        vhfdsub_on = cursor.execute("select date from vhfdaily where date = %s",[date.today()])    
-        if vhfdsub_on :
-            statusvd = models.Vhfdaily.objects.all()
-            statusvd = statusvd.values('date','status')
-            statusvd = statusvd.order_by('-date')
-            statusvd = statusvd.values('status')
-            statusvd = statusvd.values('status').filter(a_id=1)[0]['status']
-            if statusvd == "PENDING" :
-                vhfdsub_on = currdate
-                vhfd_deadline = currdate
-                vdr=0
-            elif statusvd == "COMPLETED" :
-                vhfd_deadline = currdate + timedelta(days=1)
-                vhfdsub_on = currdate
-                vdr = 1 
-            elif statusvd == "COMPLETED WITH ERRORS" :
-                vhfd_deadline = currdate + timedelta(days=1)
-                vhfdsub_on = currdate
-                vdr = 1
-        else :
-            vhfd_deadline = models.Vhfdaily.objects.all()
-            vhfd_deadline = vhfd_deadline.values('date')
-            vhfd_deadline = vhfd_deadline.order_by('-date')
-            vhfd_deadline = vhfd_deadline.values('date').filter(a_id=1)[0]['date']
-            vhfdsub_on = vhfd_deadline
-            vhfd_deadline = vhfd_deadline + timedelta(days=2)
-            if (vhfd_deadline <= date.today()) :    
-                remarks = "---Report not submitted---"
-                statusvd = "COMPLETED"
-                val = ((date.today()-timedelta(days=1)),id,status,'1',remarks)
-                sql = "INSERT INTO vhfdaily (date,emp_id,status,f_id,remarks) values (%s ,%s,%s, %s,%s)"
-                cursor.execute(sql,val)  
-                vhfdsub_on = date.today()-timedelta(days=1)    
-            else : 
-                vhfd_deadline = date.today()
-        '''
-    #     #!!!!!!!!!!!!!!!!!!!!!!!vhfmonthly!!!!!!!!!!!!!!!!!!!!!!!!!!!!        
-    #     vmr = 0
-    #     currdate = date.today()
-    #     wdate = models.Vhfmonthly.objects.all()
-    #     wdate = wdate.values('date')
-    #     wdate = wdate.order_by('-date')
-    #     wdate = wdate.values('date').filter(a_id=1)[0]['date']
-    #     wdate = str(wdate)
-    #     wdate = datetime.strptime(wdate, "%Y-%m-%d").date()
-    #     temp = wdate
-    #     wdate = wdate + timedelta(days=30) 
-    #     #vhfmsub_on = cursor.execute("select date from vhfmonthly where date = %s",[temp])    
-    #     vhfmsub_on = temp
-    #     if currdate > wdate :
-    #         vhfmsub_deadline =  currdate 
-    #     else :
-    #         vhfmsub_deadline =  wdate
-    #         vmr = 1
-    #     #!!!!!!!!!!!!!!!!!!!!!!!!vhfyearly!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    #     vyr = 0
-    #     currdate = date.today()
-    #     wdate = models.Vhfyearly.objects.all()
-    #     wdate = wdate.values('date')
-    #     wdate = wdate.order_by('-date')
-    #     wdate = wdate.values('date').filter(a_id=1)[0]['date']
-    #     wdate = str(wdate)
-    #     wdate = datetime.strptime(wdate, "%Y-%m-%d").date()
-    #     temp = wdate
-    #     wdate = wdate + timedelta(days=365) 
-    #     #vhfysub_on = cursor.execute("select date from vhfyearly where date = %s",[temp])    
-    #     vhfysub_on = temp
-    #     if currdate > wdate :
-    #         vhfysub_deadline =  currdate 
-    #     else :
-    #         vhfysub_deadline =  wdate
-    #         vyr = 1
 
-    #     #!!!!!!!!!!!!!!!!!!!!!!!!!!dscndaily!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!    
-    #     dsdr = 0
-    #     currdate = date.today()            
-    #     dscndsub_on = cursor.execute("select date from dscndaily where date = %s",[date.today()])    
-    #     if dscndsub_on :
-    #         dscnd_deadline = currdate + timedelta(days=1)
-    #         dscndsub_on = currdate
-    #         dsdr =1 
-            
-    #     else :
-    #         dscnd_deadline = models.Dscndaily.objects.all()
-    #         dscnd_deadline = dscnd_deadline.values('date')
-    #         dscnd_deadline = dscnd_deadline.order_by('-date')
-    #         dscnd_deadline = dscnd_deadline.values('date').filter(a_id=1)[0]['date']
-    #         dscndsub_on = dscnd_deadline
-    #         dscnd_deadline = dscnd_deadline + timedelta(days=2)
-    #         if (dscnd_deadline <= date.today()) :    
-    #             remarks = "---Report not submitted---"
-    #             val = ((date.today()-timedelta(days=1)),id,'2',remarks)
-    #             sql = "INSERT INTO dscndaily (date,emp_id,f_id,remarks) values (%s ,%s, %s,%s)"
-    #             cursor.execute(sql,val)  
-    #             dscndsub_on = date.today()-timedelta(days=1)    
-    #         else : 
-    #             dscnd_deadline = date.today()
 
-    #     #!!!!!!!!!!!!!!!!!!!!!!!!dscnweekly!!!!!!!!!!!!!!!!!!!!!!!!!!
-    #     currdate = date.today()
-    #     wdate = models.Dscnweekly.objects.all()
-    #     wdate = wdate.values('date')
-    #     wdate = wdate.order_by('-date')
-    #     wdate = wdate.values('date').filter(a_id=1)[0]['date']
-    #     wdate = str(wdate)
-    #     wdate = datetime.strptime(wdate, "%Y-%m-%d").date()
-    #     temp = wdate
-    #     wdate = wdate + timedelta(days=7) 
-    #     dswr = 0
-    #     dscnwsub_on = temp
-    #     if currdate > wdate :
-    #         dscnwsub_deadline =  currdate 
-    #     else :
-    #         dscnwsub_deadline =  wdate
-    #         dswr =1 
+         # return render(request,'./engineer/F.html',{'status':status,'dscnmsub_deadline':dscnmsub_deadline,'dscnmsub_on':dscnmsub_on,'dsmr':dsmr,'dswr':dswr,'dscnwsub_on':dscnwsub_on,'dscnwsub_deadline':dscnwsub_deadline,'dscnd_deadline':dscnd_deadline,'dscndsub_on':dscndsub_on,'dsdr':dsdr,'ddr':ddr,'dwr':dwr,'vdr':vdr,'vmr':vmr,'vyr':vyr,'currdate':currdate,'name':name1,'id':id,'empdet':empdetails,'datisdsub_on':datisdsub_on,'datisd_deadline':datisd_deadline,'datiswsub_on':datiswsub_on,'datiswsub_deadline':datiswsub_deadline,'vhfdsub_on':vhfdsub_on,'vhfd_deadline':vhfd_deadline,'vhfmsub_on':vhfmsub_on,'vhfmsub_deadline':vhfmsub_deadline,'vhfysub_on':vhfysub_on,'vhfysub_deadline':vhfysub_deadline})'''
+        return render(request,'./engineer/home.html',{'wdate':wdate,'supdetails':supdetails,'statusd':statusd,'status':status,'ddr':ddr,'dwr':dwr,'currdate':currdate,'name':name1,'id':id,'empdet':empdetails,'datisdsub_on':datisdsub_on,'datisd_deadline':datisd_deadline,'datiswsub_on':datiswsub_on,'datiswsub_deadline':datiswsub_deadline})
 
-    #     #!!!!!!!!!!!!!!!!!!!!!!!!dscnmonthly!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    #     dsmr = 0
-    #     currdate = date.today()
-    #     wdate = models.Dscnmonthly.objects.all()
-    #     wdate = wdate.values('date')
-    #     wdate = wdate.order_by('-date')
-    #     wdate = wdate.values('date').filter(a_id=1)[0]['date']
-    #     wdate = str(wdate)
-    #     wdate = datetime.strptime(wdate, "%Y-%m-%d").date()
-    #     temp = wdate
-    #     wdate = wdate + timedelta(days=30) 
-    #     dscnmsub_on = temp
-    #     if currdate > wdate :
-    #         dscnmsub_deadline =  currdate 
-    #     else :
-    #         dscnmsub_deadline =  wdate
-    #         dsmr = 1
-
-    #     return render(request,'./engineer/F.html',{'status':status,'dscnmsub_deadline':dscnmsub_deadline,'dscnmsub_on':dscnmsub_on,'dsmr':dsmr,'dswr':dswr,'dscnwsub_on':dscnwsub_on,'dscnwsub_deadline':dscnwsub_deadline,'dscnd_deadline':dscnd_deadline,'dscndsub_on':dscndsub_on,'dsdr':dsdr,'ddr':ddr,'dwr':dwr,'vdr':vdr,'vmr':vmr,'vyr':vyr,'currdate':currdate,'name':name1,'id':id,'empdet':empdetails,'datisdsub_on':datisdsub_on,'datisd_deadline':datisd_deadline,'datiswsub_on':datiswsub_on,'datiswsub_deadline':datiswsub_deadline,'vhfdsub_on':vhfdsub_on,'vhfd_deadline':vhfd_deadline,'vhfmsub_on':vhfmsub_on,'vhfmsub_deadline':vhfmsub_deadline,'vhfysub_on':vhfysub_on,'vhfysub_deadline':vhfysub_deadline})'''
-        return render(request,'./engineer/home.html',{'vhfdsub_on':vhfdsub_on,'vhfd_deadline':vhfd_deadline,'wdate':wdate,'supdetails':supdetails,'statusvd':statusvd,'statusd':statusd,'status':status,'ddr':ddr,'dwr':dwr,'currdate':currdate,'name':name1,'id':id,'empdet':empdetails,'datisdsub_on':datisdsub_on,'datisd_deadline':datisd_deadline,'datiswsub_on':datiswsub_on,'datiswsub_deadline':datiswsub_deadline,'vdr':vdr,})
-
-# uid=''
-# passw=''
-    # p=Engineer(emp_id=4133,name='bobby',designation='JET',a_id=1,dept='N',contact='44499',password='amdvh',supervisor_id=3112)
-    # p.save()
-    # x=models.Dgm.objects.all()
-    # for i in x:
-    #         user = User.objects.create_user(username=i.dgm_id,password=i.password)
-    #         user.save()
-    # x=models.Supervisor.objects.all()
-    # for i in x:
-    #         user = User.objects.create_user(username=i.supervisor_id,password=i.password)
-    #         user.save()
-    # x=models.Engineer.objects.all()
-    # for i in x:
-    #         user = User.objects.create_user(username=i.emp_id,password=i.password)
-    #         user.save()    
-    # x=models.Head.objects.all()
-    # for i in x:
-    #         user = User.objects.create_user(username=i.head_id,password=i.password)
-    #         user.save()
-
-            # 
-        # uid=''
-        # passw=''
-        #request.session['type']='start'
-    #   return render(request,'login/login.html')}}}

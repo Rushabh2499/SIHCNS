@@ -1,6 +1,4 @@
-.body{ overflow: hidden; 
-  font-family: 'Open Sans',sans-serif;
-}}
+.body{ overflow: hidden; }
 a{ text-decoration: none !important; }
 .active a 
 {
@@ -12,9 +10,9 @@ a{ text-decoration: none !important; }
 .table-striped > tbody > tr:nth-child(even) > td, .table-striped > tbody > tr:nth-child(even) > th {
    background-color: #A4A4A4;
 }
-.todaytasks{ table-layout: fixed; word-wrap: break-word; }
+.todaytasks{ table-layout: fixed; }
 .todaytasks th{
-   background-color: rgba(32, 48, 203, 1) ! important; border-width: 4px 0px 4px 0px !important; border-style: solid; border-color: rgba(235, 243, 255, 1)! important ; text-align: left; color: white !important;
+  background-color: rgba(32, 48, 203, 1) ! important; border-width: 4px 0px 4px 0px !important; border-style: solid; border-color: rgba(235, 243, 255, 1)! important ; text-align: left; color: white !important;
 }
 .todaytasks tr{
 	border-width: 4px 0px 4px 0px !important; border-style: solid; border-color: rgba(235, 243, 255, 1)! important ; text-align: left; margin:5px; color: black !important;
@@ -65,7 +63,7 @@ a{ text-decoration: none !important; }
 }
 .card.cardcontact
 {
-	margin-top: 5px; font-family: 'Gotu', sans-serif;width: 16rem; border-radius: 15px; background-color:#1E72FA; margin-left: 10px;
+	margin-top: 5px; font-family: 'Gotu', sans-serif;width: 18rem; border-radius: 15px; background-color:#1E72FA; 
 }
 .headcard
 {
@@ -81,7 +79,7 @@ a{ text-decoration: none !important; }
 }
 .fac
 {
-	font-family: 'Gotu', sans-serif;  overflow-y: auto; max-height: 28rem; max-width: 49rem ; overflow-x: hidden; 
+	font-family: 'Gotu', sans-serif;  overflow-y: auto; max-height: 28rem; max-width: 49rem ; overflow-x: hidden;
 }
 .dateset
 {
@@ -105,7 +103,7 @@ a{ text-decoration: none !important; }
 }
 .logout
 {
-	margin-top: 70px; margin-left: 130px; height:30x; border-radius:30px !important; background-color: #EBF3FF !important; color: black !important;
+	margin-top: 120px; margin-left: 130px; height:30x; border-radius:30px !important; background-color: #EBF3FF !important; color: black !important;
 }
 .factab a
 {

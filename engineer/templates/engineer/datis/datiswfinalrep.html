@@ -37,6 +37,10 @@
         <div class="card" style="text-align: center;">
                 <div class="card-body">
                   <h2 class="card-title">DATIS-TERMA WEEKLY MAINTENANCE ENTRY</h2>
+                  <div class="alert alert-light" style="height: 40px; padding-top: 0px">
+                    Recorded on:  DATE: {{ datisdw.date }}  |  TIME: {{ datisdw.time }}<br>
+                                    <strong>STATUS: {{ datisdw.status }} </strong>
+                </div>
                   <hr>   
       <!--  <input type=text  name="serverAorB" placeholder="{{ datisdw.serveraorb }}"/><br>
         <input type=text  name="UPS_ip" placeholder="{{ datisdw.ups_ip }}"/><br>
@@ -96,7 +100,7 @@
                                 
                 
                 <div class="form-group row has-warning"style="padding-left:0" >
-                  <textarea class="form-control form-control-sm" rows="5" id="procedure" placeholder="Please specify the reason why error prevails in brief" name='remarks'></textarea>
+                  <textarea class="form-control form-control-sm" rows="5" id="procedure" placeholder="Please specify the reason why error prevails in brief" name='remarks' required="required"></textarea>
                   <!--<input type="textarea" class="form-control " id="room_temp" name="Maintenance Procedure"  style="height:200px;" required>-->
                  
               </div>
@@ -115,6 +119,7 @@
 $(function(){
      $('#UPS_ip').css('border-color', '#CED4DA');
      $('#UPS_op').css('border-color', '#CED4DA');
+     $('#procedure').css('border-color', '#CED4DA');
     });
 
  $("#UPS_ip").on("keyup",function(){
@@ -131,6 +136,15 @@ $(function(){
                 return false;
             }else{
                $('#UPS_op').css('border-color', '#CED4DA');
+            }
+        });
+ 
+ $("#procedure").on("keyup",function(){
+            if($("#procedure").val()==""){
+               $('#procedure').css('border-color', 'red');
+                return false;
+            }else{
+               $('#procedure').css('border-color', '#CED4DA');
             }
         });
 </script>

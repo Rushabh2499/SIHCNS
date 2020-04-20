@@ -65,7 +65,7 @@ def dhomeview(request,id) :
         while i == 1 and tempdate != date.today() : 
          if (datisd_deadline <= date.today()) :    
             remarks = "---Report not submitted---"
-            statusd = "COMPLETED"
+            statusd = "PENDING"
             val = (tempdate,currtime,'1',id,statusd,'2',remarks)
             sql = "INSERT INTO datisdaily (date,time,a_id,emp_id,status,f_id,remarks) values (%s ,%s,%s,%s,%s, %s,%s)"
             cursor.execute(sql,val)  
@@ -104,19 +104,22 @@ def dhomeview(request,id) :
     uia = uia.values('unit_incharge_approval').filter(a_id=1)[0]['unit_incharge_approval']
     status = status.values('status')
     status = status.values('status').filter(a_id=1)[0]['status']
-    f = 1   
     flag = cursor.execute("select date from datisweekly where date = %s",[date.today()])    
-        
     if currdate > wdate and flag == 0 :  #if it goes beyond 7 days
-        remarks = "Report not submitted"
-        value = "No Entry" 
-        val = (id,p_id,remarks,value,currdate,currtime)
-        sql = "INSERT INTO datiswlogs (emp_id,p_id,remarks,value,date,time) values (%s ,%s,%s ,%s, %s,%s)"
-        cursor.execute(sql,val)
+        pending = wdate 
+        while pending <= (currdate - timedelta(days=1)) :
+            f = cursor.execute("select date from datiswlogs where date = %s",[pending])    
+            if f == 0 : 
+                remarks = "Report not submitted"
+                value = "No Entry" 
+                val = (id,p_id,remarks,value,pending,currtime)
+                sql = "INSERT INTO datiswlogs (emp_id,p_id,remarks,value,date,time) values (%s ,%s,%s ,%s, %s,%s)"
+                cursor.execute(sql,val)
+            pending = pending + timedelta(days=1)    
         dwr = 0
-        f=0 
+         
     if flag :    
-        if  f == 0 or temp1 < temp : #report submitted after deadline
+        if  temp1 < temp : #report submitted after deadline
             datiswsub_deadline = temp1    
             if status == "COMPLETED" or status == "COMPLETED WITH ERRORS" :
                 dwr=1  
@@ -136,8 +139,7 @@ def dhomeview(request,id) :
                 dwr=1  
             elif status == "PENDING" :
                 dwr=0
-    print(datiswsub_on)
-    
+    '''
     #!!!!!!!!!!!!!!!!!!!!!vhfdaily!!!!!!!!!!!!!!!!!!!!!!!!
     vdr = 0
     statusvd = ""
@@ -178,7 +180,7 @@ def dhomeview(request,id) :
         else : 
             vhfd_deadline = date.today()
     
-    '''
+    
     #!!!!!!!!!!!!!!!!!!!!!!!vhfmonthly!!!!!!!!!!!!!!!!!!!!!!!!!!!!        
     vmr = 0
     currdate = date.today()
@@ -275,8 +277,7 @@ def dhomeview(request,id) :
         dscnmsub_deadline =  currdate 
     else :
         dscnmsub_deadline =  wdate
-        dsmr = 1
-    '''
+        dsmr = 1'''
     #return render(request,'./engineer/home.html',{'status':status,'dscnmsub_deadline':dscnmsub_deadline,'dscnmsub_on':dscnmsub_on,'dsmr':dsmr,'dswr':dswr,'dscnwsub_on':dscnwsub_on,'dscnwsub_deadline':dscnwsub_deadline,'dscnd_deadline':dscnd_deadline,'dscndsub_on':dscndsub_on,'dsdr':dsdr,'ddr':ddr,'dwr':dwr,'vdr':vdr,'vmr':vmr,'vyr':vyr,'currdate':currdate,'name':name1,'id':id,'empdet':empdetails,'datisdsub_on':datisdsub_on,'datisd_deadline':datisd_deadline,'datiswsub_on':datiswsub_on,'datiswsub_deadline':datiswsub_deadline,'vhfdsub_on':vhfdsub_on,'vhfd_deadline':vhfd_deadline,'vhfmsub_on':vhfmsub_on,'vhfmsub_deadline':vhfmsub_deadline,'vhfysub_on':vhfysub_on,'vhfysub_deadline':vhfysub_deadline})
-    return render(request,'./engineer/home.html',{'vhfdsub_on':vhfdsub_on,'vhfd_deadline':vhfd_deadline,'wdate':wdate,'supdetails':supdetails,'statusvd':statusvd,'statusd':statusd,'status':status,'ddr':ddr,'dwr':dwr,'currdate':currdate,'name':name1,'id':id,'empdet':empdetails,'datisdsub_on':datisdsub_on,'datisd_deadline':datisd_deadline,'datiswsub_on':datiswsub_on,'datiswsub_deadline':datiswsub_deadline,'vdr':vdr,})
+    return render(request,'./engineer/home.html',{'wdate':wdate,'supdetails':supdetails,'statusd':statusd,'status':status,'ddr':ddr,'dwr':dwr,'currdate':currdate,'name':name1,'id':id,'empdet':empdetails,'datisdsub_on':datisdsub_on,'datisd_deadline':datisd_deadline,'datiswsub_on':datiswsub_on,'datiswsub_deadline':datiswsub_deadline})
  

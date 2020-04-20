@@ -41,9 +41,7 @@
         
                             <hr>
                             <div class="form-group row has-warning" >
-                                <textarea class="form-control form-control-sm" rows="5" id="procedure" placeholder="Enter Maintenance Procedure" name='remarks'></textarea>
-                                 <!--<input type="textarea" class="form-control " id="room_temp" name="Maintenance Procedure"  style="height:200px;" required>-->
-                               
+                                <textarea class="form-control form-control-sm" rows="5" id="procedure" placeholder="Enter Maintenance Procedure" name='remarks' required="required"></textarea> 
                             </div>
                                   
                                <hr>
@@ -142,7 +140,7 @@
                                 <tbody>
                                 {% for log in datiswlogs %}
                                   <tr>
-                                      <td>{{ log.logs_id }}</td>
+                                      <td>{{ log.log_id }}</td>
                                       <td>{{ log.remarks }}</td>
                                       <td>{{ log.value }}</td>
                                       <td>{{ log.time }}<br>{{ log.date }}</td>
@@ -154,10 +152,7 @@
                       </div>
                   </div>   
                 
-   <!-- <td><button class="btn btn-success" onclick="window.open('/datisweeklyrec/{{ id }}','_blank')" >Past Equipment Logs</button></td>
-    <td><button class="btn btn-success" onclick="window.open('/standards','_blank')">Check Standards</button></td>
-    <td><button onclick="window.location.href= '/datisdaily/{{ id }}'"> Contact Supervisor</button></td>
-    <button onclick="window.location.href='/routebackdd/{{ id }}'">Back</button>-->
+  
     <div class="modal fade" id="standardcheck">
                     <div class="modal-dialog" >
                       <div class="modal-content">
@@ -227,11 +222,9 @@
                     <th>UPS Input</th>
                     <th>UPS Output</th>
                     <th>Dust Free</th>
-                    <th>LAN Status</th><!--
-                    <th>Status of server A</th>
-                    <th>Status of server B</th>-->
+                    <th>LAN Status</th><
                     <th>Test</th>
-                    <!--<th>Test</th>-->
+                   
                 </tr>
             </thead>
             <tbody>
@@ -275,26 +268,68 @@
 
 
 
-                <div class="modal fade" id="contactsuper">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h4 class="modal-title">SUPERVISOR</h4>
-                          <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        </div>
-                        <div class="modal-body">
-                          {% for sup in supdetails %}
-                          <h5>{{ sup.name }}</h5>
-                          <h6>Email: <a href="/email">{{ sup.email }}</a></h6>
-                        <h6>Phone: {{ sup.contact }}</h6>
-                      {% endfor %}
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        </div>  
-                      </div>
-                    </div>
-                </div>
+
+<div class="modal fade" id="contactsuper">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">SUPERVISOR</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+    {% for sup in supdetails %}
+        <h5>{{ sup.name }}</h5>
+        <h6>Email: <a data-toggle="modal" data-target="#report" href="/email">{{ sup.email }}</a></h6>
+   
+    <!--put the contact in the a href as mailto:{{ contact }} and outside in phone too-->
+    <h6>Phone: {{ sup.contact }}</h6>
+    {% endfor %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>  
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="report">
+<div class="modal-dialog">
+  <div class="modal-content">
+  <div class="modal-header">
+    <h4 class="modal-title">SEND REPORT TO SUPERVISOR</h4>
+    <button type="button" class="close" data-dismiss="modal">&times;</button>
+  </div>
+  <div class="modal-body">
+   <div class="helloform" style="padding:0">
+    <form method='post' action="/sent/" >
+      {% csrf_token %}
+      {% for sup in supdetails %}
+           <br>
+      <div class="form-group row has-warning">
+        <label for="to" class="col-sm-6 col-form-label">TO: {{ sup.name }}</label>
+      </div>
+      <div class="form-group row has-warning">
+        <label for="Subject" class="col-sm-6 col-form-label">SUBJECT:</label>
+        <div>
+          <input class="form-control form-control-sm" type='text'></input>
+        </div>
+      </div>
+      <hr>
+      <div class="form-group row has-warning">
+        <label for="body" class="col-sm-6 col-form-label">BODY:</label>
+        <div>
+          <textarea rows="5" placeholder="Enter message" size="100" name='feedback' value="Hello {{ sup.name }}, this is regarding the issue."></textarea> 
+        </div>
+      </div>
+      <hr>                                                  
+      <input type="submit" value="SEND">
+      {% endfor %} 
+    </form>
+    </div>
+  </div>
+  </div>
+</div>
+</div>
             </div>
 
     </div>
@@ -303,6 +338,7 @@
 $(function(){
      $('#UPS_ip').css('border-color', '#CED4DA');
      $('#UPS_op').css('border-color', '#CED4DA');
+     $('#procedure').css('border-color', '#CED4DA');
     });
 
 $("#UPS_ip").on("keyup",function(){
@@ -313,6 +349,7 @@ $("#UPS_ip").on("keyup",function(){
         $('#UPS_ip').css('border-color', '#ced4da');
     }
 });
+
 $("#UPS_op").on("keyup",function(){
     if($("#UPS_op").val()==""){
         $('#UPS_op').css('border-color', 'red');
@@ -321,6 +358,15 @@ $("#UPS_op").on("keyup",function(){
         $('#UPS_op').css('border-color', '#ced4da');
     }
 });
+
+$("#procedure").on("keyup",function(){
+            if($("#procedure").val()==""){
+               $('#procedure').css('border-color', 'red');
+                return false;
+            }else{
+               $('#procedure').css('border-color', '#CED4DA');
+            }
+        });
 </script>
 </body>
 

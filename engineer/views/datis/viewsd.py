@@ -116,17 +116,17 @@ def routebackdatisd(request, id) :
     uia = uia.values('unit_incharge_approval').filter(a_id=1)[0]['unit_incharge_approval']
     status = status.values('status')
     status = status.values('status').filter(a_id=1)[0]['status']
-    f = 1   
     flag = cursor.execute("select date from datisweekly where date = %s",[date.today()])    
         
     if currdate > wdate :  #if it goes beyond 7 days
         dwr = 0
-        f=0 
+    print(flag)     
     if flag :    
-        if  f == 0 or temp1 < temp : #report submitted after deadline
+        if  temp1 < temp : #report submitted after deadline
             datiswsub_deadline = temp1    
             if status == "COMPLETED" or status == "COMPLETED WITH ERRORS" :
-                dwr=1  
+                dwr=1
+                print(temp1)  
             elif status == "PENDING" :
                 dwr=0
             
@@ -145,6 +145,7 @@ def routebackdatisd(request, id) :
                 dwr=0
         print(dwr)   
     print(datiswsub_on)    
+    '''
     #!!!!!!!!!!!!!!!!!!!!!vhfdaily!!!!!!!!!!!!!!!!!!!!!!!!
     vdr = 0
     statusvd = ""
@@ -187,7 +188,6 @@ def routebackdatisd(request, id) :
         
     
     
-    '''
     #!!!!!!!!!!!!!!!!!!!!!!!vhfmonthly!!!!!!!!!!!!!!!!!!!!!!!!!!!!        
     
     vmr = 0
@@ -285,7 +285,7 @@ def routebackdatisd(request, id) :
         dsmr = 1
     
     return render(request,'./engineer/home.html',{'status':status,'dscnmsub_deadline':dscnmsub_deadline,'dscnmsub_on':dscnmsub_on,'dsmr':dsmr,'dswr':dswr,'dscnwsub_on':dscnwsub_on,'dscnwsub_deadline':dscnwsub_deadline,'dscnd_deadline':dscnd_deadline,'dscndsub_on':dscndsub_on,'dsdr':dsdr,'ddr':ddr,'dwr':dwr,'vdr':vdr,'vmr':vmr,'vyr':vyr,'currdate':currdate,'name':name1,'id':id,'empdet':empdetails,'datisdsub_on':datisdsub_on,'datisd_deadline':datisd_deadline,'datiswsub_on':datiswsub_on,'datiswsub_deadline':datiswsub_deadline,'vhfdsub_on':vhfdsub_on,'vhfd_deadline':vhfd_deadline,'vhfmsub_on':vhfmsub_on,'vhfmsub_deadline':vhfmsub_deadline,'vhfysub_on':vhfysub_on,'vhfysub_deadline':vhfysub_deadline})'''
-    return render(request,'./engineer/home.html',{'vhfdsub_on':vhfdsub_on,'vhfd_deadline':vhfd_deadline,'wdate':wdate,'supdetails':supdetails,'statusvd':statusvd,'statusd':statusd,'status':status,'ddr':ddr,'dwr':dwr,'currdate':currdate,'name':name1,'id':id,'empdet':empdetails,'datisdsub_on':datisdsub_on,'datisd_deadline':datisd_deadline,'datiswsub_on':datiswsub_on,'datiswsub_deadline':datiswsub_deadline,'vdr':vdr,})
+    return render(request,'./engineer/home.html',{'wdate':wdate,'supdetails':supdetails,'statusd':statusd,'status':status,'ddr':ddr,'dwr':dwr,'currdate':currdate,'name':name1,'id':id,'empdet':empdetails,'datisdsub_on':datisdsub_on,'datisd_deadline':datisd_deadline,'datiswsub_on':datiswsub_on,'datiswsub_deadline':datiswsub_deadline})
   else :
     return render(request,'login/login.html')  
 
@@ -326,7 +326,8 @@ def datisdailyrec(request, id) :
      #'datetime_of_servers_wrt_gps_clk','status_of_disk_array','vhftx_atis_status','vhfrx_atis_status','datis_update','audio_quality','remarks','unit_incharge_approval')
      return render(request,'engineer/datis/datisdrecords.html',{'datis_d':datis_d,'id':id}) 
   else :
-      return routebackdatisd(request, uid)
+     messages.add_message(request,30, 'Unauthorized Access')
+     return routebackdatisd(request, uid)
  else : 
    return render(request,'login/login.html')
 
@@ -343,6 +344,7 @@ def datisdrep(request, id) :
      datis_d = datis_d.filter(emp_id=id).order_by('-p_id') 
      return render(request,'engineer/datis/datisrepsub.html',{'id':id,'datis_d':datis_d,'supdetails':supdetails}) 
    else :
+      messages.add_message(request,30, 'Unauthorized Access')
       return routebackdatisd(request, uid)  
  else : 
      return render(request,'login/login.html')
@@ -391,10 +393,11 @@ def updatisdaily(request, id) :
     remarks=request.POST['remarks']
     roomtemp=request.POST['Room Temperature']
     rint = int(roomtemp)
+    
     if('roomtemp') and (rint > 24) :
          cursor.execute("update datisdaily set room_temp = %s where p_id = %s",[roomtemp,id])
-         #remarks = "Temperature not normal(update)"
-         val = (emp_id,p_id,remarks,roomtemp,currdate,currtime)
+         remarks1 = "Temperature not normal(update)"
+         val = (emp_id,p_id,remarks1,roomtemp,currdate,currtime)
          sql = "INSERT INTO datisdlogs (emp_id,p_id,remarks,value,date,time) values (%s ,%s,%s, %s , %s,%s)"
          cursor.execute(sql,val)  
     else :
@@ -403,8 +406,8 @@ def updatisdaily(request, id) :
     statusofac=request.POST['Status of AC']
     if statusofac != 'SVCBL' :
          cursor.execute("update datisdaily set status_of_AC = %s where p_id = %s",[statusofac,id])
-         #remarks = "Status of ac not correct(update)"
-         val = (emp_id,p_id,remarks,statusofac,currdate,currtime)
+         remarks1 = "Status of ac not correct(update)"
+         val = (emp_id,p_id,remarks1,statusofac,currdate,currtime)
          sql = "INSERT INTO datisdlogs (emp_id,p_id,remarks,value,date,time) values (%s ,%s,%s, %s , %s,%s)"
          cursor.execute(sql,val)
     else :
@@ -413,8 +416,8 @@ def updatisdaily(request, id) :
     statusofups=request.POST['Status of UPS']
     if statusofups != 'NORMAL' :
          cursor.execute("update datisdaily set status_of_UPS = %s where p_id = %s",[statusofups,id])
-         #remarks = "Status of ups not NORMAL(update)"
-         val = (emp_id,p_id,remarks,statusofups,currdate,currtime)
+         remarks1 = "Status of ups not NORMAL(update)"
+         val = (emp_id,p_id,remarks1,statusofups,currdate,currtime)
          sql = "INSERT INTO datisdlogs (emp_id,p_id,remarks,value,date,time) values (%s ,%s,%s, %s , %s,%s)"
          cursor.execute(sql,val)
     else :
@@ -423,8 +426,8 @@ def updatisdaily(request, id) :
     statusofservera=request.POST['Status of Server A']
     if statusofservera != 'MAINS' and statusofservera != 'STANDBY' :
          cursor.execute("update datisdaily set status_of_serverA = %s where p_id = %s",[statusofservera,id])
-         #remarks = "Status of ServerA is not MAINS/STANDBY(update)"
-         val = (emp_id,p_id,remarks,statusofservera,currdate,currtime)
+         remarks1 = "Status of ServerA is not MAINS/STANDBY(update)"
+         val = (emp_id,p_id,remarks1,statusofservera,currdate,currtime)
          sql = "INSERT INTO datisdlogs (emp_id,p_id,remarks,value,date,time) values (%s ,%s,%s, %s , %s,%s)"
          cursor.execute(sql,val)
     else :
@@ -433,17 +436,28 @@ def updatisdaily(request, id) :
     statusofserverb=request.POST['Status of Server B']
     if statusofserverb != 'MAINS' and statusofserverb != 'STANDBY' :
          cursor.execute("update datisdaily set status_of_serverB = %s where p_id = %s",[statusofserverb,id])
-         #remarks = "Status of ServerB is not MAINS/STANDBY(update)"
-         val = (emp_id,p_id,remarks,statusofserverb,currdate,currtime)
+         remarks1 = "Status of ServerB is not MAINS/STANDBY(update)"
+         val = (emp_id,p_id,remarks1,statusofserverb,currdate,currtime)
          sql = "INSERT INTO datisdlogs (emp_id,p_id,remarks,value,date,time) values (%s ,%s,%s, %s , %s,%s)"
          cursor.execute(sql,val) 
     else :
          cursor.execute("update datisdaily set status_of_serverB = %s where p_id = %s",[statusofserverb,id])
+    
+    if statusofservera == "MAINS" and statusofserverb == "MAINS" :
+         remarks1 = "Status of ServerA and serverB is on MAINS"
+         val = (id,p_id,remarks1,statusofserverb,currdate,currtime)
+         sql = "INSERT INTO datisdlogs (emp_id,p_id,remarks,value,date,time) values (%s,%s,%s,%s,%s,%s)"
+         cursor.execute(sql,val)
+    
+    if statusofservera == "STANDBY" and statusofserverb == "STANDBY" :
+         remarks1 = "Status of ServerA and ServerB is on STANDBY"
+         val = (emp_id,p_id,remarks1,statusofserverb,currdate,currtime)
+         sql = "INSERT INTO datisdlogs (emp_id,p_id,remarks,value,date,time) values (%s,%s,%s,%s,%s,%s)"
+         cursor.execute(sql,val)
         
     if (rint <= 24 and statusofservera == 'STANDBY' and statusofserverb == 'MAINS' and statusofups == 'NORMAL' and statusofac == 'SVCBL')  or (rint <= 24 and statusofservera == 'MAINS' and statusofserverb == 'STANDBY' and statusofups == 'NORMAL' and statusofac == 'SVCBL'):
-          remarks = "Parameter/s fixed and also-" + remarks
           value = "All parameters NORMAL"
-          val = (emp_id,p_id,remarks,roomtemp,currdate,currtime)
+          val = (emp_id,p_id,value,remarks,currdate,currtime)
           sql = "INSERT INTO datisdlogs (emp_id,p_id,remarks,value,date,time) values (%s ,%s,%s, %s , %s,%s)"
           cursor.execute(sql,val)
           cursor.execute("update datisdaily set status_of_serverB = %s where p_id = %s",[statusofserverb,id])
@@ -452,14 +466,19 @@ def updatisdaily(request, id) :
           cursor.execute("update datisdaily set status_of_AC = %s where p_id = %s",[statusofac,id])
           cursor.execute("update datisdaily set room_temp = %s where p_id = %s",[roomtemp,id])
           cursor.execute("update datisdaily set status = %s where p_id = %s",["COMPLETED",id])
+    else :
+          val = (emp_id,p_id,"Procedure Followed",remarks,currdate,currtime)
+          sql = "INSERT INTO datisdlogs (emp_id,p_id,remarks,value,date,time) values (%s ,%s,%s, %s , %s,%s)"
+          cursor.execute(sql,val)  
+          
     #cursor.execute("update datisdaily set remarks = %s where p_id = %s",[remarks1,id])
     datis_d = models.Datisdaily.objects.all()    
     datis_d = datis_d.values('p_id','date','status','room_temp','status_of_ac','status_of_ups','status_of_servera','status_of_serverb','remarks')
     datisd = datis_d
-    datisd = datisd.filter(emp_id=emp_id)
+    datisd = datisd.filter(emp_id=emp_id).order_by('-p_id')
     datis_d = datis_d.filter(date=currdate)
     datisdlogs = models.Datisdlogs.objects.all()
-    datisdlogs = datisdlogs.filter(date=date.today())    
+    datisdlogs = datisdlogs.filter(date=date.today()).order_by('-log_id')    
     supdetails = models.Supervisor.objects.all()
     supdetails = supdetails.values('name','contact','email').filter(dept='C')
     return render(request,'engineer/datis/datisdailyrep.html',{'datisdlogs':datisdlogs,'supdetails':supdetails,'datis_d':datis_d,'id':emp_id,'datisd':datisd}) 
@@ -544,14 +563,25 @@ def datisdrepsubm(request, id) :
          val = (id,p_id,remarks,statusofserverb,currdate,currtime)
          sql = "INSERT INTO datisdlogs (emp_id,p_id,remarks,value,date,time) values (%s,%s,%s,%s,%s,%s)"
          cursor.execute(sql,val)
+    if statusofservera == "MAINS" and statusofserverb == "MAINS" :
+         remarks = "Status of ServerA and serverB is on MAINS"
+         val = (id,p_id,remarks,statusofserverb,currdate,currtime)
+         sql = "INSERT INTO datisdlogs (emp_id,p_id,remarks,value,date,time) values (%s,%s,%s,%s,%s,%s)"
+         cursor.execute(sql,val)
+    
+    if statusofservera == "STANDBY" and statusofserverb == "STANDBY" :
+         remarks = "Status of ServerA and ServerB is on STANDBY"
+         val = (id,p_id,remarks,statusofserverb,currdate,currtime)
+         sql = "INSERT INTO datisdlogs (emp_id,p_id,remarks,value,date,time) values (%s,%s,%s,%s,%s,%s)"
+         cursor.execute(sql,val)
     
     datis_d = models.Datisdaily.objects.all()
-    datis_d = datis_d.values('p_id','date','status','room_temp','status_of_ac','status_of_ups','status_of_servera','status_of_serverb','remarks')
+    datis_d = datis_d.values('p_id','date','time','status','room_temp','status_of_ac','status_of_ups','status_of_servera','status_of_serverb','remarks')
     datis_d = datis_d.filter(emp_id=id)  
-    datisd = datis_d   
+    datisd = datis_d.order_by('-p_id')   
     datis_d = datis_d.filter(date=currdate)     
     datisdlogs = models.Datisdlogs.objects.all()
-    datisdlogs = datisdlogs.filter(date=date.today())    
+    datisdlogs = datisdlogs.filter(date=date.today()).order_by('-log_id')    
     supdetails = models.Supervisor.objects.all()
     supdetails = supdetails.values('name','contact','email').filter(dept='C')
      
@@ -566,7 +596,7 @@ def repsuberrors(request,p_id, id):
    if int(uid) == int(id) :
     cursor = connection.cursor() 
     datisd = models.Datisdaily.objects.all()
-    datisd = datisd.values('p_id','emp_id','date','room_temp','status','status_of_ac','status_of_ups','status_of_servera','status_of_serverb','remarks')
+    datisd = datisd.values('p_id','emp_id','date','time','room_temp','status','status_of_ac','status_of_ups','status_of_servera','status_of_serverb','remarks')
     datisd = datisd.filter(p_id=p_id)
     return render(request,'engineer/datis/datisfinalrep.html',{'datisd':datisd,'p_id':p_id,'id':id}) 
    else :
@@ -576,31 +606,27 @@ def repsuberrors(request,p_id, id):
  
 def finalrepsub(request,p_id, id): 
     f=1
-    print(f)
     cursor = connection.cursor()
     currdate= date.today()
     currtime = datetime.now().strftime("%H:%M:%S")
-    remarks = request.POST['remarks']
-    print(remarks)
-    value = "Final submit with errors"
+    value = request.POST['remarks']
+    remarks = "Final submit with errors"
     val = (id,p_id,remarks,value,currdate,currtime)
     sql = "INSERT INTO datisdlogs (emp_id,p_id,remarks,value,date,time) values (%s ,%s,%s, %s , %s,%s)"
     cursor.execute(sql,val)
     cursor.execute("update datisdaily set status = %s where p_id = %s",["COMPLETED WITH ERRORS",p_id])
     cursor.execute("update datisdaily set unit_incharge_approval = %s where p_id = %s",[None,p_id])
     
-    #code for notification to supervisor will come over here 
     if request.session.has_key('uid'):
         cursor = connection.cursor() 
         currdate = date.today()
         datis_d = models.Datisdaily.objects.all()
         datis_d = datis_d.values('p_id','date','time','status','room_temp','status_of_ac','status_of_ups','status_of_servera','status_of_serverb','remarks')
         datis_d = datis_d.filter(emp_id=id)
-        datisd = datis_d
+        datisd = datis_d.order_by('-p_id')
         datis_d = datis_d.filter(date=currdate)     
-      #'datetime_of_servers_wrt_gps_clk','status_of_disk_array','vhftx_atis_status','vhfrx_atis_status','datis_update','audio_quality','remarks','unit_incharge_approval')
         datisdlogs = models.Datisdlogs.objects.all()
-        datisdlogs = datisdlogs.filter(date=date.today())    
+        datisdlogs = datisdlogs.filter(date=date.today()).order_by('-log_id')    
         supdetails = models.Supervisor.objects.all()
         supdetails = supdetails.values('name','contact','email').filter(dept='C')
         return render(request,'engineer/datis/datisdailyrep.html',{'supdetails':supdetails,'datis_d':datis_d,'id':id,'f':f,'datisd':datisd,'datisdlogs':datisdlogs}) 

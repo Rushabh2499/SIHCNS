@@ -11,6 +11,8 @@ from supervisor.views import main
 from login.sup.homeviewSup import run_sup as run_sup
 from login.eng.homeviewEng import dhomeview as dhomeview
 from login.eng.logEng import logEng as logEng
+from head.views import dispMap as dispMap    
+
 
 # Create your views here.
 
@@ -56,14 +58,14 @@ def validate(request):
     if b=='41' :
         x=models.Engineer.objects.all()
         for i in x:  
-            flag=0
             if (uid == str(i.emp_id)) & (check_password(passw,i.password)) :
+                flag=0
                 request.session['type']='e'
                 return dhomeview(request,id) 
     elif b=='21' :
         x=models.Dgm.objects.all()
         for i in x:
-            if (uid == str(i.dgm_id)) & (passw == i.password) :
+            if (uid == str(i.dgm_id)) & (check_password(passw,i.password)) :
                 flag=0
                 y=models.Airport.objects.filter(a_id=i.a_id).values()
                 print(y[0])
@@ -73,10 +75,8 @@ def validate(request):
         for i in x:
             if (uid == str(i.head_id)) & (check_password(passw,i.password)):
                 flag=0
-                # y=models.Airport.objects.filter(a_id=i.a_id).values()
-                # print(y[0])
-
-                return render(request,'./head/head.html')
+                airInfo = models.Airport.objects.all().values()
+                return dispMap(request,airInfo)
     elif b=='31' :
         # key=frt.generate_key()
         # f=frt(key)
@@ -130,9 +130,9 @@ def validate(request):
             #         break
 
 
-
+    print(flag)
     if flag==1 :
-            return render(request,'login/login.html',{'flag':flag})
+        return render(request,'login/login.html',{'flag':flag})
 
             
 

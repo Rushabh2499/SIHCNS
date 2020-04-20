@@ -261,7 +261,7 @@ class Datisweekly(models.Model):
 
 
 class Datiswlogs(models.Model):
-    logs_id = models.AutoField(primary_key=True)
+    log_id = models.AutoField(primary_key=True)
     emp = models.ForeignKey('Engineer', models.DO_NOTHING)
     p = models.ForeignKey(Datisweekly, models.DO_NOTHING)
     remarks = models.CharField(db_column='Remarks', max_length=100)  # Field name made lowercase.
