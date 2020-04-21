@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="{% static 'supervisor/datisstyle.css' %}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css2?family=Gotu&family=Righteous&display=swap" rel="stylesheet">
@@ -30,33 +30,40 @@
         <div class="row">
             <div class="col-sm-7">
 
-                    {% if temp.unit_incharge_approval == NONE %}
-                    {% if temp.room_temp < 25 and temp.status_of_servera == "MAINS" and temp.status_of_serverb == "STANDBY" and temp.status_of_ups == "NORMAL" and temp.status_of_ac == "SVCBL" or temp.room_temp < 25 and temp.status_of_servera == "STANDBY" and temp.status_of_serverb == "MAINS" and temp.status_of_ups == "NORMAL" and temp.status_of_ac == "SVCBL" %}
-                <div class="alert alert-success">
-                    <strong> All maintenance entries matched with standard values.</strong> 
-                </div>                  
-                {% else %}             
-                <div class="alert alert-danger">
-                    <strong>Maintenance values do not match standards.</strong>  
-                                              
-                </div>
-                {% endif %}
-                {% else %}
-                {% if temp.unit_incharge_approval == "NO" %}
-                  <div class="alert alert-danger">
-                    <strong>Report Declined; Waiting for update.</strong>
-                  </div>
-                {% endif %}
-                {% if temp.unit_incharge_approval == "YES" %}
-                  <div class="alert alert-success">
-                    <strong>Report Approved.</strong> 
-                  </div> 
-                {% endif %}
+              {% if temp.unit_incharge_approval == NONE %}
 
-                {% endif %}
-                <div class="card" style="text-align: center;">                  
-                   
-                  
+                  {% if temp.room_temp == None %}             
+                        <div class="alert alert-danger">
+                          <strong>Report Not Submitted</strong>
+
+                      {% elif temp.room_temp < 25 and temp.status_of_servera == "MAINS" and temp.status_of_serverb == "STANDBY" and temp.status_of_ups == "NORMAL" and temp.status_of_ac == "SVCBL" or temp.room_temp < 25 and temp.status_of_servera == "STANDBY" and temp.status_of_serverb == "MAINS" and temp.status_of_ups == "NORMAL" and temp.status_of_ac == "SVCBL" %}
+                        <div class="alert alert-success">
+                          <strong> All maintenance entries matched with standard values.</strong>                   
+
+                      {% else %}             
+                        <div class="alert alert-danger">
+                            <strong>Maintenance values do not match standards.</strong>  
+                      
+
+                  {% endif %}
+
+              {% else %}
+
+                  {% if temp.unit_incharge_approval == "NO" %}
+                    <div class="alert alert-danger">
+                      <strong>Report Declined; Waiting for update.</strong>
+                 
+                  {% endif %}
+
+                  {% if temp.unit_incharge_approval == "YES" %}
+                    <div class="alert alert-success">
+                      <strong>Report Approved.</strong> 
+
+                  {% endif %}
+
+              {% endif %}
+
+                <div class="card" style="text-align: center;">            
                   
                   <form id="form-v">                    
                         <div class="card-body">
@@ -119,10 +126,11 @@
                                       <button type="button" data-toggle="modal" data-target="#report" style="width: 100px; margin-right: 10%;"class="btn submitbut">DECLINE</button>
                                       
                                   {% endif %}
-
+                                  {% if temp.unit_incharge_approval != "YES" %}
                                       <button class="btn submitbut" onclick="window.location.href='{% url 'supervisor:verify' names=names id=temp.p_token %}'">APPROVE</button>
                                 {% endif %}
-</form>
+                                {% endif %}
+</form></div>
                                 <div class="modal fade" id="report">
                                       <div class="modal-dialog">
                                         <div class="modal-content">
@@ -159,17 +167,15 @@
                                                   <div class="form-group row has-warning">
                                                       <label for="body" class="col-sm-6 col-form-label">BODY:</label>
                                                       <div>
-                                                        <textarea rows="5" placeholder="Enter message" size="100" name='feedback' value="Hello {$name}, this is regarding the issue."></textarea> 
+                                                        <textarea rows="5" placeholder="Enter message" size="100" name='feedback' value="Hello {$name}, this is regarding the issue." required="required"></textarea> 
                                                       </div>
                                                   </div>
                                                   <hr>                                                  
-                                                  <input type="submit" value="SEND">  
+                                                  <button type="submit" class="btn btn-primary" value="SEND">Submit</button>
                                               </form>
                                             </div>
                                           </div>
-                                          <div class="modal-footer">
-                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                                          </div>  
+                                          
                                         </div>
                                       </div>
                                     </div>    
@@ -262,15 +268,15 @@
                                     </tr>
                                     <tr>
                                         <td>Status OF UPS</td>
-                                        <td>Nml</td>
+                                        <td>Normal</td>
                                     </tr>
                                     <tr>
                                         <td>Status of Server A</td>
-                                        <td>Main/Stby</td>
+                                        <td>Main/Standby</td>
                                     </tr>
                                     <tr>
                                         <td>Status of Server B</td>
-                                        <td>Main/Stdby</td>
+                                        <td>Main/Standby</td>
                                     </tr>
                                     <!--    <tr>
                                         <td>Date and time of servers wrt GPS CLK</td>

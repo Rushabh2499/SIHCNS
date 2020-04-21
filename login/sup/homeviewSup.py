@@ -112,7 +112,7 @@ def run_sup(request,uid):
                 item.update( {"type":"Dscnmonthly"})
                 item.update({"repdead":month(item['date'])})
         
-        com=datisdaily+[i for i in datisweekly]+[i for i in dscnweekly]+[i for i in dscndaily]+[i for i in dscnmonthly]+[i for i in vhfdaily]+[i for i in vhfmonthly]
+        com=[i for i in datisdaily]+[i for i in datisweekly]+[i for i in dscnweekly]+[i for i in dscndaily]+[i for i in dscnmonthly]+[i for i in vhfdaily]+[i for i in vhfmonthly]
         com=sorted(com,key=itemgetter('date'),reverse=True)
         
         eng=[entry for entry in models.Engineer.objects.filter(supervisor_id=uid).values()]

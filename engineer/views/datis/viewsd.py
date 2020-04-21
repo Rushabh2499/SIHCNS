@@ -5,6 +5,8 @@ from login import models as models
 from django.core.mail import send_mail
 from django.contrib import messages
 from login import views 
+from operator import itemgetter
+
 # Create your views here.
 def sent(request):
     if request.session.has_key('uid'):
@@ -144,7 +146,19 @@ def routebackdatisd(request, id) :
             elif status == "PENDING" :
                 dwr=0
         print(dwr)   
-    print(datiswsub_on)    
+    print(datiswsub_on) 
+    datisdaily=[entry for entry in models.Datisdaily.objects.filter(emp_id=id).values().order_by('-date')]
+    for item in datisdaily:
+        item.update( {"type":"Datisdaily"})
+                
+    datisweekly=[entry for entry in models.Datisweekly.objects.filter(emp_id=id).values().order_by('-date')]
+    for item in datisweekly:
+        item.update( {"type":"Datisweekly"})
+    com=datisdaily+[i for i in datisweekly]
+    com=sorted(com,key=itemgetter('date'),reverse=True)
+    for i in com:
+        i.update({'token':i['p_id']})
+     
     '''
     #!!!!!!!!!!!!!!!!!!!!!vhfdaily!!!!!!!!!!!!!!!!!!!!!!!!
     vdr = 0
@@ -285,7 +299,7 @@ def routebackdatisd(request, id) :
         dsmr = 1
     
     return render(request,'./engineer/home.html',{'status':status,'dscnmsub_deadline':dscnmsub_deadline,'dscnmsub_on':dscnmsub_on,'dsmr':dsmr,'dswr':dswr,'dscnwsub_on':dscnwsub_on,'dscnwsub_deadline':dscnwsub_deadline,'dscnd_deadline':dscnd_deadline,'dscndsub_on':dscndsub_on,'dsdr':dsdr,'ddr':ddr,'dwr':dwr,'vdr':vdr,'vmr':vmr,'vyr':vyr,'currdate':currdate,'name':name1,'id':id,'empdet':empdetails,'datisdsub_on':datisdsub_on,'datisd_deadline':datisd_deadline,'datiswsub_on':datiswsub_on,'datiswsub_deadline':datiswsub_deadline,'vhfdsub_on':vhfdsub_on,'vhfd_deadline':vhfd_deadline,'vhfmsub_on':vhfmsub_on,'vhfmsub_deadline':vhfmsub_deadline,'vhfysub_on':vhfysub_on,'vhfysub_deadline':vhfysub_deadline})'''
-    return render(request,'./engineer/home.html',{'wdate':wdate,'supdetails':supdetails,'statusd':statusd,'status':status,'ddr':ddr,'dwr':dwr,'currdate':currdate,'name':name1,'id':id,'empdet':empdetails,'datisdsub_on':datisdsub_on,'datisd_deadline':datisd_deadline,'datiswsub_on':datiswsub_on,'datiswsub_deadline':datiswsub_deadline})
+    return render(request,'./engineer/home.html',{'com':com,'wdate':wdate,'supdetails':supdetails,'statusd':statusd,'status':status,'ddr':ddr,'dwr':dwr,'currdate':currdate,'name':name1,'id':id,'empdet':empdetails,'datisdsub_on':datisdsub_on,'datisd_deadline':datisd_deadline,'datiswsub_on':datiswsub_on,'datiswsub_deadline':datiswsub_deadline})
   else :
     return render(request,'login/login.html')  
 
@@ -315,6 +329,32 @@ def datisd(request, id) :
  else : 
    return render(request,'login/login.html')
 
+def homed(request, id, p_id) :
+ if request.session.has_key('uid'):
+   uid=request.session['uid'] 
+   if int(uid) == int(id):
+     cursor = connection.cursor() 
+     currdate = date.today()
+     datis_d = models.Datisdaily.objects.all().filter(emp_id=id)
+     datisd = datis_d.order_by('-p_id')
+     datis_d = datis_d.filter(p_id=p_id)     
+     status = datis_d.values('status')[0]['status']
+     f=0 
+     if status == "COMPLETED WITH ERRORS" or status == "PENDING" :
+         f = 1 
+     if datis_d :
+        datisdlogs = models.Datisdlogs.objects.all().filter(date=date.today()).order_by('-log_id')
+        supdetails = models.Supervisor.objects.all()
+        supdetails = supdetails.values('name','contact','email').filter(dept='C')
+        return render(request,'engineer/datis/datisdailyrep.html',{'supdetails':supdetails,'datis_d':datis_d,'id':id,'datisd':datisd,'datisdlogs':datisdlogs,'f':f}) 
+     else :
+        messages.add_message(request,30, 'You cannot make changes to pending report!')
+        return routebackdatisd(request, id)
+   else :
+       return routebackdatisd(request, uid)
+ else : 
+   return render(request,'login/login.html')
+   
 def datisdailyrec(request, id) :
  if request.session.has_key('uid'):
   uid=request.session['uid'] 
@@ -444,13 +484,13 @@ def updatisdaily(request, id) :
          cursor.execute("update datisdaily set status_of_serverB = %s where p_id = %s",[statusofserverb,id])
     
     if statusofservera == "MAINS" and statusofserverb == "MAINS" :
-         remarks1 = "Status of ServerA and serverB is on MAINS"
+         remarks1 = "Status of ServerA and serverB is on MAINS(update)"
          val = (id,p_id,remarks1,statusofserverb,currdate,currtime)
          sql = "INSERT INTO datisdlogs (emp_id,p_id,remarks,value,date,time) values (%s,%s,%s,%s,%s,%s)"
          cursor.execute(sql,val)
     
     if statusofservera == "STANDBY" and statusofserverb == "STANDBY" :
-         remarks1 = "Status of ServerA and ServerB is on STANDBY"
+         remarks1 = "Status of ServerA and ServerB is on STANDBY(update)"
          val = (emp_id,p_id,remarks1,statusofserverb,currdate,currtime)
          sql = "INSERT INTO datisdlogs (emp_id,p_id,remarks,value,date,time) values (%s,%s,%s,%s,%s,%s)"
          cursor.execute(sql,val)
@@ -466,6 +506,8 @@ def updatisdaily(request, id) :
           cursor.execute("update datisdaily set status_of_AC = %s where p_id = %s",[statusofac,id])
           cursor.execute("update datisdaily set room_temp = %s where p_id = %s",[roomtemp,id])
           cursor.execute("update datisdaily set status = %s where p_id = %s",["COMPLETED",id])
+          cursor.execute("update datisdaily set unit_incharge_approval = %s where p_id = %s",[None,id])
+   
     else :
           val = (emp_id,p_id,"Procedure Followed",remarks,currdate,currtime)
           sql = "INSERT INTO datisdlogs (emp_id,p_id,remarks,value,date,time) values (%s ,%s,%s, %s , %s,%s)"
@@ -473,7 +515,7 @@ def updatisdaily(request, id) :
           
     #cursor.execute("update datisdaily set remarks = %s where p_id = %s",[remarks1,id])
     datis_d = models.Datisdaily.objects.all()    
-    datis_d = datis_d.values('p_id','date','status','room_temp','status_of_ac','status_of_ups','status_of_servera','status_of_serverb','remarks')
+    datis_d = datis_d.values('p_id','date','status','time','room_temp','status_of_ac','status_of_ups','status_of_servera','status_of_serverb','remarks')
     datisd = datis_d
     datisd = datisd.filter(emp_id=emp_id).order_by('-p_id')
     datis_d = datis_d.filter(date=currdate)
@@ -523,6 +565,8 @@ def datisdrepsubm(request, id) :
           val = (id,p_id,remarks,value,currdate,currtime)
           sql = "INSERT INTO datisdlogs (emp_id,p_id,remarks,value,date,time) values (%s ,%s,%s, %s , %s,%s)"
           cursor.execute(sql,val)
+          cursor.execute("update datisdaily set unit_incharge_approval = %s where p_id = %s",[None,p_id])
+   
     elif rint <= 24 and statusofac == 'SVCBL' and statusofups == 'NORMAL' and statusofservera == 'STANDBY' and statusofserverb == 'MAINS' :
           f=1
           status = "COMPLETED"
@@ -531,7 +575,8 @@ def datisdrepsubm(request, id) :
           val = (id,p_id,remarks,value,currdate,currtime)
           sql = "INSERT INTO datisdlogs (emp_id,p_id,remarks,value,date,time) values (%s ,%s,%s, %s , %s,%s)"
           cursor.execute(sql,val)
-         
+          cursor.execute("update datisdaily set unit_incharge_approval = %s where p_id = %s",[None,p_id])
+   
     else :
           f=2   
           status = "PENDING"

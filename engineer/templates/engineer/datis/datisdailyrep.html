@@ -181,7 +181,7 @@
 					  	<div class="row row1" style="align-items: right; padding-left: 27%; padding-bottom: 1%">
 					  		{% if datisd.room_temp < 25 and datisd.status_of_servera == "MAINS" and datisd.status_of_serverb == "STANDBY" and datisd.status_of_ups == "NORMAL" and datisd.status_of_ac == "SVCBL" or datisd.room_temp < 25 and datisd.status_of_servera == "STANDBY" and datisd.status_of_serverb == "MAINS" and datisd.status_of_ups == "NORMAL" and datisd.status_of_ac == "SVCBL" %}
 	                  				<p></p>
-								{% elif f != 1 %}
+								{% elif f != 1  %}
 								   
 								    <button style="width: 100px; margin-right: 10%;"class="btn submitbut" onclick="window.location.href='/editdatisd/{{ datisd.p_id }}'">EDIT</button>
 
@@ -349,8 +349,8 @@
 				                                <td>{{ datisdd.status_of_servera }}</td>
 				                                <td>{{ datisdd.status_of_serverb }}</td>
 				                                <td>{{ datisdd.remarks }}</td>
-				                            {% if datisd.room_temp < 25 and datisd.status_of_servera == "MAINS" and datisd.status_of_serverb == "STANDBY" and datisd.status_of_ups == "NORMAL" and datisd.status_of_ac == "SVCBL" or datisd.room_temp < 25 and datisd.status_of_servera == "STANDBY" and datisd.status_of_serverb == "MAINS" and datisd.status_of_ups == "NORMAL" and datisd.status_of_ac == "SVCBL" %}
-				                                <td>Pass</td>
+									{% if datisdd.room_temp < 25 and datisdd.status_of_servera == "MAINS" and datisdd.status_of_serverb == "STANDBY" and datisdd.status_of_ups == "NORMAL" and datisdd.status_of_ac == "SVCBL" or datisdd.room_temp < 25 and datisdd.status_of_servera == "STANDBY" and datisdd.status_of_serverb == "MAINS" and datisdd.status_of_ups == "NORMAL" and datisdd.status_of_ac == "SVCBL" %}
+												<td>Pass</td>
 				                            {% else %}
 				                                <td>Fail</td>
 				                            {% endif %}  

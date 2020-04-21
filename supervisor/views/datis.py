@@ -22,11 +22,11 @@ def daily(request):
 #     return render(request,'supervisor/monthly_details.html',{'context':Datismonthly,'name':'Datismonthly'}) 
 def weekly(request):
     Datisweekly=[entry for entry in models.Datisweekly.objects.all().values().order_by('-date')]
-    for i in datisweekly:
+    for i in Datisweekly:
         i['token']=main.encode(request,str(i['p_id']))
         if i['s_verify']==None:
            i['flag']=0
         else:
            i['flag']=1
     
-    return render(request,'supervisor/list_details.html',{'context':datisweekly,'name':'Datisweekly'})
+    return render(request,'supervisor/list_details.html',{'context':Datisweekly,'name':'Datisweekly'})

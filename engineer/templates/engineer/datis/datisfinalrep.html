@@ -92,7 +92,7 @@
                                 
                 
                 <div class="form-group row has-warning"style="padding-left:0" >
-                  <textarea class="form-control form-control-sm" rows="5" id="procedure" placeholder="Please specify the reason why error prevails in brief" name='remarks'></textarea>
+                  <textarea class="form-control form-control-sm" rows="5" id="procedure" placeholder="Please specify the reason why error prevails in brief" name='remarks' required></textarea>
                   <!--<input type="textarea" class="form-control " id="room_temp" name="Maintenance Procedure"  style="height:200px;" required>-->
                  
               </div>
@@ -113,6 +113,7 @@
 <script>
 $(function(){
      $('#room_temp').css('border-color', '#CED4DA');
+     $('#procedure').css('border-color', '#CED4DA');
     });
 
  $("#room_temp").on("keyup",function(){
@@ -121,6 +122,14 @@ $(function(){
                 return false;
             }else{
                $('#room_temp').css('border-color', '#CED4DA');
+            }
+        });
+        $("#procedure").on("keyup",function(){
+            if($("#procedure").val()==""){
+               $('#procedure').css('border-color', 'red');
+                return false;
+            }else{
+               $('#procedure').css('border-color', '#CED4DA');
             }
         });
 </script>

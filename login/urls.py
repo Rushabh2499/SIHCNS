@@ -92,6 +92,8 @@ urlpatterns = [
     path('finalrepsub/<int:p_id>/<int:id>',datviewsd.finalrepsub),
     #path('email/',datviewsd.email),
     path('sent/',datviewsd.sent),
+    #added new route
+    path('homed/<int:id>/<int:p_id>',datviewsd.homed),
     
     #weekly
     path('datisweekly/<int:id>',datviewsw.datisw),
@@ -101,7 +103,8 @@ urlpatterns = [
     path('editdatisw/<int:p_id>',datviewsw.editdatisweekly),
     path('updatiswrepsub/<int:id>',datviewsw.updatisweekly),
     path('repsubwerrors/<int:p_id>/<int:id>',datviewsw.repsubwerrors),
-    path('finalwrepsub/<int:p_id>/<int:id>',datviewsw.finalwrepsub)
+    path('finalwrepsub/<int:p_id>/<int:id>',datviewsw.finalwrepsub),
+    path('homew/<int:id>/<int:p_id>',datviewsw.homew)
    
     # path('engineer/',include('supervisor.urls'))
     # path('employee/',views.employee)

@@ -47,7 +47,7 @@
 					<div class="card-body headcard">
 							<b>DGM: {{dgm.name}} </b>
 							<br>
-						   <button class="btn btn-primary contactbut" data-toggle="modal" data-target="#contactsuper" href='#'>Contact</a>
+						   <button class="btn btn-primary contactbut" data-toggle="modal" data-target="#contactsuper" href='#'>Contact</button>
 							<br>
 
 					</div>
@@ -57,8 +57,8 @@
 				    <div class="modal-dialog">
 				      <div class="modal-content">
 				        <div class="modal-header">
-				          <h3 class="modal-title">SUPERVISOR</h3>
-				          <button type="button" class="close" data-dismiss="modal">&times;</button>
+				          <h3 class="modal-title">SUPERVISOR
+				          <button type="button" class="close" data-dismiss="modal">&times;</button></h3>
 				        </div>
 				        <div class="modal-body">
 				          <h4>Name: {{dgm.name}} </h4>
@@ -85,7 +85,7 @@
 						    <li><a class="faculty" data-toggle="pill" href="#facilities" >Facilities</a></li>
 						    
 						 </ul>
-						 <button class="btn btn-primary logout" onclick="window.location.href='/logout/{{ sup.supervisor_id }}'"> Logout</button></td>
+						 <button class="btn btn-primary logout" onclick="window.location.href='/logout/{{ sup.supervisor_id }}'" style="margin-top:70px"> Logout</button>
 					</div>
 				</div>
 
@@ -201,25 +201,25 @@
 								{% if sup.dept == 'C' %}
 								<h3 class="dateset">Weekly</h3>
 								<table class="table table-bordered table-condensed table-striped table-hover todaytasks">
-									<tr data-href="{% url 'supervisor:datisdaily' %}">
+									<tr data-href="{% url 'supervisor:datisweekly' %}">
 										<td>DATIS</td>
 									</tr>
-									<tr data-href="{% url 'supervisor:vhfdaily' %}">
+									<tr data-href="{% url 'supervisor:vhfweekly' %}">
 										<td>VHF</td>
 									</tr>
-									<tr data-href="{% url 'supervisor:dscndaily' %}">
+									<tr data-href="{% url 'supervisor:dscnweekly' %}">
 										<td>DSCN</td>
 									{% endif %}
 
 									{% if sup.dept == 'N' %}
 									</tr>
-									<tr data-href="{% url 'supervisor:cdvordaily' %}">
+									<tr data-href="{% url 'supervisor:cdvorweekly' %}">
 										<td>CDVOR</td>
 									</tr>
-									<tr data-href="{% url 'supervisor:dmedaily' %}">
+									<tr data-href="{% url 'supervisor:dmeweekly' %}">
 										<td>DME</td>			
 									</tr>
-									<tr data-href="{% url 'supervisor:ndbdaily' %}">	
+									<tr data-href="{% url 'supervisor:ndbweekly' %}">	
 										<td>NDB</td>
 									</tr>
 									{% endif %}

@@ -206,7 +206,6 @@ class Datisdaily(models.Model):
     audio_quality = models.CharField(db_column='Audio_quality', max_length=10, blank=True, null=True)  # Field name made lowercase.
     remarks = models.TextField(db_column='REMARKS', blank=True, null=True)  # Field name made lowercase.
     unit_incharge_approval = models.CharField(db_column='Unit_incharge_approval', max_length=3, blank=True, null=True)  # Field name made lowercase.
-    test = models.CharField(max_length=30, blank=True, null=True)
     approval_date = models.DateField(blank=True, null=True)
     approval_time = models.TimeField(blank=True, null=True)
 
@@ -278,7 +277,7 @@ class Dgm(models.Model):
     dgm_id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=20, blank=True, null=True)
     designation = models.CharField(max_length=10, blank=True, null=True)
-    a = models.ForeignKey(Airport, models.DO_NOTHING, blank=True,related_name='ui', null=True)
+    a = models.ForeignKey(Airport, models.DO_NOTHING, blank=True,related_name='ok', null=True)
     contact = models.IntegerField(blank=True, null=True)
     password = models.CharField(max_length=128, blank=True, null=True)
     head = models.ForeignKey('Head', models.DO_NOTHING, blank=True, null=True)
@@ -353,6 +352,7 @@ class Dmedaily(models.Model):
     s_verify = models.CharField(max_length=11, blank=True, null=True)
     approval_date = models.DateField(blank=True, null=True)
     approval_time = models.TimeField(blank=True, null=True)
+    status = models.CharField(max_length=30)
 
     class Meta:
         managed = False
@@ -448,7 +448,7 @@ class Dscndlogs(models.Model):
     value = models.CharField(max_length=30)
     date = models.DateField()
     time = models.TimeField()
-    p = models.ForeignKey(Datisdaily, models.DO_NOTHING, blank=True, null=True)
+    p = models.ForeignKey(Dscndaily, models.DO_NOTHING, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -562,7 +562,7 @@ class Issues(models.Model):
     class Meta:
         managed = False
         db_table = 'issues'
-        unique_together = (('issue_no', 'a'), ('issue_no', 'date', 'a'),)
+        unique_together = (('issue_no', 'date', 'a'), ('issue_no', 'a'),)
 
 
 class Mcdo(models.Model):
@@ -572,7 +572,7 @@ class Mcdo(models.Model):
     dop = models.DateTimeField(db_column='DOP')  # Field name made lowercase.
     content = models.TextField()
     doa = models.DateTimeField(db_column='DOA', blank=True, null=True)  # Field name made lowercase.
-    approved_by = models.ForeignKey(Employee, models.DO_NOTHING, db_column='approved_by', blank=True,related_name='abc', null=True)
+    approved_by = models.ForeignKey(Employee, models.DO_NOTHING, db_column='approved_by',related_name='b', blank=True, null=True)
 
     class Meta:
         managed = False
@@ -826,6 +826,7 @@ class Vhfdlogs(models.Model):
     value = models.CharField(max_length=30)
     date = models.DateField()
     time = models.TimeField()
+    p = models.ForeignKey(Vhfdaily, models.DO_NOTHING, blank=True, null=True)
 
     class Meta:
         managed = False

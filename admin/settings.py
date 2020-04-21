@@ -30,7 +30,6 @@ ALLOWED_HOSTS = ['127.0.0.1']
 
 # Application definition
 STATIC_URL = '/static/'
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 EMAIL_USE_TLS = True
@@ -45,6 +44,7 @@ INSTALLED_APPS = [
     'engineer',
     'head',
     'login',
+    
     'supervisor',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -136,4 +136,5 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-
+STATIC_URL = '/static/'
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True

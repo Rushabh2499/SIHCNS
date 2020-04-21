@@ -11,8 +11,7 @@ from supervisor.views import main
 from login.sup.homeviewSup import run_sup as run_sup
 from login.eng.homeviewEng import dhomeview as dhomeview
 from login.eng.logEng import logEng as logEng
-from head.views import dispMap as dispMap    
-
+from head.views import dispMap as dispMap
 
 # Create your views here.
 
@@ -58,6 +57,9 @@ def validate(request):
     if b=='41' :
         x=models.Engineer.objects.all()
         for i in x:  
+        
+        
+            
             if (uid == str(i.emp_id)) & (check_password(passw,i.password)) :
                 flag=0
                 request.session['type']='e'
@@ -65,7 +67,7 @@ def validate(request):
     elif b=='21' :
         x=models.Dgm.objects.all()
         for i in x:
-            if (uid == str(i.dgm_id)) & (check_password(passw,i.password)) :
+            if (uid == str(i.dgm_id)) & (passw == i.password) :
                 flag=0
                 y=models.Airport.objects.filter(a_id=i.a_id).values()
                 print(y[0])
@@ -73,10 +75,15 @@ def validate(request):
     elif b=='11' :
         x=models.Head.objects.all()
         for i in x:
-            if (uid == str(i.head_id)) & (check_password(passw,i.password)):
-                flag=0
-                airInfo = models.Airport.objects.all().values()
-                return dispMap(request,airInfo)
+            if (uid == str(i.head_id)) & (check_password(passw,i.password)) :
+
+                    flag=0
+
+                    # y=models.Airport.objects.filter(a_id=i.a_id).values()
+                    # print(y[0])
+                    airInfo=models.Airport.objects.all().values()
+                    # request.session['dept']=supInfo[0]['dept']
+                    return dispMap(request,airInfo)
     elif b=='31' :
         # key=frt.generate_key()
         # f=frt(key)
@@ -130,12 +137,18 @@ def validate(request):
             #         break
 
 
-    print(flag)
+
     if flag==1 :
-        return render(request,'login/login.html',{'flag':flag})
+            print("wrong")
+            return render(request,'login/login.html',{'flag':flag})
 
             
 
 
 
+def std(request,id) :
+     if request.session.has_key('uid'):
+        return render(request,'login/standards.html')  
+     else :
+        return render(request,'login/login.html')     
 

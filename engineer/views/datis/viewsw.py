@@ -31,7 +31,6 @@ def datisw(request, id) :
     supdetails = supdetails.values('name','contact','email').filter(dept='C')
     datiswlogs = models.Datiswlogs.objects.all()
     datiswlogs = datiswlogs.filter(date=date.today()).order_by('-log_id')    
-    
     if datis_w :
        return render(request,'engineer/datis/datisweeklyrep.html',{'datiswlogs':datiswlogs,'supdetails':supdetails,'datis_w':datis_w,'id':id,'datisw':datisw}) 
     else :
@@ -41,7 +40,33 @@ def datisw(request, id) :
    
  else : 
     return render(request,'login/login.html')
+
+def homew(request, id, p_id) :
+  if request.session.has_key('uid'):
+   uid=request.session['uid'] 
+   if int(uid) == int(id):
+    datis_w = models.Datisweekly.objects.all().filter(emp_id=id)
+    datisw = datis_w.order_by('-p_id')
+    datis_w = datis_w.filter(p_id=p_id)
+    status = datis_w.values('status')[0]['status']
+    f = 0 
+    if status == "COMPLETED WITH ERRORS" or status == "PENDING":
+        f = 1
+
+    supdetails = models.Supervisor.objects.all().values('name','contact','email').filter(dept='C')
+    datiswlogs = models.Datiswlogs.objects.all().filter(date=date.today()).order_by('-log_id') 
+    if datis_w :
+       return render(request,'engineer/datis/datisweeklyrep.html',{'datiswlogs':datiswlogs,'supdetails':supdetails,'datis_w':datis_w,'id':id,'datisw':datisw,'f':f}) 
+    else :
+       return routebackdatisd(request, id)
+   else : 
+     return routebackdatisd(request, uid)
    
+  else : 
+    return render(request,'login/login.html')
+
+  
+
 def datiswrep(request, id) :
  cursor = connection.cursor() 
  if request.session.has_key('uid'):
@@ -132,6 +157,7 @@ def datiswrepsubw(request, id) :
         val = (id,p_id,remarks,value,currdate,currtime)
         sql = "INSERT INTO datiswlogs (emp_id,p_id,remarks,value,date,time) values (%s ,%s,%s,%s , %s,%s)"
         cursor.execute(sql,val)
+        cursor.execute("update datisweekly set unit_incharge_approval = %s where p_id = %s",[None,p_id])
     else :
         status = "PENDING"    
     print(status)    
@@ -259,6 +285,8 @@ def updatisweekly(request, id) :
         val = (emp_id,p_id,"All parameters NORMAL",remarks,currdate,currtime)
         sql = "INSERT INTO datiswlogs (emp_id,p_id,remarks,value,date,time) values (%s ,%s,%s,%s , %s,%s)"
         cursor.execute(sql,val)
+        cursor.execute("update datisweekly set unit_incharge_approval = %s where p_id = %s",[None,id])
+   
     else : 
         val = (emp_id,p_id,"Procedure Followed",remarks,currdate,currtime)
         sql = "INSERT INTO datiswlogs (emp_id,p_id,remarks,value,date,time) values (%s ,%s,%s,%s , %s,%s)"

@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.contrib import messages
 from django.core.mail import send_mail
 from cryptography.fernet import Fernet as frt
-
+from operator import itemgetter
 # Create your views here.
 def choice(request):
     # uid=request.POST.get('daily')
@@ -113,7 +113,13 @@ def details(request,id,name):
         eng=models.Engineer.objects.filter(emp_id=temp[0]['emp_id']).values()
         # print(i)
         redir='supervisor:'+name
-        return render(request,'supervisor/imp_details.html',{'eng':eng[0],'temp':i,'names':name,'redir':redir,'logs':logs,'mrec':mrec})
+        if name =='datisdaily':
+            return render(request,'supervisor/imp_details.html',{'eng':eng[0],'temp':i,'names':name,'redir':redir,'logs':logs,'mrec':mrec})
+        elif name == 'datisweekly':
+            
+            return render(request,'supervisor/impw_details.html',{'eng':eng[0],'temp':i,'names':name,'redir':redir,'logs':logs,'mrec':mrec})    
+        
+        
         # return render(request,'supervisor/imp_details.html',{'temp':i,'names':name})
 
 def mail(request,id):
@@ -200,19 +206,108 @@ def verify(request,names,id):
 
 def empdetails(request,id):
      id=decode(request,id)
-     datisdaily=[entry for entry in models.Datisdaily.objects.filter(emp_id=id).values().order_by('-date')]
+     
+     
      eng=models.Engineer.objects.filter(emp_id=id).values()          
-     datisweekly=[entry for entry in models.Datisweekly.objects.filter(emp_id=id).values().order_by('-date')]
-     datis=datisdaily+[i for i in datisweekly]
-     print(datis)
-     for i in datis:
-        # eng=models.Engineer.objects.filter(emp_id=i['emp_id']).values()
+    #  datisweekly=[entry for entry in models.Datisweekly.objects.filter(emp_id=id).values().order_by('-date')]
+    #  datis=datisdaily+[i for i in datisweekly]
+    #  print(datis)
+    #  for i in datis:
+    #     # eng=models.Engineer.objects.filter(emp_id=i['emp_id']).values()
          
         
-        i.update({'type':'Datisdaily','token':encode(request,str(i['p_id']))})
+    #     i.update({'type':'Datisdaily','token':encode(request,str(i['p_id']))})
         # print(i['e_name'])
     #  print(datis)
-     return render(request,'supervisor/employee_details.html',{'datis':datis,'e_name':eng[0]['name'],'e_desig':eng[0]['designation'],'e_contact':eng[0]['contact'],'e_email':eng[0]['email']})
+     if request.session.get('dept')=='N':
+        Cdvordaily=[entry for entry in models.Cdvordaily.objects.filter(emp_id=id).values().order_by('-date')]
+        for item in Cdvordaily:
+            item.update( {"type":"Cdvordaily"})
+        Cdvorweekly=[entry for entry in models.Cdvorweekly.objects.filter(emp_id=id).values().order_by('-date')]
+        
+        for item in Cdvorweekly:
+            item.update( {"type":"Cdvorweekly"})
+        
+        ndbdaily=[entry for entry in models.Ndbdaily.objects.filter(emp_id=id).values().order_by('-date')]
+        
+        for item in ndbdaily:
+                    item.update( {"type":"Ndbdaily"})
+            
+        Ndbweekly=[entry for entry in models.Cdvorweekly.objects.filter(emp_id=id).values().order_by('-date')]
+        for item in Ndbweekly:
+                item.update( {"type":"Ndbweekly"})
+        Ndbmonthly=[entry for entry in models.Ndbmonthly.objects.filter(emp_id=id).values().order_by('-date')]
+        for item in Ndbmonthly:
+                item.update( {"type":"Ndbmonthly"})
+        Dmedaily=[entry for entry in models.Dmedaily.objects.filter(emp_id=id).values().order_by('-date')]
+        for item in Dmedaily:
+                item.update( {"type":"Dmedaily"})
+        
+        Dmeweekly=[entry for entry in models.Dmeweekly.objects.filter(emp_id=id).values().order_by('-date')]
+        for item in Dmeweekly:
+                item.update( {"type":"Dmeweekly"})
+        Dmemonthly=[entry for entry in models.Dmemonthly.objects.filter(emp_id=id).values().order_by('-date')]
+        for item in Dmemonthly:
+                item.update( {"type":"Dmemonthly"})
+        
+        Cdvormonthly=[entry for entry in models.Cdvormonthly.objects.filter(emp_id=id).values().order_by('-date')]
+        for item in Cdvormonthly:
+                item.update( {"type":"Cdvormonthly"})        
+        
+        
+        com=Cdvordaily+[i for i in Cdvorweekly]+[i for i in Dmeweekly]+[i for i in Dmedaily]+[i for i in Dmemonthly]+[i for i in Ndbweekly]+[i for i in ndbdaily]+[i for i in Ndbmonthly]+[i for i in Cdvormonthly]
+        com=sorted(com,key=itemgetter('date'),reverse=True)
+        
+        eng=[entry for entry in models.Engineer.objects.filter(supervisor_id=uid).values()]
+        for i in com:
+
+            i.update({'token':main.encode(request,str(i['p_id']))})
+
+
+    
+    
+    
+     elif request.session.get('dept')=='C':
+        datisdaily=[entry for entry in models.Datisdaily.objects.filter(emp_id=id).values().order_by('-date')]
+        for item in datisdaily:
+                item.update( {"type":"Datisdaily"})
+                
+        datisweekly=[entry for entry in models.Datisweekly.objects.filter(emp_id=id).values().order_by('-date')]
+        for item in datisweekly:
+                item.update( {"type":"Datisweekly"})
+                
+        vhfdaily=[entry for entry in models.Vhfdaily.objects.filter(emp_id=id).values().order_by('-date')]
+        for item in vhfdaily:
+                item.update( {"type":"Vhfdaily"})
+                
+                
+        # vhfweekly=[entry for entry in models.Vhfweekly.objects.filter(emp_id=id).values().order_by('-date')]
+        # for item in vhfweekly:
+        #         item.update( {"type":"Vhfweekly"})
+        vhfmonthly=[entry for entry in models.Vhfmonthly.objects.filter(emp_id=id).values().order_by('-date')]
+        for item in vhfmonthly:
+                item.update( {"type":"Vhfmonthly"})
+                
+        dscndaily=[entry for entry in models.Dscndaily.objects.filter(emp_id=id).values().order_by('-date')]
+        for item in dscndaily:
+                item.update( {"type":"Dscndaily"})
+                
+                
+        dscnweekly=[entry for entry in models.Dscnweekly.objects.filter(emp_id=id).values().order_by('-date')]
+        for item in dscnweekly:
+                item.update( {"type":"Dscnweekly"})
+                
+        dscnmonthly=[entry for entry in models.Dscnmonthly.objects.filter(emp_id=id).values().order_by('-date')]
+        for item in dscnmonthly:
+                item.update( {"type":"Dscnmonthly"})
+                
+        
+        com=datisdaily+[i for i in datisweekly]+[i for i in dscnweekly]+[i for i in dscndaily]+[i for i in dscnmonthly]+[i for i in vhfdaily]+[i for i in vhfmonthly]
+        com=sorted(com,key=itemgetter('date'),reverse=True)
+        for i in com:
+
+            i.update({'token':encode(request,str(i['p_id']))})
+     return render(request,'supervisor/employee_details.html',{'datis':com,'e_name':eng[0]['name'],'e_desig':eng[0]['designation'],'e_contact':eng[0]['contact'],'e_email':eng[0]['email']})
 
 def encode(request,s):
 

@@ -46,14 +46,15 @@
 }
 .taskbut img{
 	height:40px;
+	margin-top:20px;
 }
 .title-header
 {
-	font-size: 30px; background-color: #1E27FA ; color: white; font-family: 'Righteous', cursive;
+	padding-left:30px;font-size: 30px; background-color: #1E27FA ; color: white; font-family: 'Righteous', cursive; text-align: right;
 }
 .title-header img
 {
-	height:80px; padding:10px; padding-top: 0;
+	height:80px; margin-top: 7px; margin-left:0rem; 
 }
 
 	</style>
@@ -68,13 +69,13 @@
 	      			<a href='/' onclick="window.location.href='/'" class="taskbut"><img src="{% static '/images/task.png' %}"></a>		
 	    		</li>
 	    	</ul>
-			<div class="title-header">PREVENTIVE MAINTENANCE LOG<img src="{% static '/images/aai.jpg' %}"></div>
+			<div class="title-header">PREVENTIVE MAINTENANCE LOG <img src="{% static '/images/aai.jpg' %}"></div>
 			
 		</nav>
 		<div class="row">
-			<div class="card" style="width:60%; height: 7rem; margin-left:20%; text-align: center;">
-				<div class="card-body" style="font-family: 'Times New Roman', Times, serif; font-weight: bold; font-size: 20px; box-shadow: 4px 4px 10px #1E72FA;background-color: #EBF4FF">
-					        <h2 class="title" style="border-bottom: black; padding:10px; font-weight: bold;">{{ name }}</h2>
+			<div class="card" style="width:40%; height: 7rem; margin-left:30%; text-align: center;">
+				<div class="card-body" style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color:white;font-size: 20px; background-color: #1E27FA">
+					        <h2 class="title" style="padding:10px; font-weight: bold;">{{ name }}</h2>
 					<!-- Enter the maintainence type details here -->
 			 	</div>
 			</div>
@@ -87,9 +88,9 @@
 					</div>
 					<div class="card tabcard" style="height:35rem !important; background-color: #ffffff!important">
 						<ul class="nav nav-pills nav-stacked">
-						    <li style="background-color:#DBDBDB;"><a class="todays" data-toggle="pill" href="#pending" >Unverified</a></li>
-						    <li style="background-color:#DBDBDB;"><a class="todays" data-toggle="pill" href="#approved" >Approved</a></li>
-						    <li style="background-color:#DBDBDB;"><a class="todays" data-toggle="pill" href="#declined" >Declined</a></li>
+						    <li style="background-color:#DBDBDB; font-size:16px"><a class="todays" data-toggle="pill" href="#pending" >Unverified</a></li>
+						    <li style="background-color:#DBDBDB;font-size:16px"><a class="todays" data-toggle="pill" href="#approved" >Approved</a></li>
+						    <li style="background-color:#DBDBDB;font-size:16px"><a class="todays" data-toggle="pill" href="#declined" >Declined</a></li>
 						    
 						 </ul>
 					</div>
@@ -108,13 +109,13 @@
 				                	<th>Date</th>
 				                  	<th>Time</th>
 				                  	<th>EmployeeID</th>
-				                  	<th>Status</th>
+				                  	<th>Submission Status</th>
 				                </tr>
 				            </thead>
 				            <tbody>
 				            	<h1> Unverified </h1>
 				                {% for i in context %}
-				                {% if i.unit_incharge_approval == None %}
+				                {% if i.unit_incharge_approval == None and i.status != "PENDING" and i.room_temp != None %}
 				                <tr data-href="/schoice/{{i.token}}/{{name}} ">
 				                	<td>{{i.date}}</td>
 				                	<td>{{i.time}}</td>
@@ -135,7 +136,7 @@
 				                	<th>Date</th>
 				                  	<th>Time</th>
 				                  	<th>EmployeeID</th>
-				                  	<th>Status</th>
+				                  	<th>Submission Status</th>
 				                </tr>
 				            </thead>
 							{% for i in context %}
@@ -158,7 +159,7 @@
 				                	<th>Date</th>
 				                  	<th>Time</th>
 				                  	<th>EmployeeID</th>
-				                  	<th>Status</th>
+				                  	<th>Submission Status</th>
 				                </tr>
 				            </thead>
 							{% for i in context %}

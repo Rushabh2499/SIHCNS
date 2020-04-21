@@ -119,7 +119,7 @@ a{ text-decoration: none !important; }
 }
 .logout
 {
-	margin-top: 150px; margin-left: 130px; height:30x; border-radius:30px !important; background-color: #EBF3FF !important; color: black !important;
+	margin-top: 110px; margin-left: 140px; height:30x; border-radius:30px !important; background-color: #EBF3FF !important; color: black !important;
 }
 .factab a
 {
@@ -156,6 +156,24 @@ a{ text-decoration: none !important; }
 
 /* Style the tab content */
 .tabcontent { color: white; display: none; padding: 50px 7px 50px 7px; text-align: center;}
+
+.reportlink {
+  background-color: #555;
+  color: white;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  font-size: 17px;
+  width: 33.33%;
+}
+
+.reportlink:hover {  background-color: #777; }
+
+
+/* Style the tab content */
+.reportcontent { color: white; display: none; padding: 50px 7px 50px 7px; text-align: center;}
 
 .standtab tabcon{ border:4px solid black; padding:3px; }
 .standtab th{ border:4px solid black; padding:3px; }
