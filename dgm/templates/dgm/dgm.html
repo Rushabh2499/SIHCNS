@@ -1,9 +1,42 @@
 <html>
     <body>
+<h1>DGM Page</h1>
+
+    {% block content %}
+  <div id="container" style="width: 75%;">
+    <canvas id="pie-chart"></canvas>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+  <script>
+
+    var config = {
+      type: 'pie',
+      data: {
+        datasets: [{
+          data: {{ data|safe }},
+          backgroundColor: [
+            '#1E72FA', '#11b461', '#bf0033', '#C0C0C0', '#D3D3D3'
+          ],
+          label: 'r_count'
+        }],
+        labels: {{ labels|safe }}
+      },
+      options: {
+        responsive: true
+      }
+    };
 
     
-         <h1>{{name}}</h1>
-    
+    window.onload = function() {
+      var ctx = document.getElementById('pie-chart').getContext('2d');
+      window.myPie = new Chart(ctx, config);
+    };
+
+  </script>
+
+{% endblock %}
+         
     
     
     </body>

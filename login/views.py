@@ -10,6 +10,7 @@ from cryptography.fernet import Fernet as frt
 from supervisor.views import main
 from login.sup.homeviewSup import run_sup as run_sup
 from login.eng.homeviewEng import dhomeview as dhomeview
+from login.dgm.homeviewDgm import pie_chart as pie_chart
 from login.eng.logEng import logEng as logEng
 from head.views import dispMap as dispMap
 
@@ -30,6 +31,9 @@ def login(request):
          
     if request.session.has_key('uid') and request.session.get('type')=='s':
         return run_sup(request,request.session.get('uid'))
+
+    if request.session.has_key('uid') and request.session.get('type')=='d':
+        return logDgm(request,request.session.get('uid'))
     else:
          return render(request,'login/login.html')
 
@@ -57,9 +61,6 @@ def validate(request):
     if b=='41' :
         x=models.Engineer.objects.all()
         for i in x:  
-        
-        
-            
             if (uid == str(i.emp_id)) & (check_password(passw,i.password)) :
                 flag=0
                 request.session['type']='e'
@@ -67,11 +68,10 @@ def validate(request):
     elif b=='21' :
         x=models.Dgm.objects.all()
         for i in x:
-            if (uid == str(i.dgm_id)) & (passw == i.password) :
+            if (uid == str(i.dgm_id)) & (check_password(passw,i.password)) :
                 flag=0
-                y=models.Airport.objects.filter(a_id=i.a_id).values()
-                print(y[0])
-                return render(request,'./dgm/dgm.html',{'name':y[0]})
+                request.session['type']='d'
+                return pie_chart(request)
     elif b=='11' :
         x=models.Head.objects.all()
         for i in x:
@@ -92,23 +92,6 @@ def validate(request):
         # print(request.session['key'])
                    
         x=models.Supervisor.objects.all()
-        # print(models.Datisdaily.objects.all().values())
-        # context={
-        # 'cdvordaily':[entry for entry in models.Cdvordaily.objects.all().values()],
-        # 'datisdaily':[entry1 for entry1 in models.Datisdaily.objects.all().values()],
-        # 'dmedaily':[entry for entry in models.Dmedaily.objects.all().values()],
-        # 'dscndaily':[entry for entry in models.Dscndaily.objects.all().values()],
-        # 'ndbdaily':[entry for entry in models.Ndbdaily.objects.all().values()],
-        # 'scctvdaily':[entry for entry in models.Scctvdaily.objects.all().values()],
-        # 'vhfdaily':[entry for entry in models.Vhfdaily.objects.all().values()]
-        # }
-        # list_result=[{}]
-        # for k,v in context.items():
-        #     list_result=[entry for entry in context[k]]
-        # print(list_result)
-        # for i in list_result:
-        #     for k,v in i:
-        #         print(v)
         for i in x:
             print(check_password(passw,i.password))
             if (uid == str(i.supervisor_id)) & (check_password(passw,i.password)) :

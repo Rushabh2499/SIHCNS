@@ -24,6 +24,8 @@ urlpatterns = [
     path('validate/',views.validate),
     path('dhomeview/',views.dhomeview),
     path('dhomeviews/<int:id>',views.dhomeview),
+    path('dgmhome/', views.pie_chart, name='dgmhome'),
+
     
 
     #vhf 

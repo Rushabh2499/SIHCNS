@@ -123,7 +123,7 @@
                                 <hr>
                                 {% if temp.status != "PENDING" and temp.unit_incharge_approval == NONE %}
                                   {% if temp.status == "COMPLETED WITH ERRORS" %}                      
-                                      <button type="button" data-toggle="modal" data-target="#report" style="width: 100px; margin-right: 10%;"class="btn submitbut">DECLINE</button>
+                                      <button type="button" data-toggle="modal" data-target="#recheck" style="width: 100px; margin-right: 10%;"class="btn submitbut">DECLINE</button>
                                       
                                   {% endif %}
                                   {% if temp.unit_incharge_approval != "YES" %}
@@ -131,7 +131,7 @@
                                 {% endif %}
                                 {% endif %}
 </form></div>
-                                <div class="modal fade" id="report">
+                                <div class="modal fade" id="recheck">
                                       <div class="modal-dialog">
                                         <div class="modal-content">
                                           <div class="modal-header">
@@ -215,7 +215,7 @@
                         </div>
                     </div>    
                 </div>
-
+                {% if temp.room_temp != None %}
                 <div> 
                     <div class="logr">                       
                         <div class="card sidecard logrtitle"> REPORT LOG </div>
@@ -243,7 +243,7 @@
                         </div>
                     </div>
                 </div>   
-              
+              {% endif %}
                 <div class="modal fade" id="standardcheck">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -371,7 +371,7 @@
                             </div>
                             <div class="modal-body">
                               <h5>{{eng.name}}</h5>
-                              <h6>Email: <a href="mailto:surajshah@aai.com">{{eng.email}}</a></h6>
+                              <h6>Email: <a href="{{ eng.email }}">{{eng.email}}</a></h6>
                               <h6>Phone: {{eng.contact}}</h6>
                             </div>
                             <div class="modal-footer">
