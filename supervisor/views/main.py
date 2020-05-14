@@ -8,6 +8,7 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from cryptography.fernet import Fernet as frt
 from operator import itemgetter
+from datetime import date
 # Create your views here.
 def choice(request):
     # uid=request.POST.get('daily')
@@ -103,7 +104,7 @@ def details(request,id,name):
         str3=').values()'
         request.session['pid']=id
         request.session['name']=name
-        que=str1+logname+str2+str(id)+str3
+        que=str1+logname+str2+str(id)+str3+".order_by('-log_id')"
         exec(que,globals())
         # print("logs:")
         # print(logs)
@@ -119,9 +120,35 @@ def details(request,id,name):
             
             return render(request,'supervisor/impw_details.html',{'eng':eng[0],'temp':i,'names':name,'redir':redir,'logs':logs,'mrec':mrec})    
         
+        elif name == 'dscndaily':
+            
+            return render(request,'supervisor/dscn_imp_details.html',{'eng':eng[0],'temp':i,'names':name,'redir':redir,'logs':logs,'mrec':mrec})    
+        elif name == 'dscnmonthly':
+            
+            return render(request,'supervisor/dscn_impm_details.html',{'eng':eng[0],'temp':i,'names':name,'redir':redir,'logs':logs,'mrec':mrec})    
+        
+        elif name == 'cdvordaily':
+            
+            return render(request,'supervisor/cdvor_imp_details.html',{'eng':eng[0],'temp':i,'names':name,'redir':redir,'logs':logs,'mrec':mrec})    
+        elif name == 'cdvormonthly':
+            
+            return render(request,'supervisor/cdvor_impm_details.html',{'eng':eng[0],'temp':i,'names':name,'redir':redir,'logs':logs,'mrec':mrec})        
         
         # return render(request,'supervisor/imp_details.html',{'temp':i,'names':name})
-
+        elif name == 'cdvorweekly':
+            
+            return render(request,'supervisor/cdvor_impw_details.html',{'eng':eng[0],'temp':i,'names':name,'redir':redir,'logs':logs,'mrec':mrec})    
+        elif name == 'scctvdaily':
+            
+            return render(request,'supervisor/scctv_imp_details.html',{'eng':eng[0],'temp':i,'names':name,'redir':redir,'logs':logs,'mrec':mrec})    
+        elif name == 'scctvmonthly':
+            
+            return render(request,'supervisor/scctv_impm_details.html',{'eng':eng[0],'temp':i,'names':name,'redir':redir,'logs':logs,'mrec':mrec})        
+        
+        # return render(request,'supervisor/imp_details.html',{'temp':i,'names':name})
+        elif name == 'scctvweekly':
+            
+            return render(request,'supervisor/scctv_impw_details.html',{'eng':eng[0],'temp':i,'names':name,'redir':redir,'logs':logs,'mrec':mrec})        
 def mail(request,id):
     # print(reverse("supervisor:choice"))
     # print(sid)
@@ -153,16 +180,20 @@ def sent(request):
     temp.approval_date=date
     temp.approval_time=time
     temp.unit_incharge_approval='NO'
-    print("temp")
+
     temp.status="PENDING"
+
+    print("temp")
+    # currdate = date.today()
     temp.save()
       
     print(temp)
     send_mail('urgent',mail,'aai.urgent@gmail.com',['naik.varun99@gmail.com'],fail_silently=False)
     # return render(request,'supervisor/imp_details.html',{'temp':temp[0],'names':names1,'logs':logs})
     return HttpResponseRedirect(reverse('supervisor:details',kwargs={'id':encode(request,str(pid)), 'name':names1}))
-
+    # details(request,encode(request,str(pid)),names1)
 def verify(request,names,id):
+    
     ids=id
     id=decode(request,id)
     print(id)
@@ -184,7 +215,7 @@ def verify(request,names,id):
     str1='context=[entry for entry in models.'
     str2='.objects.all().values()]'
     now = datetime.datetime.now()
-    names1=names.capitalize()
+    # names1=names.capitalize()
     # print('here')
     # print(names1)
     que=str1+names1+str2
@@ -200,14 +231,83 @@ def verify(request,names,id):
             i['flag']='not set'
     # cdvordaily=[entry for entry in models.Cdvordaily.objects.all().values()]
     print("com")
-    print(context)
-   
-    return HttpResponseRedirect(reverse('supervisor:details',kwargs={'id':ids, 'name':names1}))
+    # print(context)
+    print("return")
+    # return HttpResponseRedirect(reverse('supervisor:details',args={'id':ids, 'name':names1}))
+    # details(request,ids,names1)
+    str1='temp=models.'
+    str2='.objects.filter(p_id='
+    str3=').values()'
+    str4='.objects.all('
+    que=str1+names1+str2+str(id)+str3
+    exec(que,globals())
+    str1='mrec=models.'
+    que=str1+names1+str4+str3+".order_by('-date')"
+    exec(que,globals())
+    #  UNCOMMENT WHEN DONE WITH ALL LOG TABLES
+    logname=names1+'logs'
+    logname=logname.replace('daily','d')
+    logname=logname.replace('monthly','m')
+    logname=logname.replace('weekly','w')
+    logname=logname.replace('yearly','y')
+    # print(logname)
+    name=names1[0].lower()+names1[1:]
+    # # logname=name+'logs'
+    str1='logs=models.'
+    str2='.objects.filter(p_id='
+    str3=').values()'
+    request.session['pid']=id
+    request.session['name']=names
+    que=str1+logname+str2+str(id)+str3+".order_by('-log_id')"
+    exec(que,globals())
+    # print("logs:")
+    # print(logs)
+    i=temp[0]
+    i['e_token']=encode(request,str(i['emp_id']))
+    i['p_token']=encode(request,str(i['p_id']))
+    eng=models.Engineer.objects.filter(emp_id=temp[0]['emp_id']).values()
+    # print(i)
+    redir='supervisor:'+name
+    if name =='datisdaily':
+        return render(request,'supervisor/imp_details.html',{'eng':eng[0],'temp':i,'names':name,'redir':redir,'logs':logs,'mrec':mrec})
+    elif name == 'datisweekly':
+        
+        return render(request,'supervisor/impw_details.html',{'eng':eng[0],'temp':i,'names':name,'redir':redir,'logs':logs,'mrec':mrec})    
+    
+    elif name == 'dscndaily':
+        
+        return render(request,'supervisor/dscn_imp_details.html',{'eng':eng[0],'temp':i,'names':name,'redir':redir,'logs':logs,'mrec':mrec})    
+    elif name == 'dscnmonthly':
+        
+        return render(request,'supervisor/dscn_impm_details.html',{'eng':eng[0],'temp':i,'names':name,'redir':redir,'logs':logs,'mrec':mrec})    
+    
+    elif name == 'cdvordaily':
+        
+        return render(request,'supervisor/cdvor_imp_details.html',{'eng':eng[0],'temp':i,'names':name,'redir':redir,'logs':logs,'mrec':mrec})    
+    elif name == 'cdvormonthly':
+        
+        return render(request,'supervisor/cdvor_impm_details.html',{'eng':eng[0],'temp':i,'names':name,'redir':redir,'logs':logs,'mrec':mrec})        
+    
+    # return render(request,'supervisor/imp_details.html',{'temp':i,'names':name})
+    elif name == 'cdvorweekly':
+        
+        return render(request,'supervisor/cdvor_impw_details.html',{'eng':eng[0],'temp':i,'names':name,'redir':redir,'logs':logs,'mrec':mrec})    
+    elif name == 'scctvdaily':
+        
+        return render(request,'supervisor/scctv_imp_details.html',{'eng':eng[0],'temp':i,'names':name,'redir':redir,'logs':logs,'mrec':mrec})    
+    elif name == 'scctvmonthly':
+        
+        return render(request,'supervisor/scctv_impm_details.html',{'eng':eng[0],'temp':i,'names':name,'redir':redir,'logs':logs,'mrec':mrec})        
+    
+    # return render(request,'supervisor/imp_details.html',{'temp':i,'names':name})
+    elif name == 'scctvweekly':
+        
+        return render(request,'supervisor/scctv_impw_details.html',{'eng':eng[0],'temp':i,'names':name,'redir':redir,'logs':logs,'mrec':mrec})        
 
 def empdetails(request,id):
      id=decode(request,id)
      
-     
+     uid=request.session['uid']
      eng=models.Engineer.objects.filter(emp_id=id).values()          
     #  datisweekly=[entry for entry in models.Datisweekly.objects.filter(emp_id=id).values().order_by('-date')]
     #  datis=datisdaily+[i for i in datisweekly]
@@ -228,40 +328,20 @@ def empdetails(request,id):
         for item in Cdvorweekly:
             item.update( {"type":"Cdvorweekly"})
         
-        ndbdaily=[entry for entry in models.Ndbdaily.objects.filter(emp_id=id).values().order_by('-date')]
-        
-        for item in ndbdaily:
-                    item.update( {"type":"Ndbdaily"})
-            
-        Ndbweekly=[entry for entry in models.Cdvorweekly.objects.filter(emp_id=id).values().order_by('-date')]
-        for item in Ndbweekly:
-                item.update( {"type":"Ndbweekly"})
-        Ndbmonthly=[entry for entry in models.Ndbmonthly.objects.filter(emp_id=id).values().order_by('-date')]
-        for item in Ndbmonthly:
-                item.update( {"type":"Ndbmonthly"})
-        Dmedaily=[entry for entry in models.Dmedaily.objects.filter(emp_id=id).values().order_by('-date')]
-        for item in Dmedaily:
-                item.update( {"type":"Dmedaily"})
-        
-        Dmeweekly=[entry for entry in models.Dmeweekly.objects.filter(emp_id=id).values().order_by('-date')]
-        for item in Dmeweekly:
-                item.update( {"type":"Dmeweekly"})
-        Dmemonthly=[entry for entry in models.Dmemonthly.objects.filter(emp_id=id).values().order_by('-date')]
-        for item in Dmemonthly:
-                item.update( {"type":"Dmemonthly"})
+
         
         Cdvormonthly=[entry for entry in models.Cdvormonthly.objects.filter(emp_id=id).values().order_by('-date')]
         for item in Cdvormonthly:
                 item.update( {"type":"Cdvormonthly"})        
         
         
-        com=Cdvordaily+[i for i in Cdvorweekly]+[i for i in Dmeweekly]+[i for i in Dmedaily]+[i for i in Dmemonthly]+[i for i in Ndbweekly]+[i for i in ndbdaily]+[i for i in Ndbmonthly]+[i for i in Cdvormonthly]
+        com=Cdvordaily+[i for i in Cdvorweekly]+[i for i in Cdvormonthly]
         com=sorted(com,key=itemgetter('date'),reverse=True)
         
         eng=[entry for entry in models.Engineer.objects.filter(supervisor_id=uid).values()]
         for i in com:
 
-            i.update({'token':main.encode(request,str(i['p_id']))})
+            i.update({'token':encode(request,str(i['p_id']))})
 
 
     
@@ -303,6 +383,30 @@ def empdetails(request,id):
                 
         
         com=datisdaily+[i for i in datisweekly]+[i for i in dscnweekly]+[i for i in dscndaily]+[i for i in dscnmonthly]+[i for i in vhfdaily]+[i for i in vhfmonthly]
+        com=sorted(com,key=itemgetter('date'),reverse=True)
+        for i in com:
+
+            i.update({'token':encode(request,str(i['p_id']))})
+
+     
+     elif request.session.get('dept')=='S':
+  
+                
+        Scctvdaily=[entry for entry in models.Scctvdaily.objects.filter(emp_id=id).values().order_by('-date')]
+        for item in Scctvdaily:
+                item.update( {"type":"Scctvdaily"})
+                
+                
+        Scctvweekly=[entry for entry in models.Scctvweekly.objects.filter(emp_id=id).values().order_by('-date')]
+        for item in Scctvweekly:
+                item.update( {"type":"Scctvweekly"})
+                
+        Scctvmonthly=[entry for entry in models.Scctvmonthly.objects.filter(emp_id=id).values().order_by('-date')]
+        for item in Scctvmonthly:
+                item.update( {"type":"Scctvmonthly"})
+                
+        
+        com=[i for i in Scctvweekly]+[i for i in Scctvdaily]+[i for i in Scctvmonthly]
         com=sorted(com,key=itemgetter('date'),reverse=True)
         for i in com:
 

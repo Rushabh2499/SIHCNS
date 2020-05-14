@@ -115,7 +115,7 @@
 				            <tbody>
 				            	<h1> Unverified </h1>
 				                {% for i in context %}
-				                {% if i.unit_incharge_approval == None and i.status != "PENDING" and i.room_temp != None %}
+				                {% if i.unit_incharge_approval == None and i.status != "PENDING"  %}
 				                <tr data-href="/schoice/{{i.token}}/{{name}} ">
 				                	<td>{{i.date}}</td>
 				                	<td>{{i.time}}</td>

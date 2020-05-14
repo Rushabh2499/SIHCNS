@@ -11,7 +11,7 @@ def dispMap(request,airInfo):
 
 
     # Create map object
-    m = folium.Map(location=[28.6139, 77.2090],zoom_start=5)
+    m = folium.Map(location=[21.1458, 79.0882],zoom_start=5)
 
     # Global tooltip
     tooltip = 'Click For More Info'

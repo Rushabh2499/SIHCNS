@@ -213,11 +213,11 @@ textarea {
 	 height:15rem;
 }
 .tabr{
-	width:22.7rem; margin-left:3rem;
+	width:22rem; margin-left:3rem;
 }
 .mantab{
 	table-layout: fixed;
-	word-wrap:break-word;
+	word-wrap: break-word;
 }
 .rows{
 	padding: 0px 0px 0px 0px;
@@ -226,7 +226,4 @@ textarea {
 .s{
 
 	position:fixed;
-}
-.s_01{
-	margin-top:8rem;
 }

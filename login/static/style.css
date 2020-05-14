@@ -3,127 +3,45 @@ body {
   font-weight: 500;
   color:#fff;
   overflow: hidden;
+
 }
-
-.linkx{
-  text-align: center;
-  color: #0000ff;
-  opacity:0.5;
-}
-
-.info p {
-  text-align:center;
-  color: #999;
-  text-transform:none;
-  font-weight:600;
-  font-size:15px;
-  margin-top:2px
-}
-
-.info i {
-  color:#55acee;
-}
-
-h1 {
-  text-align:center; 
-  color: #666;
-  text-shadow: 1px 1px 0px #FFF;
-  margin:50px 0px 0px 0px
-}
-
-h2 {
-  font-size: 20px;
-  font-weight: 600;
-}
-
-h4{
-  opacity:1;
-  color: #000;
-}
-
-
-h3 {
-  text-align: left;
-  font-size: 17px;
-  font-weight: 600;
-}
-
-a {
-  text-decoration: inherit;
-  color: inherit;
-}
-
-a:hover {
-  text-decoration: inherit;
-}
-
-hr {
-  position: relative;
-  margin-top: 27%;
-  border: 1px solid #fff;
-  border-radius: 50px;
-  opacity: 0.15;
-}
-
-
 .container {
   display: absolute;
   position: relative;
   height: 679px;
-  margin: auto;
-  box-shadow: 1px 5px 10px 1px #333;
   overflow:hidden;
 }
 
-img.bg-img {
-  display: block;
+.bg-img {
+  background-size: cover;
   position: absolute;
-  margin: auto;
   height:100%;
   width: 100%;
-  opacity: 0.6;
-}
-
-a:not(.active) {
-  cursor:inherit;
-}
-.menu .active h2 {
-  border-bottom: 0 solid #1161ee;
-  color: #AEAEAE;
-  transition: color 0.5s ease-in;
+  opacity: 0.7;
 }
 
 .connexion {
     position: absolute;
-    padding: 15% 13%;
-    width: 74%;
+    padding: 0% 13%;
     left:0px;
     transition: all 0.7s;
 }
 
-.connexion h2 {
-    display: inline;
-    margin: 20px;
-    padding-bottom: 3px;
-    border-bottom: 2px solid #1161ee;
+.card{
+  margin-top: 30%;
+  height: 400px;
+  width: 400px;
+  background-color: rgba(0,0,0,0.3);
 }
 
-.connexion h4 {
-    margin-bottom: 0;
-    text-align: center;
-    color: #ffffff;
-    opacity: 0.3;
-}
-
-.connexion h4:hover {
-    opacity: 0.8;
-    transition: all 0.1s ease-in;
+.contact-form{
+  margin: 90px 10px;
 }
 
 label {
     display: block;
     margin-top: 10px;
-    padding: 1% 2%;
+    padding-left: 10px;
     font-size: 15px;
     font-weight: 600;
     font-family:"Arial", sans-serif;
@@ -134,78 +52,31 @@ input {
     display: block;
     width: 93%;
     margin: auto;
-    padding: 2%;
+    padding: 3%;
     border: 0;
     border-radius: 20px;
     font-family: "Roboto",sans-serif;
-    opacity: 0.5;
+    background-color: rgba(255,255,255,0.5);
+    color: #000;
 }
 
-input p {
-    color: #0;
-    opacity: 1;
+input:hover{
+  background-color: rgba(255,255,255,0.8);
 }
 
-input.submit {
-    width: 100%;
-    padding: 10px;
+input:focus{
+  background-color: rgba(255,255,255,0.8);
+}
+
+.submit {
+  margin-top: 20px;
+    width: 50%;
     font-size: 17px;
     font-weight: 700;
     color: #fff;
-    opacity: 1;
-    background-color: #5d594d;
-    cursor: pointer;
+    background-color:rgba(93,89,77,0.8);
 }
 
-.check label {
-    float: left;
-    width: 10%;
-    margin-left: 5%;
-}
-
-.check h3 {
-    padding: 15px;
-}
-
-.checkbox {
-    display: none;
-}
-
-.checkbox:checked + svg .path-moving {
-    -webkit-transition: stroke .4s,stroke-dasharray .4s,stroke-dashoffset .4s cubic-bezier(.3,.8,.6,1.5);
-    transition: stroke .4s,stroke-dasharray .4s,stroke-dashoffset .4s cubic-bezier(.3,.8,.6,1.5);
-    stroke-dasharray: 25 90;
-    stroke-dashoffset: 0;
-}
-
-.path-moving,
-.path-back {
-    fill: none;
-    stroke: #1161ee;
-    stroke-width: 3px;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-}
-
-.path-moving {
-    -webkit-transition: stroke .4s,stroke-dasharray .4s,stroke-dashoffset .4s;
-    transition: stroke .4s,stroke-dasharray .4s,stroke-dashoffset .4s;
-    stroke: #ffffff;
-    stroke-dasharray: 110;
-    stroke-dashoffset: -32;
-}
-.enregistrer {
-    position: absolute;
-    padding: 15% 13%;
-    width: 74%;
-    right:0px;
-    transition: all 0.7s;
-}
-.active-section {
-    position: absolute;
-    right:500px;
-}
-.remove-section {
-    position: absolute;
-    left: 500px;
+.submit:hover{
+  background-color: rgba(93,89,77,1);
 }

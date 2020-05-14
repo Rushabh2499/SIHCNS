@@ -17,7 +17,7 @@ def daily(request):
 
 def monthly(request):
     scctvmonthly=[entry for entry in models.Scctvmonthly.objects.all().values().order_by('-date')]
-    for i in scctvweekly:
+    for i in scctvmonthly:
         i['token']=main.encode(request,str(i['p_id']))
         if i['unit_incharge_approval']=="YES":
            i['flag']=1

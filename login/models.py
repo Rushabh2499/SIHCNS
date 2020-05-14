@@ -7,17 +7,6 @@
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 
-class DgmReports(models.Model):
-    r_id = models.IntegerField(primary_key=True)
-    r_type = models.CharField(max_length=30)
-    r_status = models.CharField(max_length=30)
-    r_count = models.PositiveIntegerField()
-    r_date = models.DateTimeField()
-
-    class Meta:
-        managed = False
-        db_table = 'dgmreports'
-
 
 class Airport(models.Model):
     a_id = models.IntegerField(primary_key=True)
@@ -102,7 +91,8 @@ class AuthUserUserPermissions(models.Model):
 
 
 class Cdvordaily(models.Model):
-    date = models.DateTimeField()
+    date = models.DateField()
+    time = models.TimeField(blank=True, null=True)
     a = models.ForeignKey(Airport, models.DO_NOTHING)
     emp = models.ForeignKey('Engineer', models.DO_NOTHING, blank=True, null=True)
     azimuth_angle = models.IntegerField(db_column='Azimuth_angle', blank=True, null=True)  # Field name made lowercase.
@@ -115,21 +105,36 @@ class Cdvordaily(models.Model):
     unit_incharge_approval = models.CharField(db_column='Unit_incharge_approval', max_length=3, blank=True, null=True)  # Field name made lowercase.
     f_id = models.CharField(max_length=10)
     p_id = models.AutoField(primary_key=True)
-    s_verify = models.IntegerField(blank=True, null=True)
     status = models.CharField(max_length=30)
+    approval_date = models.DateField(blank=True, null=True)
+    approval_time = models.TimeField(blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'cdvordaily'
 
+class Cdvordlogs(models.Model):
+    log_id = models.AutoField(primary_key=True)
+    emp = models.ForeignKey('Engineer', models.DO_NOTHING)
+    p = models.ForeignKey('Cdvordaily', models.DO_NOTHING)
+    value = models.CharField(max_length=30)
+    remarks = models.CharField(db_column='Remarks', max_length=100)  # Field name made lowercase.
+    date = models.DateField(db_column='Date')  # Field name made lowercase.
+    time = models.TimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'cdvordlogs'
+
+
 
 class Cdvormonthly(models.Model):
-    date = models.DateTimeField()
+    p_id = models.AutoField(primary_key=True)
+    date = models.DateField()
+    time = models.TimeField()
     a = models.ForeignKey(Airport, models.DO_NOTHING)
     emp = models.ForeignKey('Engineer', models.DO_NOTHING, blank=True, null=True)
     f_id = models.CharField(max_length=10)
-    p_id = models.AutoField(primary_key=True)
-    s_verify = models.IntegerField(blank=True, null=True)
     status = models.CharField(max_length=30)
     measured_bearing_1 = models.FloatField(blank=True, null=True)
     bearing_deviation_1 = models.FloatField(blank=True, null=True)
@@ -137,29 +142,44 @@ class Cdvormonthly(models.Model):
     bearing_deviation_2 = models.FloatField(blank=True, null=True)
     measured_bearing_3 = models.FloatField(blank=True, null=True)
     bearing_deviation_3 = models.FloatField(blank=True, null=True)
-    measured_deviation_4 = models.FloatField(blank=True, null=True)
+    measured_bearing_4 = models.FloatField(blank=True, null=True)
     bearing_deviation_4 = models.FloatField(blank=True, null=True)
-    measured_deviation_5 = models.FloatField(blank=True, null=True)
+    measured_bearing_5 = models.FloatField(blank=True, null=True)
     bearing_deviation_5 = models.FloatField(blank=True, null=True)
     error_spread = models.FloatField(blank=True, null=True)
     remarks = models.TextField(db_column='REMARKS', blank=True, null=True)  # Field name made lowercase.
     unit_incharge_approval = models.CharField(db_column='Unit_incharge_approval', max_length=3, blank=True, null=True)  # Field name made lowercase.
+    approval_date = models.DateField(blank=True, null=True)
+    approval_time = models.TimeField(blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'cdvormonthly'
 
+class Cdvormlogs(models.Model):
+    log_id = models.AutoField(primary_key=True)
+    emp = models.ForeignKey('Engineer', models.DO_NOTHING)
+    p = models.ForeignKey('Cdvormonthly', models.DO_NOTHING)
+    value = models.CharField(max_length=30)
+    remarks = models.CharField(max_length=100)
+    date = models.DateField()
+    time = models.TimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'cdvormlogs'        
+
 
 class Cdvorweekly(models.Model):
-    date = models.DateTimeField()
+    date = models.DateField()
+    time = models.TimeField(blank=True, null=True)
     a = models.ForeignKey(Airport, models.DO_NOTHING)
     emp = models.ForeignKey('Engineer', models.DO_NOTHING, blank=True, null=True)
     f_id = models.CharField(max_length=10)
     p_id = models.AutoField(primary_key=True)
-    s_verify = models.IntegerField(blank=True, null=True)
     status = models.CharField(max_length=30)
-    ps_5v = models.IntegerField(db_column='PS_5V', blank=True, null=True)  # Field name made lowercase.
-    ps_12v = models.IntegerField(db_column='PS_12V', blank=True, null=True)  # Field name made lowercase.
+    ps_5v = models.FloatField(db_column='PS_5V', blank=True, null=True)  # Field name made lowercase.
+    ps_12v = models.FloatField(db_column='PS_12V', blank=True, null=True)  # Field name made lowercase.
     ps_negative_12v = models.IntegerField(db_column='PS_negative_12V', blank=True, null=True)  # Field name made lowercase.
     ps_28v = models.IntegerField(db_column='PS_28V', blank=True, null=True)  # Field name made lowercase.
     ps_48v = models.IntegerField(db_column='PS_48V', blank=True, null=True)  # Field name made lowercase.
@@ -172,11 +192,25 @@ class Cdvorweekly(models.Model):
     sideband_frequency = models.IntegerField(blank=True, null=True)
     remarks = models.TextField(db_column='REMARKS', blank=True, null=True)  # Field name made lowercase.
     unit_incharge_approval = models.CharField(db_column='Unit_incharge_approval', max_length=3, blank=True, null=True)  # Field name made lowercase.
+    approval_date = models.DateField(blank=True, null=True)
+    approval_time = models.TimeField(blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'cdvorweekly'
+    
+class Cdvorwlogs(models.Model):
+    log_id = models.AutoField(primary_key=True)
+    emp = models.ForeignKey('Engineer', models.DO_NOTHING)
+    p = models.ForeignKey('Cdvorweekly', models.DO_NOTHING)
+    value = models.CharField(max_length=30)
+    remarks = models.CharField(db_column='Remarks', max_length=100)  # Field name made lowercase.
+    date = models.DateField(db_column='Date')  # Field name made lowercase.
+    time = models.TimeField()
 
+    class Meta:
+        managed = False
+        db_table = 'cdvorwlogs'
 
 class Communication(models.Model):
     f_id = models.IntegerField(primary_key=True)
@@ -260,7 +294,6 @@ class Datisweekly(models.Model):
     status_of_rop = models.CharField(db_column='status_of_ROP', max_length=5, blank=True, null=True)  # Field name made lowercase.
     remarks = models.TextField(db_column='REMARKS', blank=True, null=True)  # Field name made lowercase.
     unit_incharge_approval = models.CharField(db_column='Unit_incharge_approval', max_length=3, blank=True, null=True)  # Field name made lowercase.
-    s_verify = models.IntegerField(blank=True, null=True)
     approval_date = models.DateField(blank=True, null=True)
     approval_time = models.TimeField(blank=True, null=True)
 
@@ -342,6 +375,16 @@ class DjangoSession(models.Model):
         managed = False
         db_table = 'django_session'
 
+class DgmReports(models.Model):
+    r_id = models.IntegerField(primary_key=True)
+    r_type = models.CharField(max_length=30)
+    r_status = models.CharField(max_length=30)
+    r_count = models.PositiveIntegerField()
+    r_date = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'dgmreports'
 
 class Dmedaily(models.Model):
     date = models.DateTimeField()
@@ -360,7 +403,6 @@ class Dmedaily(models.Model):
     remarks = models.TextField(db_column='REMARKS', blank=True, null=True)  # Field name made lowercase.
     unit_incharge_approval = models.CharField(db_column='Unit_incharge_approval', max_length=3, blank=True, null=True)  # Field name made lowercase.
     p_id = models.IntegerField(primary_key=True)
-    s_verify = models.CharField(max_length=11, blank=True, null=True)
     approval_date = models.DateField(blank=True, null=True)
     approval_time = models.TimeField(blank=True, null=True)
     status = models.CharField(max_length=30)
@@ -424,7 +466,6 @@ class Dmeweekly(models.Model):
 
 class Dscndaily(models.Model):
     p_id = models.AutoField(primary_key=True)
-    s_verify = models.IntegerField(blank=True, null=True)
     status = models.CharField(max_length=30)
     date = models.DateField()
     time = models.TimeField()
@@ -482,7 +523,6 @@ class Dscnmonthly(models.Model):
     eqpt_status_after_check = models.CharField(max_length=5, blank=True, null=True)
     remarks = models.TextField(db_column='REMARKS', blank=True, null=True)  # Field name made lowercase.
     unit_incharge_approval = models.CharField(db_column='Unit_incharge_approval', max_length=3, blank=True, null=True)  # Field name made lowercase.
-    s_verify = models.IntegerField(blank=True, null=True)
     status = models.CharField(max_length=30)
     approval_date = models.DateField(blank=True, null=True)
     approval_time = models.TimeField(blank=True, null=True)
@@ -492,6 +532,18 @@ class Dscnmonthly(models.Model):
         db_table = 'dscnmonthly'
         unique_together = (('date', 'a'),)
 
+class Dscnmlogs(models.Model):
+    log_id = models.AutoField(primary_key=True)
+    emp = models.ForeignKey('Engineer', models.DO_NOTHING)
+    remarks = models.CharField(max_length=100)
+    value = models.CharField(max_length=30)
+    date = models.DateField()
+    time = models.TimeField()
+    p = models.ForeignKey(Dscnmonthly, models.DO_NOTHING, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'dscnmlogs'
 
 class Dscnweekly(models.Model):
     p_id = models.AutoField(primary_key=True)
@@ -509,7 +561,6 @@ class Dscnweekly(models.Model):
     unit_incharge_approval = models.CharField(db_column='Unit_incharge_approval', max_length=3, blank=True, null=True)  # Field name made lowercase.
     approval_date = models.DateField(blank=True, null=True)
     approval_time = models.TimeField(blank=True, null=True)
-    s_verify = models.IntegerField(blank=True, null=True)
     status = models.CharField(max_length=30)
 
     class Meta:
@@ -517,6 +568,18 @@ class Dscnweekly(models.Model):
         db_table = 'dscnweekly'
         unique_together = (('date', 'a'),)
 
+class Dscnwlogs(models.Model):
+    log_id = models.AutoField(primary_key=True)
+    emp = models.ForeignKey('Engineer', models.DO_NOTHING)
+    remarks = models.CharField(max_length=100)
+    value = models.CharField(max_length=30)
+    date = models.DateField()
+    time = models.TimeField()
+    p = models.ForeignKey(Dscnweekly, models.DO_NOTHING, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'dscnwlogs'
 
 class Employee(models.Model):
     emp_id = models.IntegerField(primary_key=True)
@@ -690,14 +753,14 @@ class Ndbweekly(models.Model):
 
 
 class Scctvdaily(models.Model):
-    date = models.DateTimeField()
+    date = models.DateField()
     a = models.ForeignKey(Airport, models.DO_NOTHING)
-    emp = models.ForeignKey(Engineer, models.DO_NOTHING, blank=True, null=True)
+    emp = models.ForeignKey('Engineer', models.DO_NOTHING, blank=True, null=True)
     f_id = models.CharField(max_length=10)
     ups_battery_indication = models.CharField(db_column='UPS_battery_indication', max_length=20, blank=True, null=True)  # Field name made lowercase.
     servers_on_condition = models.CharField(db_column='Servers_ON_condition', max_length=10, blank=True, null=True)  # Field name made lowercase.
     nas_status_in_vmsorvrm = models.CharField(db_column='NAS_status_in_VMSorVRM', max_length=10, blank=True, null=True)  # Field name made lowercase.
-    recording_active_status_vrs_server = models.IntegerField(db_column='recording_active_status_VRS_server', blank=True, null=True)  # Field name made lowercase.
+    recording_active_status_vrs_server = models.CharField(db_column='recording_active_status_VRS_server', max_length=11, blank=True, null=True)  # Field name made lowercase.
     recording_active_status_rrs_server = models.CharField(db_column='recording_active_status_RRS_server', max_length=20, blank=True, null=True)  # Field name made lowercase.
     database_status_vms = models.CharField(db_column='database_status_VMS', max_length=10, blank=True, null=True)  # Field name made lowercase.
     cameras_ivms = models.CharField(db_column='cameras_IVMS', max_length=10, blank=True, null=True)  # Field name made lowercase.
@@ -707,17 +770,31 @@ class Scctvdaily(models.Model):
     approval_date = models.DateField(blank=True, null=True)
     approval_time = models.TimeField(blank=True, null=True)
     p_id = models.AutoField(primary_key=True)
-    s_verify = models.IntegerField(blank=True, null=True)
     status = models.CharField(max_length=30)
+    time = models.TimeField(blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'scctvdaily'
-        unique_together = (('date', 'a'),)
+
+
+class Scctvdlogs(models.Model):
+    emp = models.ForeignKey(Engineer, models.DO_NOTHING)
+    value = models.CharField(max_length=30)
+    remarks = models.CharField(max_length=30)
+    log_id = models.AutoField(primary_key=True)
+    p = models.ForeignKey(Scctvdaily, models.DO_NOTHING)
+    date = models.DateField()
+    time = models.TimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'scctvdlogs'
 
 
 class Scctvmonthly(models.Model):
-    date = models.DateTimeField()
+    date = models.DateField()
+    time = models.TimeField()
     a = models.ForeignKey(Airport, models.DO_NOTHING)
     emp = models.ForeignKey(Engineer, models.DO_NOTHING, blank=True, null=True)
     f_id = models.CharField(max_length=10)
@@ -737,7 +814,6 @@ class Scctvmonthly(models.Model):
     approval_date = models.DateField(blank=True, null=True)
     approval_time = models.TimeField(blank=True, null=True)
     p_id = models.AutoField(primary_key=True)
-    s_verify = models.IntegerField(blank=True, null=True)
     status = models.CharField(max_length=30)
 
     class Meta:
@@ -745,9 +821,21 @@ class Scctvmonthly(models.Model):
         db_table = 'scctvmonthly'
         unique_together = (('date', 'a'),)
 
+class Scctvmlogs(models.Model):
+    emp = models.ForeignKey(Engineer, models.DO_NOTHING)
+    value = models.CharField(max_length=30)
+    remarks = models.CharField(max_length=30)
+    log_id = models.AutoField(primary_key=True)
+    p = models.ForeignKey(Scctvmonthly, models.DO_NOTHING)
+    date = models.DateField()
+    time = models.TimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'scctvmlogs'
 
 class Scctvweekly(models.Model):
-    date = models.DateTimeField()
+    date = models.DateField()
     a = models.ForeignKey(Airport, models.DO_NOTHING)
     emp = models.ForeignKey(Engineer, models.DO_NOTHING, blank=True, null=True)
     f_id = models.CharField(max_length=10)
@@ -764,12 +852,26 @@ class Scctvweekly(models.Model):
     approval_date = models.DateField(blank=True, null=True)
     approval_time = models.TimeField(blank=True, null=True)
     p_id = models.AutoField(primary_key=True)
-    s_verify = models.IntegerField(blank=True, null=True)
     status = models.CharField(max_length=30)
+    time = models.TimeField(blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'scctvweekly'
+
+
+class Scctvwlogs(models.Model):
+    p = models.ForeignKey(Scctvweekly, models.DO_NOTHING)
+    log_id = models.AutoField(primary_key=True)
+    date = models.DateField()
+    time = models.TimeField()
+    value = models.CharField(max_length=30)
+    remarks = models.CharField(max_length=30)
+    emp = models.ForeignKey(Engineer, models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'scctvwlogs'
 
 
 class Supervisor(models.Model):

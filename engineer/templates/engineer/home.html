@@ -65,10 +65,10 @@
 					          <h3 class="modal-title">SUPERVISOR</h3>
 					          
 					        </div>
-					        <div class="modal-body">
+					        <div class="modal-body" >
 					        	{% for supdetails1 in supdetails %}
 					          <h4>Name:{{supdetails1.name}}</h4>
-					          <h5>Email: <a href="mailto:{{ supdetails1.email }}">{{ supdetails1.email }}</a></h5>
+					          <h5>Email: <a data-toggle="modal" data-target="#report" href='#'>{{ supdetails1.email }}</a></h5>
 					          <!--put the contact in the a href as mailto:{{ contact }} and outside in phone too-->
 					          <h5>Phone: {{ supdetails1.contact }}</h5>
 								{% endfor %}
@@ -80,6 +80,45 @@
 					      </div>
 					    </div>
 					</div>
+
+					<div class="modal fade" id="report">
+						<div class="modal-dialog">
+						  <div class="modal-content">
+							<div class="modal-header">
+							  <h4 class="modal-title">SEND REPORT TO SUPERVISOR<button type="button" class="close" data-dismiss="modal">&times;</button></h4>
+							</div>
+							<div class="modal-body" style="margin-left:30px; margin-right:30px">
+								 <div class="helloform" style="padding:0">
+									<form method='post' action="/sent/" >
+										{% csrf_token %}
+										{% for sup in supdetails %}
+						         		<br>
+										<div class="form-group row has-warning">
+											<label for="to" class="col-sm-6 col-form-label">TO: {{ sup.name }}</label>
+										</div>
+										<div class="form-group row has-warning">
+											<label for="Subject" class="col-sm-6 col-form-label">SUBJECT:</label>
+											<div>
+											  <input  type='text' required></input>
+											</div> 
+										</div>
+										<hr>
+										<div class="form-group row has-warning">
+											<label for="body" class="col-sm-6 col-form-label">BODY:</label>
+											<div>
+											  <textarea rows="5" placeholder="Enter message" size="100" name='feedback' value="Hello {{ sup.name }}, this is regarding the issue." required style="width:16rem;"></textarea> 
+											</div>
+										</div>
+										<hr>                                                  
+										<input type="submit" value="SEND">
+										{% endfor %} 
+									</form>
+						  		 </div>
+							</div>
+					      </div>
+					    </div>
+				    </div>    
+				  
 				</div>	
 	
 				<div class="col-md-2">
@@ -142,8 +181,43 @@
 			                </tr>
               			{% endif %}
               
-						<!-- Vhf daily-->
-						{% if vhfd_deadline <= currdate %} 
+							<!-- DSCN DAILY -->
+							{% if dscnd_deadline <= currdate %} 
+							{% if dscndsub_on == currdate and dsdr == 0 %}
+							{% if statusdsd == "PENDING" %}	
+							<tr data-href='/dscndaily/{{ id }}'>
+									<td>{{ dscnd_deadline }}</td>                
+									 <td>DSCN DAILY</td>
+									 <td>Pending</td>
+								</tr>
+								{% endif %}
+							 {% elif dsdr == 0 %}
+								<tr data-href='/dscndailyrep/{{ id }}'>
+								 <td>{{ dscnd_deadline }}</td>
+								 <td>DSCN Daily</td>
+								 <td>Pending</td>
+								</tr>
+							{% endif %}
+							 {% endif %}  
+							 {% if statusdsd == "COMPLETED WITH ERRORS" and dsdr == 1 %}	
+							 <tr data-href='/dscndailyrec/{{ id }}'>
+								 <td>{{ dscndsub_on }}</td>                
+								  <td>DSCN DAILY</td>
+								  <td>Completed with errors</td>
+							 </tr>
+							 {% endif %}
+						
+							 {% if dsdr == 1 and statusdsd == "COMPLETED" %}
+								 <tr data-href='/dscndailyrec/{{ id }}'>
+								 <td>{{ dscndsub_on }}</td>
+								 <td>DSCN Daily</td>
+								 <td>Completed</td>
+								</tr>
+							  {% endif %}
+				  
+						
+						  <!-- Vhf daily-->
+					<!--	{% if vhfd_deadline <= currdate %} 
             			{% if vhfdsub_on == currdate and vdr == 0 %}
 						{% if statusvd == "PENDING" %}	
 						<tr data-href='/vhfdaily/{{ id }}'>
@@ -174,7 +248,7 @@
 			                 <td>VHF Daily</td>
 			                 <td>Completed</td>
 			            </tr>
-              			{% endif %}
+              			{% endif %}-->
               
 			  
 				
@@ -188,7 +262,7 @@
 		                      	<td>Pending</td>
 		                    </tr>
 						  {% elif datiswsub_deadline == currdate %}
-						    {% if status == "PENDING" %}
+						    {% if status == "PENDING" and datiswsub_on == currdate %}
 	                      	<tr data-href='/datisweekly/{{ id }}' >
 		                      <td>{{ datiswsub_deadline }}</td>    
 		                      <td>DATIS Weekly</td>
@@ -226,7 +300,57 @@
 								<td>Completed with errors</td>
 							</tr>
 				  			  {% endif %}
-	                         {% endif %} 
+							 {% endif %} 
+							 
+							 	  <!-- Dscn monthly-->
+								   {% if dsmr == 0 %} 
+								   {% if currdate > wdatedm %}
+									   <tr data-href='/dscnmonthlyrep/{{ id }}' >
+											  <td>{{ dscnmsub_deadline }}</td>    
+											  <td>DSCN Monthly</td>
+											 <td>Pending</td>
+									   </tr>
+									 {% elif dscnmsub_deadline == currdate %}
+									   {% if statusdm == "PENDING" %}
+										 <tr data-href='/dscnmonthly/{{ id }}' >
+										 <td>{{ dscnmsub_deadline }}</td>    
+										 <td>DSCN Monthly</td>
+										 <td>Pending</td>
+									   </tr>
+									   {% else %}
+									   <tr data-href='/dscnmonthlyrep/{{ id }}' >
+										   <td>{{ dscnmsub_deadline }}</td>    
+										   <td>DSCN Monthly</td>
+										   <td>Pending</td>
+									   </tr>
+										 {% endif %}
+										 {% elif dscnmsub_on == currdate %}
+										 {% if statusdm == "PENDING" %}
+									   <tr data-href='/dscnmonthly/{{ id }}' >
+										   <td>{{ dscnmsub_deadline }}</td>    
+										   <td>DSCN Monthly</td>
+										   <td>Pending</td>
+									   </tr>	
+										   {% endif %}
+										  {% endif %} 
+									 {% endif %}
+									 
+									 {% if dsmr == 1 and dscnmsub_on == currdate %}
+										{% if statusdm == "COMPLETED"  %}  
+									   <tr data-href='/dscnmonthlyrec/{{ id }}' > 
+										 <td>{{ dscnmsub_deadline }}</td>    
+										 <td>DSCN Monthly</td>
+										 <td>Completed</td>
+									   </tr>
+									   {% else %}
+									   <tr data-href='/dscnmonthlyrec/{{ id }}' > 
+										   <td>{{ dscnmsub_deadline }}</td>    
+										   <td>DSCN Monthly</td>
+										   <td>Completed with errors</td>
+									   </tr>
+										   {% endif %}
+										{% endif %} 
+							   
 					</table>
 			    </div>
 
@@ -263,20 +387,30 @@
 					    			<td><button class="btn standards" onclick="window.location.href='/datisdailyrec/{{ id }}'">MORE DETAILS</button></td>
 				    		</tr>
 				    		
-		    		 		<tr data-href='#'>
+		    		 	<!--	<tr data-href='#'>
 				    			<td>02.04.2020</td>    
 	                            <td><button disabled class="btn standards" onclick="window.location.href='#'">VHF</button></td>
 	                            <td>{{ vhfdsub_on }}</td>
 				    			<td><button class="btn standards" data-toggle="modal" data-target="#vhfdaily">STANDARDS</button></td>
 				    			<td><button class="btn standards" href="/vhfdaily/{{ id }}">MORE DETAILS</button></td>
-				    		</tr>
-				    		<tr data-href='#'>
-				    			<td>01.04.2020</td>
-				    			<td><button disabled class="btn standards" onclick="window.location.href='#'">DSCN</button></td>
-				    			<td>01.04.2020</td>
+				    		</tr>-->
+							
+							<tr data-href='#'>
+				    			<td>{{ dscnd_deadline }}</td>
+				    		    {% if dscnd_deadline == currdate %} 
+								{% if dscndsub_on == currdate and dsdr == 0 %}
+								<td><button class="btn standards" onclick="window.location.href='/dscndaily/{{ id }}'">DSCN</button></td>
+					           	{% elif dsdr == 0 %}
+							   	<td><button class="btn standards" onclick="window.location.href='/dscndailyrep/{{ id }}'">DCSN</button></td>
+					        	{% endif %}
+	                            {% endif %}
+								{% if dsdr == 1  %}
+								<td><button disabled class="btn standards" onclick="window.location.href='/dscndailyrec/{{ id }}'">DSCN</button></td>
+					            {% endif %}
+					    		<td>{{ dscndsub_on }}</td>
 				    			<td><button class="btn standards"data-toggle="modal" data-target="#dscndaily">STANDARDS</button></td>
-				    			<td><button class="btn standards" href="#">MORE DETAILS</button></td> 
-				    		</tr>
+								<td><button class="btn standards" onclick="window.location.href='/dscndailyrec/{{ id }}'">MORE DETAILS</button></td>
+							</tr>
 				    		
 				    	</table>
 					</div>
@@ -303,7 +437,7 @@
 								 {% if currdate > wdate %}
 								 <td><button class="btn standards" onclick="window.location.href='/datisweeklyrep/{{ id }}'">DATIS</button></td>
 							   {% elif datiswsub_deadline == currdate %}
-								 {% if status == "PENDING" %}
+								 {% if status == "PENDING" and datiswsub_on == currdate %}
 								 <td><button class="btn standards" onclick="window.location.href='/datisweekly/{{ id }}'">DATIS</button></td>
 							    {% else %}
 								<td><button class="btn standards" onclick="window.location.href='/datisweeklyrep/{{ id }}'">DATIS</button></td>
@@ -320,7 +454,7 @@
 			         			<td><button class="btn standards" data-toggle="modal" data-target="#datisweekly">STANDARDS</button></td>
 								 <td><button class="btn standards" onclick="window.location.href='/datisweeklyrec/{{ id }}'">MORE DETAILS</button></td>
 					     	</tr>
-				    		 <tr data-href='#'>
+				    	<!--	 <tr data-href='#'>
 				    			<td>01.04.2020</td>
 				    			<td><button disabled class="btn standards" onclick="window.location.href='#'">VHF RX</button></td>
 				    			<td>01.04.2020</td>
@@ -333,21 +467,52 @@
 				    			<td>01.04.2020</td>
 				    			<td></td>
 				    			<td><button class="btn standards" href="#">MORE DETAILS</button></td>
-				    		</tr>
+				    		</tr>-->
 				    	</table>
 					</div>
 
 					<div id="Monthly" class="tabcontent">
   						<h3 class="dateset">Monthly</h3>
   						<table class="table table-bordered table-condensed table-striped table-hover todaytasks">
-  							<tr>	
+							<tr>	
 				    			<th>Deadline</th>
 				    			<th>Task Name</th>
 				    			<th>Last submitted on</th>
 				    			<th>Standards</th>
 				    			<th>Previous Records</th>
 				    		</tr>
-				    		<tr data-href='#'>
+				    	
+							   <tr>
+								<td>{{ wdatedm }}</td>
+								{% if dsmr == 1 and dscnmsub_on == currdate %}
+								{% if statusdm == "COMPLETED" or statusdm == "COMPLETED WITH ERRORS" %}
+								<td><button disabled class="btn standards" onclick="window.location.href='/dscnmonthlyrec/{{ id }}'">DSCN</button></td>
+								{% else %}
+								<td><button class="btn standards" onclick="window.location.href='/dscnmonthly/{{ id }}'">DSCN</button></td>
+								{% endif %}	 
+								{% elif dsmr == 0 %}
+								 {% if currdate > wdate %}
+								 <td><button class="btn standards" onclick="window.location.href='/dscnmonthlyrep/{{ id }}'">DSCN</button></td>
+							   {% elif dscnmsub_deadline == currdate %}
+								 {% if statusdm == "PENDING" and dscnmsub_on == currdate %}
+								 <td><button class="btn standards" onclick="window.location.href='/dscnmonthly/{{ id }}'">DCSN</button></td>
+							    {% else %}
+								<td><button class="btn standards" onclick="window.location.href='/dscnmonthlyrep/{{ id }}'">DCSN</button></td>
+								{% endif %}
+								{% elif dscnmsub_on == currdate %}
+								 {% if statusdm == "PENDING" %}
+								 <td><button class="btn standards" onclick="window.location.href='/dscnmonthly/{{ id }}'">DCSN</button></td>
+								  {% endif %}
+								 {% else %}
+								<td><button class="btn standards" onclick="window.location.href='/dscnmonthlyrep/{{ id }}'">DSCN</button></td>
+								{% endif %}
+							    {% endif %}
+								<td>{{ dscnmsub_on }}</td>
+			         			<td><button class="btn standards" data-toggle="modal" data-target="#dscnmonthly">STANDARDS</button></td>
+								 <td><button class="btn standards" onclick="window.location.href='/dscnmonthlyrec/{{ id }}'">MORE DETAILS</button></td>
+					     	</tr>
+				    	
+  						<!--	<tr data-href='#'>
 				    			<td>01.04.2020</td>
 				    			<td><button disabled class="btn standards" onclick="window.location.href='#'">DATIS</button></td>
 				    			<td>01.04.2020</td>
@@ -360,14 +525,7 @@
 		                        <td>{{ vhfmsub_on }}</td>  
 				    			<td><button class="btn standards" data-toggle="modal" data-target="#vhfmonthly">STANDARDS</button></td>
 				    			<td><button class="btn standards" href="/vhfmonthly/{{ id }}">MORE DETAILS</button></td>
-				    		</tr>
-				    		<tr data-href='#'>
-				    			<td>01.04.2020</td>
-				    			<td><button disabled class="btn standards" onclick="window.location.href='#'">DSCN</button></td>
-				    			<td>01.04.2020</td>
-				    			<td> </td>
-				    			<td><button class="btn standards" href="#">MORE DETAILS</button></td>
-				    		</tr>
+				    		</tr>-->
 				    	</table>
 					</div>
 				</div>
@@ -387,7 +545,7 @@
 				                <tr>
 				                	<th>Date-Time</th>
 				                  	<th>Task Name</th>
-				                  	<th>Status</th>
+				                  	<th>Submission Status</th>
 				                </tr>
 				            </thead>
 				            <tbody>
@@ -396,20 +554,30 @@
 								{% if coms.status == "COMPLETED" or coms.status == "COMPLETED WITH ERRORS" %}
 								{% if coms.type == "Datisdaily" %}
 									<tr data-href="/homed/{{ id }}/{{ coms.token }}">
-										{% else %}
+										{% elif coms.type == "Datisweekly" %}
 								<tr data-href="/homew/{{ id }}/{{ coms.token }}">
+									{% elif coms.type == "Dscndaily" %}
+									<tr data-href="/homedsd/{{ id }}/{{ coms.token }}">
+										{% elif coms.type == "Dscnmonthly" %}
+										<tr data-href="/homedm/{{ id }}/{{ coms.token }}">
+								
 								{% endif %}
-									<td>{{ coms.time }}<br>{{ coms.date }}</td>
+								<td>{{ coms.time }}<br>{{ coms.date }}</td>
 									{% if coms.type == "Datisdaily" %}
 									<td>Datis Daily</td>
-									{% else %}
+									{% elif coms.type == "Datisweekly" %}
 									<td>Datis Weekly</td>
+									{% elif coms.type == "Dscndaily" %}
+									<td>Dscn Daily</td>
+									{% elif coms.type == "Dscnmonthly" %}
+									<td>Dscn Monthly</td>
 							     	{% endif %}
-									<td>Pending Approval</td>
-									{% endif %}
-									{% endif %}
+									<td>{{ coms.status }}</td>
+								
 								</tr>
-								{% endfor %}
+								{% endif %}
+								{% endif %}
+							{% endfor %}
 				             </tbody>
 				        </table>
 					</div>
@@ -418,9 +586,9 @@
 						<table class="table table-bordered table-condensed table-striped table-hover todaytasks" >
 				            <thead>
 				                <tr>
-				                	<th>Date</th>
-				                  	<th>Time</th>
-				                  	<th>Status</th>
+				                	<th>Date-Time</th>
+				                  	<th>Task Name</th>
+				                  	<th>Submission Status</th>
 				                </tr>
 				            </thead>
 				            <tbody>
@@ -428,18 +596,29 @@
 								{% if coms.unit_incharge_approval == "YES" %}
 								{% if coms.type == "Datisdaily" %}
 									<tr data-href="/homed/{{ id }}/{{ coms.token }}">
-										{% else %}
+										{% elif coms.type == "Datisweekly" %}
 								<tr data-href="/homew/{{ id }}/{{ coms.token }}">
+									{% elif coms.type == "Dscndaily" %}
+									<tr data-href="/homedsd/{{ id }}/{{ coms.token }}">
+										{% elif coms.type == "Dscnmonthly" %}
+										<tr data-href="/homedm/{{ id }}/{{ coms.token }}">
+								
 								{% endif %}
-									<td>{{ coms.time }}<br>{{ coms.date }}</td>
+								<td>{{ coms.time }}<br>{{ coms.date }}</td>
 									{% if coms.type == "Datisdaily" %}
 									<td>Datis Daily</td>
-									{% else %}
+									{% elif coms.type == "Datisweekly" %}
 									<td>Datis Weekly</td>
+									{% elif coms.type == "Dscndaily" %}
+									<td>Dscn Daily</td>
+									{% elif coms.type == "Dscnmonthly" %}
+									<td>Dscn Monthly</td>
 							     	{% endif %}
-									<td>Approved</td>
-									{% endif %}
+									<td>{{ coms.status }}</td>
+								
 								</tr>
+								{% endif %}
+							
 								{% endfor %}
 				           
 				             </tbody>
@@ -450,41 +629,99 @@
 						<table class="table table-bordered table-condensed table-striped table-hover todaytasks" >
 				            <thead>
 				                <tr>
-				                	<th>Date</th>
-				                  	<th>Time</th>
-				                  	<th>Status</th>
+				                	<th>Date-Time</th>
+				                  	<th>Task Name</th>
+				                  	<th>Submission Status</th>
 				                </tr>
 				            </thead>
 				            <tbody>
 								{% for coms in com %}
 								{% if coms.unit_incharge_approval == "NO" %}
 								{% if coms.type == "Datisdaily" %}
-									<tr data-href="/homed/{{ id }}/{{ coms.token }}">
-										{% else %}
-								<tr data-href="/datisweekly/{{ id }}/{{ coms.token }}">
-								{% endif %}
-									<td>{{ coms.time }}<br>{{ coms.date }}</td>
-									{% if coms.type == "Datisdaily" %}
-									<td>Datis Daily</td>
-									{% else %}
-									<td>Datis Weekly</td>
-							     	{% endif %}
-									<td>Declined</td>
-									{% endif %}
+								<tr data-href="/homed/{{ id }}/{{ coms.token }}">
+									{% elif coms.type == "Datisweekly" %}
+							<tr data-href="/homew/{{ id }}/{{ coms.token }}">
+								{% elif coms.type == "Dscndaily" %}
+								<tr data-href="/homedsd/{{ id }}/{{ coms.token }}">
+									{% elif coms.type == "Dscnmonthly" %}
+									<tr data-href="/homedm/{{ id }}/{{ coms.token }}">
+							   {% endif %}
+							<td>{{ coms.time }}<br>{{ coms.date }}</td>
+								{% if coms.type == "Datisdaily" %}
+								<td>Datis Daily</td>
+								{% elif coms.type == "Datisweekly" %}
+								<td>Datis Weekly</td>
+								{% elif coms.type == "Dscndaily" %}
+								<td>Dscn Daily</td>
+								{% elif coms.type == "Dscnmonthly" %}
+								<td>Dscn Monthly</td>
+								 {% endif %}
+								 <td>{{ coms.status }}</td>
+								
 								</tr>
-								{% endfor %}
+								{% endif %}
+							
+							{% endfor %}
 				           </tbody>
 				        </table>
 					</div>
 			    </div> 
 			</div>
 		</div>
+		<div class="modal fade" id="dscnmonthly">
+			<div class="modal-dialog">
+			  <div class="modal-content">
+				<div class="modal-header">
+				  <h4 class="modal-title">Standards - Dscn Monthly<button type="button" class="close" data-dismiss="modal">&times;</button></h4>
+				</div>
+				<div class="modal-body">
+				  <table  class="table table-bordered standtab table-condensed table-striped table-hover todaytasks">
+					  <tr>
+						<th>VALUE LABEL</th>
+						<th>NORMAL VALUE</th>
+					</tr>
+					<tr>
+						<td>CLEANING DSCN ASSOCIATED EQUIPMENT</td>
+						<td>(Check if completed)</td>
+					</tr>
+					
+					  <tr>
+						<td>BATTERY BACKUP TIME OF UPS1 AND UPS2</td>
+						<td>(Check if enough)</td>
+					</tr>
+						<tr>
+						<td>UPS BATTERY VOLTAGE ON LOAD</td>
+						<td>(Check if proper)</td>
+					</tr>
+						<tr>
+						<td>ANTENNA AND CABLE CHECK</td>
+						<td>(Check if okay)</td>
+					</tr>
+						<tr>
+						<td>EARTH RESISTANCE</td>
+						<td>(Check if okay)</td>
+					</tr>
+						<tr>
+						<td>E OR N VOLTAGE</td>
+						<td>(Check value)</td>
+					</tr>
+						<tr>
+						<td>EQUIPMENT STATUS AFTER CHECK</td>
+						<td>(Check if okay)</td>
+						</tr>    
+				  </table>
+				</div>
+				<div class="modal-footer">
+				  <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				</div>  
+			  </div>
+			</div>
+		</div>
 		<div class="modal fade" id="datisdaily">
 				    <div class="modal-dialog">
 				      <div class="modal-content">
 				        <div class="modal-header">
-				          <h4 class="modal-title">Standards - Datis Daily</h4>
-				          <button type="button" class="close" data-dismiss="modal">&times;</button>
+				          <h4 class="modal-title">Standards - Datis Daily<button type="button" class="close" data-dismiss="modal">&times;</button></h4>
 				        </div>
 				        <div class="modal-body">
 				          <table  class="table table-bordered standtab table-condensed table-striped table-hover todaytasks">
@@ -549,8 +786,8 @@
 				    <div class="modal-dialog">
 				      <div class="modal-content">
 				        <div class="modal-header">
-				          <h4 class="modal-title">Standards - Datis Weekly</h4>
-				          <button type="button" class="close" data-dismiss="modal">&times;</button>
+				          <h4 class="modal-title">Standards - Datis Weekly<button type="button" class="close" data-dismiss="modal">&times;</button></h4>
+				          
 				        </div>
 				        <div class="modal-body">
 				          <table class="table table-bordered table-condensed table-striped table-hover todaytasks">
@@ -599,8 +836,7 @@
 				    <div class="modal-dialog">
 				      <div class="modal-content">
 				        <div class="modal-header">
-				          <h4 class="modal-title">Standards - VHF RX Daily</h4>
-				          <button type="button" class="close" data-dismiss="modal">&times;</button>
+				          <h4 class="modal-title">Standards - VHF RX Daily<button type="button" class="close" data-dismiss="modal">&times;</button></h4>
 				        </div>
 				        <div class="modal-body">
 				          <table class="table table-bordered table-condensed table-striped table-hover todaytasks">
@@ -641,8 +877,7 @@
 				    <div class="modal-dialog">
 				      <div class="modal-content">
 				        <div class="modal-header">
-				          <h4 class="modal-title">Standards - VHF RX Monthly</h4>
-				          <button type="button" class="close" data-dismiss="modal">&times;</button>
+				          <h4 class="modal-title">Standards - VHF RX Monthly<button type="button" class="close" data-dismiss="modal">&times;</button></h4>
 				        </div>
 				        <div class="modal-body">
 				          <table class="table table-bordered table-condensed table-striped table-hover todaytasks">
@@ -715,8 +950,7 @@
 				    <div class="modal-dialog">
 				      <div class="modal-content">
 				        <div class="modal-header">
-				          <h4 class="modal-title">Standards - DSCN Daily</h4>
-				          <button type="button" class="close" data-dismiss="modal">&times;</button>
+				          <h4 class="modal-title">Standards - DSCN Daily<button type="button" class="close" data-dismiss="modal">&times;</button></h4>
 				        </div>
 				        <div class="modal-body">
 				          <table class="table table-bordered table-condensed table-striped table-hover todaytasks">

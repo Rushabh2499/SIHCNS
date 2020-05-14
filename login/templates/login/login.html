@@ -5,48 +5,40 @@
 	<title>LOGIN</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="{% static '/style.css' %}">
 </head>
-<body> 
-
+<body>
 	<div class="container">
-		<img class="bg-img" src="{% static '/images/flightlogin.jpg' %}" alt="">
-		<div style=" column-count: 3;">
-			<div> 
-				column1
+	<img class="bg-img" src="{% static '/images/flightlogin.jpg' %}" alt="">
+		<div class="row">
+			<div class="col-sm-3">
+				
 			</div>
-			<div class="col-sm-4">
+			<div class="col-sm-8">
 				<div class="connexion">
-					<form method='POST' action='/validate/'>
+					<div class="card">
+						<form method='POST' action='/validate/'>
 						{% csrf_token %}
-						<div class="contact-form">
-							<label>USERNAME</label>
-							<input type=number placeholder="user_id" name="id"></input>
-							
-							<label>PASSWORD</label>
-							<input type=password placeholder="password" name="passw"></input>
-							
-							<div class="check">
-								<label>				
-									<input id="check" type="checkbox" class="checkbox">
-										<svg xmlns="http://www.w3.org/2000/svg" width="26px" height="23px">
-											<path class="path-back"  d="M1.5,6.021V2.451C1.5,2.009,1.646,1.5,2.3,1.5h18.4c0.442,0,0.8,0.358,0.8,0.801v18.398c0,0.442-0.357,0.801-0.8,0.801H2.3c-0.442,0-0.8-0.358-0.8-0.801V6"/>
-											<path class="path-moving" d="M24.192,3.813L11.818,16.188L1.5,6.021V2.451C1.5,2.009,1.646,1.5,2.3,1.5h18.4c0.442,0,0.8,0.358,0.8,0.801v18.398c0,0.442-0.357,0.801-0.8,0.801H2.3c-0.442,0-0.8-0.358-0.8-0.801V6"/>
-										</svg>
-									</input>
-								</label>
-								<h3>Keep me signed in</h3>
+							<div class="contact-form">
+								<label>USERNAME</label>
+								<input placeholder="Employee ID" name="id" required="required">
+
+								<label>PASSWORD</label>
+								<input type=password placeholder="Password" name="passw" required="required">
+								
+								<input class="submit" value="SIGN IN" type="submit">
+								<br>
+								<!-- <a href="#">Forgot Username / Password?</a> -->
 							</div>
-							<input class="submit" value="SIGN IN" type="submit">
-						</div>
-					</form>
-					<p class="linkx"><a href="#" class="txt1">Forgot Username / Password?</a></p>
+						</form>
+					</div>
 				</div>
 			</div>
-			<div>
-				column3
+			<div class="col-sm-2">
+				
 			</div>
-		</div>	
+		</div>
 	</div>
 </body> 
 {%if flag %}

@@ -35,9 +35,11 @@ def run_sup(request,uid):
         Cdvordaily=[entry for entry in models.Cdvordaily.objects.filter(unit_incharge_approval=None).values().order_by('-date')]
         for item in Cdvordaily:
                 item.update( {"type":"Cdvordaily"})
+                item.update({"repdead":item['date']})
         Cdvorweekly=[entry for entry in models.Cdvorweekly.objects.filter(unit_incharge_approval=None).values().order_by('-date')]
         for item in Cdvorweekly:
                 item.update( {"type":"Cdvorweekly"})
+                item.update({"repdead":week(item['date'])})
         
         ndbdaily=[entry for entry in models.Ndbdaily.objects.filter(unit_incharge_approval=None).values().order_by('-date')]
         for item in ndbdaily:
@@ -62,7 +64,8 @@ def run_sup(request,uid):
         
         Cdvormonthly=[entry for entry in models.Cdvormonthly.objects.filter(unit_incharge_approval=None).values().order_by('-date')]
         for item in Cdvormonthly:
-                item.update( {"type":"Cdvormonthly"})        
+                item.update( {"type":"Cdvormonthly"})  
+                item.update({"repdead":month(item['date'])})      
         
         
         com=Cdvordaily+[i for i in Cdvorweekly]+[i for i in Dmeweekly]+[i for i in Dmedaily]+[i for i in Dmemonthly]+[i for i in Ndbweekly]+[i for i in ndbdaily]+[i for i in Ndbmonthly]+[i for i in Cdvormonthly]
@@ -94,14 +97,14 @@ def run_sup(request,uid):
         # vhfweekly=[entry for entry in models.Vhfweekly.objects.filter(unit_incharge_approval=None).values().order_by('-date')]
         # for item in vhfweekly:
         #         item.update( {"type":"Vhfweekly"})
-        vhfmonthly=[entry for entry in models.Vhfmonthly.objects.filter(Q(unit_incharge_approval=None) | Q(status='PENDING')).values().order_by('-date')]
-        for item in vhfmonthly:
-                item.update( {"type":"Vhfmonthly"})
-                item.update({"repdead":month(item['date'])})
+        # vhfmonthly=[entry for entry in models.Vhfmonthly.objects.filter(Q(unit_incharge_approval=None) | Q(status='PENDING')).values().order_by('-date')]
+        # for item in vhfmonthly:
+        #         item.update( {"type":"Vhfmonthly"})
+        #         item.update({"repdead":month(item['date'])})
         dscndaily=[entry for entry in models.Dscndaily.objects.filter(Q(unit_incharge_approval=None) | Q(status='PENDING')).values().order_by('-date')]
         for item in dscndaily:
                 item.update( {"type":"Dscndaily"})
-                item.update({"repdead":dailydeadline})
+                # item.update({"repdead":dailydeadline})
                 item.update({"repdead":item['date']})
         dscnweekly=[entry for entry in models.Dscnweekly.objects.filter(Q(unit_incharge_approval=None) | Q(status='PENDING')).values().order_by('-date')]
         for item in dscnweekly:
@@ -112,17 +115,41 @@ def run_sup(request,uid):
                 item.update( {"type":"Dscnmonthly"})
                 item.update({"repdead":month(item['date'])})
         
-        com=[i for i in datisdaily]+[i for i in datisweekly]+[i for i in dscnweekly]+[i for i in dscndaily]+[i for i in dscnmonthly]+[i for i in vhfdaily]+[i for i in vhfmonthly]
+        com=[i for i in datisdaily]+[i for i in datisweekly]+[i for i in dscnweekly]+[i for i in dscndaily]+[i for i in dscnmonthly]+[i for i in vhfdaily]
         com=sorted(com,key=itemgetter('date'),reverse=True)
         
-        eng=[entry for entry in models.Engineer.objects.filter(supervisor_id=uid).values()]
+        
         for i in com:
 
             i.update({'token':main.encode(request,str(i['p_id']))})
-        eng=[entry for entry in models.Engineer.objects.filter(supervisor_id=uid).values()] 
+        
+    
     else:
-         
-        eng=[entry for entry in models.Engineer.objects.filter(supervisor_id=uid).values()]   
+        Scctvdaily=[entry for entry in models.Scctvdaily.objects.filter(unit_incharge_approval=None).values().order_by('-date')]
+        for item in Scctvdaily:
+                item.update( {"type":"Scctvdaily"})
+                item.update({"repdead":item['date']})
+        Scctvweekly=[entry for entry in models.Scctvweekly.objects.filter(unit_incharge_approval=None).values().order_by('-date')]
+        for item in Scctvweekly:
+                item.update( {"type":"Scctvweekly"})
+                item.update({"repdead":week(item['date'])})
+        Scctvmonthly=[entry for entry in models.Scctvmonthly.objects.filter(unit_incharge_approval=None).values().order_by('-date')]
+        for item in Scctvmonthly:
+                item.update( {"type":"Scctvmonthly"})
+                item.update({"repdead":month(item['date'])})
+        com=[i for i in Scctvweekly]+[i for i in Scctvdaily]+[i for i in Scctvmonthly]
+        com=sorted(com,key=itemgetter('date'),reverse=True)
+        for i in com:
+
+            i.update({'token':main.encode(request,str(i['p_id']))})
+        
+        
+    
+    
+    
+    eng=[entry for entry in models.Engineer.objects.filter(supervisor_id=uid).values()] 
+
+
     
     for i in eng:
         # token=main.encode(i['p_id'])
@@ -198,5 +225,5 @@ def week(cd):
         ded=cd+timedelta(7)
         return ded
 def month(cd):
-        ded=cd.day+timedelta(30)
+        ded=cd+timedelta(30)
         return ded

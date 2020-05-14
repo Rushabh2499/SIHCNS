@@ -7,17 +7,6 @@
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 
-class DgmReports(models.Model):
-    r_id = models.IntegerField(primary_key=True)
-    r_type = models.CharField(max_length=30)
-    r_status = models.CharField(max_length=30)
-    r_count = models.PositiveIntegerField()
-    r_date = models.DateTimeField()
-
-    class Meta:
-        managed = False
-        db_table = 'dgmreports'
-
 
 class Airport(models.Model):
     a_id = models.IntegerField(primary_key=True)

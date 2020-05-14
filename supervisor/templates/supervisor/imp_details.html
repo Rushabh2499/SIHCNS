@@ -127,7 +127,7 @@
                                       
                                   {% endif %}
                                   {% if temp.unit_incharge_approval != "YES" %}
-                                      <button class="btn submitbut" onclick="window.location.href='{% url 'supervisor:verify' names=names id=temp.p_token %}'">APPROVE</button>
+                                  <a href='/verify/{{names}}/{{temp.p_token}}' class="btn submitbut" >APPROVE</a>      
                                 {% endif %}
                                 {% endif %}
 </form></div>
@@ -408,7 +408,7 @@
                      $('#status_of_serverB').css('border-color', 'pale-green');
                      $('#status_of_serverA').css('border-color', 'pale-green');
                 }
-                if($("#status_of_serverA").val()=="MAINS" && $("#status_of_serverB").val()=="STANDBY" ){
+                else if($("#status_of_serverA").val()=="MAINS" && $("#status_of_serverB").val()=="STANDBY" ){
                      $('#status_of_serverA').css('border-color', 'pale-green');
                      $('#status_of_serverB').css('border-color', 'pale-green');
                 }else{

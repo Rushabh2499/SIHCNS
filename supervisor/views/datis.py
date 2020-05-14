@@ -24,9 +24,11 @@ def weekly(request):
     Datisweekly=[entry for entry in models.Datisweekly.objects.all().values().order_by('-date')]
     for i in Datisweekly:
         i['token']=main.encode(request,str(i['p_id']))
-        if i['s_verify']==None:
+        if i['unit_incharge_approval']=="YES":
+           i['flag']=1
+        elif['unit_incharge_approval']=="NO":
            i['flag']=0
         else:
-           i['flag']=1
+           i['flag']=9
     
     return render(request,'supervisor/list_details.html',{'context':Datisweekly,'name':'Datisweekly'})

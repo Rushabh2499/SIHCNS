@@ -7,8 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="{% static 'engineer/datisstyle.css' %}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<!--<script src="strength.js"></script> temp-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css2?family=Gotu&family=Righteous&display=swap" rel="stylesheet">
@@ -187,6 +185,8 @@
                     <th>UPS Output</th>
                     <th>Dust Free</th>
                     <th>LAN Status</th>
+                    <th>Remarks</th>
+                    <th>Test</th>
                 </tr>
             </thead>
             <tbody>
@@ -199,6 +199,12 @@
                   <td>{{ datisw.ups_op }}</td>
                   <td>{{ datisw.dust_free }}</td>
                   <td>{{ datisw.lan_status }}</td>
+                  <td>{{ datisw.remarks }}</td>
+                  {% if datisw.ups_ip < 231 and datisw.ups_ip > 199 and datisw.ups_op == 230 and datisw.dust_free == "OK" and datisw.lan_status == "OK" %}
+                  <td>Pass</td>
+                  {% else %}
+                  <td>Fail</td>
+                  {% endif %}
              </tr>
                {% endfor %}
              </tbody>
@@ -222,7 +228,7 @@
       <div class="modal-body">
     {% for sup in supdetails %}
         <h5>{{ sup.name }}</h5>
-        <h6>Email: <a data-toggle="modal" data-target="#report" href="/email">{{ sup.email }}</a></h6>
+        <h6>Email: <a href="mailto:{{ sup.email }}">{{ sup.email }}</a></h6>
    
     <!--put the contact in the a href as mailto:{{ contact }} and outside in phone too-->
     <h6>Phone: {{ sup.contact }}</h6>
@@ -235,44 +241,7 @@
   </div>
 </div>
 
-<div class="modal fade" id="report">
-<div class="modal-dialog">
-  <div class="modal-content">
-  <div class="modal-header">
-    <h4 class="modal-title">SEND REPORT TO SUPERVISOR</h4>
-    <button type="button" class="close" data-dismiss="modal">&times;</button>
-  </div>
-  <div class="modal-body">
-   <div class="helloform" style="padding:0">
-    <form method='post' action="/sent/" >
-      {% csrf_token %}
-      {% for sup in supdetails %}
-           <br>
-      <div class="form-group row has-warning">
-        <label for="to" class="col-sm-6 col-form-label">TO: {{ sup.name }}</label>
-      </div>
-      <div class="form-group row has-warning">
-        <label for="Subject" class="col-sm-6 col-form-label">SUBJECT:</label>
-        <div>
-          <input class="form-control form-control-sm" type='text'></input>
-        </div>
-      </div>
-      <hr>
-      <div class="form-group row has-warning">
-        <label for="body" class="col-sm-6 col-form-label">BODY:</label>
-        <div>
-          <textarea rows="5" placeholder="Enter message" size="100" name='feedback' value="Hello {{ sup.name }}, this is regarding the issue."></textarea> 
-        </div>
-      </div>
-      <hr>                                                  
-      <input type="submit" value="SEND">
-      {% endfor %} 
-    </form>
-    </div>
-  </div>
-  </div>
-</div>
-</div>    
+
 
             </div>
 
@@ -280,21 +249,6 @@
     <!--ADDITION-->
 <script>
 
-$("#UPS_ip").on("keyup",function(){
-    if($("#UPS_ip").val()==""){
-        $('#UPS_ip').css('border-color', 'red');
-            return false;
-    }else{
-        $('#UPS_ip').css('border-color', '#ced4da');
-    }
-});
-$("#UPS_op").on("keyup",function(){
-    if($("#UPS_op").val()==""){
-        $('#UPS_op').css('border-color', 'red');
-            return false;
-    }else{
-        $('#UPS_op').css('border-color', '#ced4da');
-    }
-});
+
 </script>
 </body>

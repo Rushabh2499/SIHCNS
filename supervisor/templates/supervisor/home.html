@@ -58,10 +58,11 @@
 				      <div class="modal-content">
 				        <div class="modal-header">
 				          <h3 class="modal-title">SUPERVISOR
+				          <button type="button" class="close" data-dismiss="modal">&times;</button></h3>
 				        </div>
 				        <div class="modal-body">
 				          <h4>Name: {{dgm.name}} </h4>
-				          <h5>Email: <a href="mailto:{{dgm.email}}">{{dgm.email}}</a></h5>
+				          <h5>Email: <a data-toggle="modal" data-target="#report" href='#'>{{dgm.email}}</a></h5>
 				          <!--put the contact in the a href as mailto:{{ contact }} and outside in phone too-->
 				          <h5>Phone: {{dgm.contact}}</h5>
 				        </div>
@@ -71,6 +72,42 @@
 				      </div>
 				    </div>
 				</div>
+				<div class="modal fade" id="report">
+						<div class="modal-dialog">
+						  <div class="modal-content">
+							<div class="modal-header">
+							  <h4 class="modal-title">SEND REPORT TO SUPERVISOR<button type="button" class="close" data-dismiss="modal">&times;</button></h4>
+							</div>
+							<div class="modal-body" style="margin-left:30px; margin-right:30px">
+								 <div class="helloform" style="padding:0">
+									<form method='post' action="/sent/" >
+										{% csrf_token %}
+						         		<br>
+										<div class="form-group row has-warning">
+											<label for="to" class="col-sm-6 col-form-label">TO: {{ dgm.name }}</label>
+										</div>
+										<div class="form-group row has-warning">
+											<label for="Subject" class="col-sm-6 col-form-label">SUBJECT:</label>
+											<div>
+											  <input  type='text' required></input>
+											</div> 
+										</div>
+										<hr>
+										<div class="form-group row has-warning">
+											<label for="body" class="col-sm-6 col-form-label">BODY:</label>
+											<div>
+											  <textarea rows="5" placeholder="Enter message" size="100" name='feedback' value="Hello {{ sup.name }}, this is regarding the issue." required style="width:16rem;"></textarea> 
+											</div>
+										</div>
+										<hr>                                                  
+										<input type="submit" value="SEND">
+										
+									</form>
+						  		 </div>
+							</div>
+					      </div>
+					    </div>
+				    </div>    
 			</div>	
 			<div class="col-md-2">
 			</div>
@@ -170,9 +207,6 @@
 									<tr data-href="{% url 'supervisor:datisdaily' %}">
 										<td>DATIS</td>
 									</tr>
-									<tr data-href="{% url 'supervisor:vhfdaily' %}">
-										<td>VHF</td>
-									</tr>
 									<tr data-href="{% url 'supervisor:dscndaily' %}">
 										<td>DSCN</td>
 								{% endif %}
@@ -180,12 +214,6 @@
 									</tr>
 									<tr data-href="{% url 'supervisor:cdvordaily' %}">
 										<td>CDVOR</td>
-									</tr>
-									<tr data-href="{% url 'supervisor:dmedaily' %}">
-										<td>DME</td>			
-									</tr>
-									<tr data-href="{% url 'supervisor:ndbdaily' %}">	
-										<td>NDB</td>
 									</tr>
 								{% endif %}
 								{% if sup.dept == 'S' %}
@@ -197,29 +225,21 @@
 								</table>
 							</div>
 							<div id="Weekly" class="tabcontent">
-								{% if sup.dept == 'C' %}
 								<h3 class="dateset">Weekly</h3>
 								<table class="table table-bordered table-condensed table-striped table-hover todaytasks">
+								
+								{% if sup.dept == 'C' %}
 									<tr data-href="{% url 'supervisor:datisweekly' %}">
 										<td>DATIS</td>
-									</tr>
-									<tr data-href="{% url 'supervisor:vhfweekly' %}">
-										<td>VHF</td>
 									</tr>
 									<tr data-href="{% url 'supervisor:dscnweekly' %}">
 										<td>DSCN</td>
 									{% endif %}
 
 									{% if sup.dept == 'N' %}
-									</tr>
+									
 									<tr data-href="{% url 'supervisor:cdvorweekly' %}">
 										<td>CDVOR</td>
-									</tr>
-									<tr data-href="{% url 'supervisor:dmeweekly' %}">
-										<td>DME</td>			
-									</tr>
-									<tr data-href="{% url 'supervisor:ndbweekly' %}">	
-										<td>NDB</td>
 									</tr>
 									{% endif %}
 
@@ -238,23 +258,14 @@
 									<tr data-href="{% url 'supervisor:datisdaily' %}">
 										<td>DATIS</td>
 									</tr>
-									<tr data-href="{% url 'supervisor:vhfdaily' %}">
-										<td>VHF</td>
-									</tr>
 									<tr data-href="{% url 'supervisor:dscndaily' %}">
 										<td>DSCN</td>
 									{% endif %}
 
 									{% if sup.dept == 'N' %}
 									</tr>
-									<tr data-href="{% url 'supervisor:cdvordaily' %}">
+									<tr data-href="{% url 'supervisor:cdvormonthly' %}">
 										<td>CDVOR</td>
-									</tr>
-									<tr data-href="{% url 'supervisor:dmedaily' %}">
-										<td>DME</td>			
-									</tr>
-									<tr data-href="{% url 'supervisor:ndbdaily' %}">	
-										<td>NDB</td>
 									</tr>
 									{% endif %}
 

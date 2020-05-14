@@ -1,0 +1,55 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<style type="text/css">
+		.container{
+			height: 190px;
+			width: auto;
+			overflow:hidden;
+		}
+	</style>
+</head>
+<body> 
+	<div class="container" >
+		<canvas id="pie-chart"> </canvas>
+	</div>
+	
+
+
+
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script>
+    var config = {
+      type: 'pie',
+      data: {
+		labels: ["Africa", "Asia", "Europe", "Latin America", "North America"],
+        datasets: [{
+          data: [2478,5267,734,784,433],
+          backgroundColor: [
+            '#1E72FA', '#11b461', '#bf0033', '#C0C0C0', '#D3D3D3'
+          ],
+          label: "Population (millions)"
+        }],
+        
+      },
+      options: {
+        responsive: true
+      }
+    };
+
+
+    
+    window.onload = function() {
+      var ctx = document.getElementById('pie-chart').getContext('2d');
+      window.myPie = new Chart(ctx, config);
+    };
+
+  </script>
+
+         
+    
+</body>
+</html>

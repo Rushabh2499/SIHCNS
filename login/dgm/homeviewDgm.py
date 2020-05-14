@@ -16,7 +16,8 @@ from django.db import connection
 def pie_chart(request):
     labels = []
     data = []
-
+    emp_id = models.Dgm.objects.all().filter(a_id=1).values('dgm_id')[0]['dgm_id']
+    
     queryset = models.DgmReports.objects.order_by('-r_count')
     for datisd in queryset:
         labels.append(datisd.r_status)
@@ -25,6 +26,7 @@ def pie_chart(request):
     return render(request, 'dgm/dgm.html', {
         'labels': labels,
         'data': data,
+        'id':emp_id
     })
 
 
